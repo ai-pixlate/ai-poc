@@ -1,12 +1,22 @@
 """줄·문단 병합 + 역할 분류 — variant 비교표 생성기.
 
 results/ 아래 실행된 모든 variant를 읽어 summary.md를 만든다.
-등급·건수 칸은 비워둔다. 채우는 건 사람 몫.
+등급 칸은 비워둔다. 채우는 건 사람 몫.
 
-**이미 채워진 판정은 재실행해도 보존한다.** 기존 summary.md의 판정표를
+**정답 라벨을 만들지 않기로 함(2026-09-08).** 병합·역할의 정오는 사람이
+육안 A/B/C로 판정한다. 대신 정답 없이도 계산되는 보조 지표 3종을 붙여
+어느 이미지를 먼저 볼지 고르는 데 쓴다. 보조 지표는 **정오가 아니다.**
+
+  겹침  — 블록 bbox끼리 겹치는 쌍의 수. 과병합에서도 늘지만 원래 겹쳐
+          배치된 레이아웃(제품 패키지 사진 등)에서도 는다. 어느 쪽인지는
+          vis를 봐야 갈린다.
+  이질  — 한 블록 안에서 글자 높이가 1.5배 넘게 벌어진 블록 수.
+          h_ratio가 직접 누르는 값이라 variant 간 차이는 설계상 당연하다.
+          쓸모는 총수가 아니라 **어느 블록인지**에 있다.
+  일치율 — variant 간 블록 경계가 같은 비율. 임계 민감도
+
+**이미 채워진 등급은 재실행해도 보존한다.** 기존 summary.md의 판정표를
 (이미지, variant) 키로 읽어 되돌려 넣는다.
-
-집계는 채워진 칸에서만 계산한다. 빈 칸을 추정하지 않는다.
 
 사용법
     python compare.py
@@ -24,39 +34,87 @@ OUT = HERE / "summary.md"
 
 ROLES = ["제목", "본문", "캡션", "가격", "주의문구"]
 
+# 기계 집계 열 — 코드가 채운다.
+MACHINE_COLS = ["겹침", "이질"]
 # 판정 열 — 전부 빈 칸으로 생성한다.
 #   병합 / 역할 : 이미지 단위 A/B/C 육안 등급
 #   과분할·과병합·오분류 : 사람이 vis/ 를 보고 센 건수
 GRADE_COLS = ["병합", "역할", "과분할", "과병합", "오분류", "비고"]
 
+# 한 블록 안에서 이 배수를 넘게 글자 높이가 벌어지면 이질로 센다.
+HETERO_RATIO = 1.5
+
 
 def variants() -> list[str]:
     if not RESULTS.exists():
         return []
-    return sorted(
-        (d.name for d in RESULTS.iterdir() if (d / "meta.json").exists()),
-        key=lambda n: n,
-    )
+    return sorted(d.name for d in RESULTS.iterdir() if (d / "meta.json").exists())
 
+
+def load_blocks(variant: str, image: str) -> list[dict]:
+    path = RESULTS / variant / "blocks" / f"{Path(image).stem}.json"
+    return json.loads(path.read_text(encoding="utf-8"))["blocks"]
+
+
+# ---------------------------------------------------------------- 보조 지표
+
+def overlap_pairs(blocks: list[dict]) -> int:
+    """bbox가 겹치거나 한쪽이 다른쪽을 품는 블록 쌍의 수.
+
+    과병합이면 늘지만, 제품 패키지 사진처럼 글자가 원래 겹쳐 배치된
+    이미지에서도 는다. 어느 쪽인지는 vis를 봐야 갈린다. 정오 판정이 아니다.
+    """
+    n = 0
+    for i in range(len(blocks)):
+        a = blocks[i]["bbox"]
+        for j in range(i + 1, len(blocks)):
+            b = blocks[j]["bbox"]
+            if min(a[2], b[2]) > max(a[0], b[0]) and min(a[3], b[3]) > max(a[1], b[1]):
+                n += 1
+    return n
+
+
+def hetero_blocks(blocks: list[dict], regions_h: dict[int, int]) -> int:
+    """한 블록 안에서 글자 높이가 HETERO_RATIO 배를 넘게 벌어진 블록 수."""
+    n = 0
+    for b in blocks:
+        hs = [regions_h[i] for i in b["regions"] if i in regions_h]
+        if len(hs) >= 2 and max(hs) / max(1, min(hs)) > HETERO_RATIO:
+            n += 1
+    return n
+
+
+def agreement(a: list[dict], b: list[dict]) -> tuple[int, float]:
+    """두 variant에서 구성 영역이 완전히 같은 블록 수와 비율."""
+    sa = {tuple(x["regions"]) for x in a}
+    sb = {tuple(x["regions"]) for x in b}
+    same = len(sa & sb)
+    denom = max(1, (len(sa) + len(sb)) / 2)
+    return same, same / denom
+
+
+# ---------------------------------------------------------------- 판정 보존
 
 def read_existing() -> dict[tuple[str, str], list[str]]:
-    """기존 summary.md 판정표에서 채워진 칸을 회수한다.
+    """기존 summary.md 판정표에서 채워진 등급을 회수한다.
 
-    행 형식: | {이미지} | `{variant}` | {영역} | {블록} | 판정 6칸 | 시각화 |
+    행 형식: | 이미지 | `variant` | 영역 | 블록 | 기계 2칸 | 판정 6칸 | 시각화 |
     """
     if not OUT.exists():
         return {}
+    width = 4 + len(MACHINE_COLS) + len(GRADE_COLS) + 1
+    start = 4 + len(MACHINE_COLS)
     got: dict[tuple[str, str], list[str]] = {}
     for line in OUT.read_text(encoding="utf-8").splitlines():
         if not line.startswith("|"):
             continue
         cells = [c.strip() for c in line.strip().strip("|").split("|")]
-        if len(cells) != len(GRADE_COLS) + 5:  # 이미지 variant 영역 블록 + 판정 + 시각화
+        if len(cells) != width:
             continue
         img, variant = cells[0], cells[1]
         if not (variant.startswith("`") and variant.endswith("`")):
             continue
-        vals = cells[4 : 4 + len(GRADE_COLS)]
+        vals = cells[start : start + len(GRADE_COLS)]
         if any(vals):
             got[(img, variant.strip("`"))] = vals
     return got
@@ -71,12 +129,24 @@ def main() -> None:
 
     metas = {n: json.loads((RESULTS / n / "meta.json").read_text(encoding="utf-8")) for n in names}
     existing = read_existing()
+    images = [p["image"] for p in metas[names[0]]["per_image"]]
+
+    # 블록·영역 높이 적재
+    blocks: dict[tuple[str, str], list[dict]] = {}
+    heights: dict[str, dict[int, int]] = {}
+    src = HERE.parents[1] / "poc" / "B_ocr" / "results" / "baseline" / "regions"
+    for img in images:
+        rs = json.loads((src / f"{Path(img).stem}.json").read_text(encoding="utf-8"))["regions"]
+        heights[img] = {i: r["bbox"][3] - r["bbox"][1] for i, r in enumerate(rs)}
+        for n in names:
+            blocks[(n, img)] = load_blocks(n, img)
 
     L: list[str] = []
     L.append("# 줄·문단 병합 + 역할 분류 — 실행 결과")
     L.append("")
     L.append("> 이 파일은 `compare.py`가 생성함. **판정 칸은 사람이 채움.**")
     L.append("> 입력은 텍스트 인식 `baseline` 영역. 판정 기준·계획은 `PoC_추가검증_계획.md`.")
+    L.append("> **정답 라벨 없음** — 병합·역할의 정오는 육안 A/B/C로 판정함.")
     L.append("")
 
     # 1. 실행 조건
@@ -93,7 +163,7 @@ def main() -> None:
         )
     L.append("")
 
-    # 2. 역할 분포 — 기계 집계. 정오는 아님
+    # 2. 역할 분포
     L.append("## 2. 역할 분포 (기계 집계 — 정오 아님)")
     L.append("")
     L.append("| variant | " + " | ".join(ROLES) + " |")
@@ -103,38 +173,81 @@ def main() -> None:
         L.append(f"| `{n}` | " + " | ".join(str(r.get(x, 0)) for x in ROLES) + " |")
     L.append("")
 
-    # 3. 판정표
-    L.append("## 3. 판정표")
+    # 3. 보조 지표
+    L.append("## 3. 보조 지표 (정답 없이 계산 — 정오 아님)")
     L.append("")
-    L.append("`병합`·`역할`은 이미지 단위 A/B/C. 나머지는 건수.")
+    L.append("- **겹침** = 블록 bbox가 서로 겹치는 쌍의 수. 과병합에서도 늘지만"
+             " **원래 겹쳐 배치된 레이아웃**(제품 패키지 사진 등)에서도 늚 — vis로 갈라야 함")
+    L.append(f"- **이질** = 한 블록 안에서 글자 높이가 {HETERO_RATIO}배 넘게 벌어진 블록 수."
+             " `h_ratio`가 직접 누르는 값이라 **variant 간 차이는 설계상 당연** — 총수보다"
+             " 어느 블록인지가 정보")
+    L.append("")
+    L.append("| variant | 겹침 | 이질 | 겹침 있는 이미지 |")
+    L.append("|---|---|---|---|")
+    per_var_machine: dict[tuple[str, str], tuple[int, int]] = {}
+    for n in names:
+        ov_total = het_total = 0
+        dirty = []
+        for img in images:
+            ov = overlap_pairs(blocks[(n, img)])
+            het = hetero_blocks(blocks[(n, img)], heights[img])
+            per_var_machine[(n, img)] = (ov, het)
+            ov_total += ov
+            het_total += het
+            if ov:
+                dirty.append(f"{img}({ov})")
+        L.append(f"| `{n}` | {ov_total} | {het_total} | {', '.join(dirty) or '—'} |")
+    L.append("")
+
+    if len(names) >= 2:
+        a, b = names[0], names[1]
+        L.append(f"**`{a}` ↔ `{b}` 블록 경계 일치율** — 구성 영역이 완전히 같은 블록 기준.")
+        L.append("")
+        L.append("| 이미지 | 일치 블록 | 일치율 |")
+        L.append("|---|---|---|")
+        tot_same = tot_rate = 0.0
+        for img in images:
+            same, rate = agreement(blocks[(a, img)], blocks[(b, img)])
+            tot_same += same
+            tot_rate += rate
+            L.append(f"| {img} | {same} | {rate:.0%} |")
+        L.append(f"| **전체** | **{int(tot_same)}** | **{tot_rate / len(images):.0%}** |")
+        L.append("")
+
+    # 4. 판정표
+    L.append("## 4. 판정표")
+    L.append("")
+    L.append("`병합`·`역할`은 이미지 단위 A/B/C. 나머지는 건수. **겹침·이질은 코드가 채움.**")
     L.append("")
     L.append("- **과분할** = 한 문단이 여러 블록으로 쪼개진 건")
     L.append("- **과병합** = 서로 다른 문단이 한 블록으로 붙은 건")
     L.append("- **오분류** = 역할 5종을 잘못 준 블록 수")
     L.append("")
-    header = "| 이미지 | variant | 영역 | 블록 | " + " | ".join(GRADE_COLS) + " | 시각화 |"
-    L.append(header)
-    L.append("|---|---|---|---|" + "---|" * len(GRADE_COLS) + "---|")
-
-    images = [p["image"] for p in metas[names[0]]["per_image"]]
+    L.append(
+        "| 이미지 | variant | 영역 | 블록 | "
+        + " | ".join(MACHINE_COLS + GRADE_COLS)
+        + " | 시각화 |"
+    )
+    L.append("|---|---|---|---|" + "---|" * (len(MACHINE_COLS) + len(GRADE_COLS)) + "---|")
     for img in images:
         stem = Path(img).stem
         for n in names:
             per = next((p for p in metas[n]["per_image"] if p["image"] == img), None)
             if per is None:
                 continue
+            ov, het = per_var_machine[(n, img)]
             vals = existing.get((img, n), [""] * len(GRADE_COLS))
             L.append(
-                f"| {img} | `{n}` | {per['regions']} | {per['blocks']} | "
+                f"| {img} | `{n}` | {per['regions']} | {per['blocks']} | {ov} | {het} | "
                 + " | ".join(vals)
                 + f" | `results/{n}/vis/{stem}.jpg` |"
             )
     L.append("")
 
-    # 4. variant 간 차이 — 어느 이미지를 먼저 볼지 고르는 용도
+    # 5. variant 간 블록 수 차이 — 볼 순서 정하는 용도
     if len(names) >= 2:
         a, b = names[0], names[1]
-        L.append(f"## 4. `{a}` vs `{b}` — 블록 수 차이")
+        L.append(f"## 5. `{a}` vs `{b}` — 블록 수 차이")
         L.append("")
         L.append("차이가 큰 이미지부터 보면 임계 변경의 효과를 빨리 판단할 수 있음.")
         L.append("")
@@ -150,14 +263,22 @@ def main() -> None:
             L.append(f"| {img} | {x} | {y} | {d:+d} |")
         L.append("")
 
-    # 5. 집계 — 채워진 칸에서만
-    filled = [v for v in existing.values()]
-    L.append("## 5. 집계")
+    # 6. 집계 — 채워진 칸에서만
+    L.append("## 6. 집계")
     L.append("")
-    if not filled:
+    if not existing:
         L.append("_판정 전_ — 채워진 칸 없음.")
     else:
-        L.append(f"채워진 행 {len(filled)} / {len(images) * len(names)}. 빈 칸은 계산에서 뺌.")
+        L.append(f"채워진 행 {len(existing)} / {len(images) * len(names)}. 빈 칸은 계산에서 뺌.")
+        for n in names:
+            got = [v for (img, var), v in existing.items() if var == n]
+            grades = [v[0] for v in got if v[0] in {"A", "B", "C"}]
+            if grades:
+                ab = sum(1 for g in grades if g in {"A", "B"})
+                L.append(
+                    f"- `{n}` 병합 — A {grades.count('A')} / B {grades.count('B')} / "
+                    f"C {grades.count('C')} · A+B {ab}/{len(grades)}"
+                )
     L.append("")
 
     OUT.write_text("\n".join(L) + "\n", encoding="utf-8")
