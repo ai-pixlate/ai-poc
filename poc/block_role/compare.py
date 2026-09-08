@@ -39,7 +39,8 @@ MACHINE_COLS = ["겹침", "이질"]
 # 판정 열 — 전부 빈 칸으로 생성한다.
 #   병합 / 역할 : 이미지 단위 A/B/C 육안 등급
 #   과분할·과병합·오분류 : 사람이 vis/ 를 보고 센 건수
-GRADE_COLS = ["병합", "역할", "과분할", "과병합", "오분류", "비고"]
+#   라벨 : 제품 인쇄 글자 블록 수. 역할 오분류율의 분모에서 빠진다
+GRADE_COLS = ["병합", "역할", "과분할", "과병합", "오분류", "라벨", "비고"]
 
 # 한 블록 안에서 이 배수를 넘게 글자 높이가 벌어지면 이질로 센다.
 HETERO_RATIO = 1.5
@@ -66,9 +67,16 @@ def grade_merge(over_split: int, over_merge: int, blocks: int) -> str:
     return "C"
 
 
-def grade_role(mis: int, blocks: int) -> str:
-    """오분류 건수 → 역할 등급. 주의문구 미탐 상한은 사람이 비고에 적고 직접 내린다."""
-    rate = mis / max(1, blocks)
+def grade_role(mis: int, blocks: int, labels: int = 0) -> str:
+    """오분류 건수 → 역할 등급.
+
+    제품 인쇄 글자(라벨) 블록은 5종 어디에도 해당하지 않으므로 분모에서 뺀다.
+    주의문구 미탐 상한은 사람이 비고에 적고 직접 내린다.
+    """
+    judged = blocks - labels
+    if judged <= 0:
+        return "—"  # 전부 라벨이라 역할을 판정할 대상이 없다
+    rate = mis / judged
     if rate <= ROLE_A:
         return "A"
     if rate <= ROLE_B:
@@ -277,8 +285,9 @@ def main() -> None:
     L.append("")
     L.append("| 축 | 처리 |")
     L.append("|---|---|")
-    L.append("| 역할 오분류 | **세지 않음.** 비고에 `라벨 n건 제외`로 적을 것 |")
+    L.append("| 역할 오분류 | **세지 않음.** 라벨 블록 수를 `라벨` 칸에 적을 것 |")
     L.append("| 과분할·과병합 | **그대로 셈** — 라벨이든 아니든 블록 경계는 맞아야 함 |")
+    L.append("| 역할 오분류율 분모 | **블록 수 − 라벨.** 전부 라벨이면 역할 등급은 `—` |")
     L.append("")
     L.append("제품 용기·패키지에 인쇄된 글자는 5종(제목·본문·캡션·가격·주의문구) 중 "
              "무엇으로 불러도 의미가 없음. **제품 라벨 판정 과업에서 별도로 판정함** — "
@@ -333,20 +342,22 @@ def main() -> None:
     else:
         L.append(f"채워진 행 {len(existing)} / {len(images) * len(names)}. 빈 칸은 계산에서 뺌.")
         L.append("")
-        L.append("| 이미지 | variant | 병합(입력) | 병합(산식) | 역할(입력) | 역할(산식) |")
-        L.append("|---|---|---|---|---|---|")
+        L.append("| 이미지 | variant | 판정 블록 | 병합(입력) | 병합(산식) | 역할(입력) | 역할(산식) |")
+        L.append("|---|---|---|---|---|---|---|")
         tally: dict[str, list[str]] = {n: [] for n in names}
         for (img, n), v in sorted(existing.items()):
             per = next((p for p in metas[n]["per_image"] if p["image"] == img), None)
             nb = per["blocks"] if per else 0
             try:
                 osp, omg, mis = int(v[2]), int(v[3]), int(v[4])
+                lab = int(v[5]) if v[5] else 0
             except ValueError:
                 continue
-            gm, gr = grade_merge(osp, omg, nb), grade_role(mis, nb)
+            gm, gr = grade_merge(osp, omg, nb), grade_role(mis, nb, lab)
             mark = lambda got, calc: f"{got or '—'}{'' if got in ('', calc) else ' ⚠'}"
             L.append(
-                f"| {img} | `{n}` | {mark(v[0], gm)} | {gm} | {mark(v[1], gr)} | {gr} |"
+                f"| {img} | `{n}` | {nb - lab}/{nb} | {mark(v[0], gm)} | {gm} | "
+                f"{mark(v[1], gr)} | {gr} |"
             )
             tally[n].append(v[0] or gm)
         L.append("")

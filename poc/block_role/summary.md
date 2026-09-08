@@ -69,37 +69,38 @@
 
 | 축 | 처리 |
 |---|---|
-| 역할 오분류 | **세지 않음.** 비고에 `라벨 n건 제외`로 적을 것 |
+| 역할 오분류 | **세지 않음.** 라벨 블록 수를 `라벨` 칸에 적을 것 |
 | 과분할·과병합 | **그대로 셈** — 라벨이든 아니든 블록 경계는 맞아야 함 |
+| 역할 오분류율 분모 | **블록 수 − 라벨.** 전부 라벨이면 역할 등급은 `—` |
 
 제품 용기·패키지에 인쇄된 글자는 5종(제목·본문·캡션·가격·주의문구) 중 무엇으로 불러도 의미가 없음. **제품 라벨 판정 과업에서 별도로 판정함** — 여기서 억지로 5종에 넣어 세면 같은 블록을 서로 다른 기준으로 두 번 판정하게 됨. 인페인팅 판정에서 쓴 관례와 같음(`PoC_검증_계획_및_기록.md` 2.2).
 
-| 이미지 | variant | 영역 | 블록 | 겹침 | 이질 | 병합 | 역할 | 과분할 | 과병합 | 오분류 | 비고 | 시각화 |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| 1.jpg | `heuristic_v1` | 13 | 7 | 0 | 0 |  |  |  |  |  |  | `results/heuristic_v1/vis/1.jpg` |
-| 1.jpg | `heuristic_v2` | 13 | 7 | 0 | 0 |  |  |  |  |  |  | `results/heuristic_v2/vis/1.jpg` |
-| 2.jpg | `heuristic_v1` | 18 | 9 | 3 | 1 |  |  |  |  |  |  | `results/heuristic_v1/vis/2.jpg` |
-| 2.jpg | `heuristic_v2` | 18 | 9 | 3 | 1 |  |  |  |  |  |  | `results/heuristic_v2/vis/2.jpg` |
-| 3.jpg | `heuristic_v1` | 5 | 4 | 3 | 0 |  |  |  |  |  |  | `results/heuristic_v1/vis/3.jpg` |
-| 3.jpg | `heuristic_v2` | 5 | 4 | 3 | 0 |  |  |  |  |  |  | `results/heuristic_v2/vis/3.jpg` |
-| 4.jpg | `heuristic_v1` | 11 | 5 | 2 | 0 |  |  |  |  |  |  | `results/heuristic_v1/vis/4.jpg` |
-| 4.jpg | `heuristic_v2` | 11 | 5 | 2 | 0 |  |  |  |  |  |  | `results/heuristic_v2/vis/4.jpg` |
-| 5.jpg | `heuristic_v1` | 38 | 24 | 2 | 2 |  |  |  |  |  |  | `results/heuristic_v1/vis/5.jpg` |
-| 5.jpg | `heuristic_v2` | 38 | 25 | 2 | 1 |  |  |  |  |  |  | `results/heuristic_v2/vis/5.jpg` |
-| 6.jpg | `heuristic_v1` | 28 | 15 | 4 | 1 |  |  |  |  |  |  | `results/heuristic_v1/vis/6.jpg` |
-| 6.jpg | `heuristic_v2` | 28 | 16 | 4 | 0 |  |  |  |  |  |  | `results/heuristic_v2/vis/6.jpg` |
-| 7.jpg | `heuristic_v1` | 34 | 17 | 2 | 4 |  |  |  |  |  |  | `results/heuristic_v1/vis/7.jpg` |
-| 7.jpg | `heuristic_v2` | 34 | 21 | 4 | 1 |  |  |  |  |  |  | `results/heuristic_v2/vis/7.jpg` |
-| 8.jpg | `heuristic_v1` | 14 | 10 | 1 | 0 |  |  |  |  |  |  | `results/heuristic_v1/vis/8.jpg` |
-| 8.jpg | `heuristic_v2` | 14 | 10 | 1 | 0 |  |  |  |  |  |  | `results/heuristic_v2/vis/8.jpg` |
-| 9.jpg | `heuristic_v1` | 39 | 19 | 4 | 5 |  |  |  |  |  |  | `results/heuristic_v1/vis/9.jpg` |
-| 9.jpg | `heuristic_v2` | 39 | 23 | 5 | 0 |  |  |  |  |  |  | `results/heuristic_v2/vis/9.jpg` |
-| 10.jpg | `heuristic_v1` | 17 | 9 | 0 | 1 |  |  |  |  |  |  | `results/heuristic_v1/vis/10.jpg` |
-| 10.jpg | `heuristic_v2` | 17 | 11 | 0 | 0 |  |  |  |  |  |  | `results/heuristic_v2/vis/10.jpg` |
-| 11.jpg | `heuristic_v1` | 46 | 32 | 10 | 5 |  |  |  |  |  |  | `results/heuristic_v1/vis/11.jpg` |
-| 11.jpg | `heuristic_v2` | 46 | 36 | 13 | 1 |  |  |  |  |  |  | `results/heuristic_v2/vis/11.jpg` |
-| 12.jpg | `heuristic_v1` | 17 | 8 | 1 | 1 |  |  |  |  |  |  | `results/heuristic_v1/vis/12.jpg` |
-| 12.jpg | `heuristic_v2` | 17 | 9 | 1 | 0 |  |  |  |  |  |  | `results/heuristic_v2/vis/12.jpg` |
+| 이미지 | variant | 영역 | 블록 | 겹침 | 이질 | 병합 | 역할 | 과분할 | 과병합 | 오분류 | 라벨 | 비고 | 시각화 |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 1.jpg | `heuristic_v1` | 13 | 7 | 0 | 0 |  |  |  |  |  |  |  | `results/heuristic_v1/vis/1.jpg` |
+| 1.jpg | `heuristic_v2` | 13 | 7 | 0 | 0 |  |  |  |  |  |  |  | `results/heuristic_v2/vis/1.jpg` |
+| 2.jpg | `heuristic_v1` | 18 | 9 | 3 | 1 |  |  |  |  |  |  |  | `results/heuristic_v1/vis/2.jpg` |
+| 2.jpg | `heuristic_v2` | 18 | 9 | 3 | 1 |  |  |  |  |  |  |  | `results/heuristic_v2/vis/2.jpg` |
+| 3.jpg | `heuristic_v1` | 5 | 4 | 3 | 0 |  |  |  |  |  |  |  | `results/heuristic_v1/vis/3.jpg` |
+| 3.jpg | `heuristic_v2` | 5 | 4 | 3 | 0 |  |  |  |  |  |  |  | `results/heuristic_v2/vis/3.jpg` |
+| 4.jpg | `heuristic_v1` | 11 | 5 | 2 | 0 |  |  |  |  |  |  |  | `results/heuristic_v1/vis/4.jpg` |
+| 4.jpg | `heuristic_v2` | 11 | 5 | 2 | 0 |  |  |  |  |  |  |  | `results/heuristic_v2/vis/4.jpg` |
+| 5.jpg | `heuristic_v1` | 38 | 24 | 2 | 2 |  |  |  |  |  |  |  | `results/heuristic_v1/vis/5.jpg` |
+| 5.jpg | `heuristic_v2` | 38 | 25 | 2 | 1 |  |  |  |  |  |  |  | `results/heuristic_v2/vis/5.jpg` |
+| 6.jpg | `heuristic_v1` | 28 | 15 | 4 | 1 |  |  |  |  |  |  |  | `results/heuristic_v1/vis/6.jpg` |
+| 6.jpg | `heuristic_v2` | 28 | 16 | 4 | 0 |  |  |  |  |  |  |  | `results/heuristic_v2/vis/6.jpg` |
+| 7.jpg | `heuristic_v1` | 34 | 17 | 2 | 4 |  |  |  |  |  |  |  | `results/heuristic_v1/vis/7.jpg` |
+| 7.jpg | `heuristic_v2` | 34 | 21 | 4 | 1 |  |  |  |  |  |  |  | `results/heuristic_v2/vis/7.jpg` |
+| 8.jpg | `heuristic_v1` | 14 | 10 | 1 | 0 |  |  |  |  |  |  |  | `results/heuristic_v1/vis/8.jpg` |
+| 8.jpg | `heuristic_v2` | 14 | 10 | 1 | 0 |  |  |  |  |  |  |  | `results/heuristic_v2/vis/8.jpg` |
+| 9.jpg | `heuristic_v1` | 39 | 19 | 4 | 5 |  |  |  |  |  |  |  | `results/heuristic_v1/vis/9.jpg` |
+| 9.jpg | `heuristic_v2` | 39 | 23 | 5 | 0 |  |  |  |  |  |  |  | `results/heuristic_v2/vis/9.jpg` |
+| 10.jpg | `heuristic_v1` | 17 | 9 | 0 | 1 |  |  |  |  |  |  |  | `results/heuristic_v1/vis/10.jpg` |
+| 10.jpg | `heuristic_v2` | 17 | 11 | 0 | 0 |  |  |  |  |  |  |  | `results/heuristic_v2/vis/10.jpg` |
+| 11.jpg | `heuristic_v1` | 46 | 32 | 10 | 5 |  |  |  |  |  |  |  | `results/heuristic_v1/vis/11.jpg` |
+| 11.jpg | `heuristic_v2` | 46 | 36 | 13 | 1 |  |  |  |  |  |  |  | `results/heuristic_v2/vis/11.jpg` |
+| 12.jpg | `heuristic_v1` | 17 | 8 | 1 | 1 |  |  |  |  |  |  |  | `results/heuristic_v1/vis/12.jpg` |
+| 12.jpg | `heuristic_v2` | 17 | 9 | 1 | 0 |  |  |  |  |  |  |  | `results/heuristic_v2/vis/12.jpg` |
 
 ## 5. `heuristic_v1` vs `heuristic_v2` — 블록 수 차이
 
