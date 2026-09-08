@@ -1,0 +1,22 @@
+# 현재 git 저장소가 아니지만, 나중에 init 할 때 키가 딸려 들어가는 사고를 막으려고 미리 둔다.
+.env
+.env.*
+!.env.example
+
+# 가상환경
+.venv/
+.venv-e1/
+
+# 실행 산출물 — 용량이 크고 재생성 가능
+poc/*/results/
+poc/*/cache/
+poc/C_translate/scores/
+
+# 데이터 원본 (재배포 금지 대상)
+data/
+
+__pycache__/
+*.pyc
+
+# 가상환경 (G 과업)
+.venv-g/

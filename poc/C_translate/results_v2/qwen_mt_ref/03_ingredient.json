@@ -1,0 +1,58 @@
+{
+ "image": "03_ingredient.synthetic",
+ "model": "qwen_mt_ref",
+ "kind": "참고 측정 — 벤치마크 후보 아님",
+ "model_id": "qwen-mt-plus",
+ "translations": [
+  {
+   "id": "03_ingredient-01",
+   "translation": "Three key ingredients",
+   "note": ""
+  },
+  {
+   "id": "03_ingredient-02",
+   "translation": "Hydrolyzed collagen",
+   "note": ""
+  },
+  {
+   "id": "03_ingredient-03",
+   "translation": "Contains 2% niacinamide",
+   "note": ""
+  },
+  {
+   "id": "03_ingredient-04",
+   "translation": "Contains 0.04% adenosine",
+   "note": ""
+  },
+  {
+   "id": "03_ingredient-05",
+   "translation": "Five-hyaluronic-acid complex",
+   "note": ""
+  },
+  {
+   "id": "03_ingredient-06",
+   "translation": "Forms a moisturizing barrier with panthenol and ceramides",
+   "note": ""
+  },
+  {
+   "id": "03_ingredient-07",
+   "translation": "Soothing with centella asiatica extract",
+   "note": ""
+  },
+  {
+   "id": "03_ingredient-08",
+   "translation": "Formulated with ingredients that help reduce the look of fine lines for blemish-prone skin",
+   "note": ""
+  },
+  {
+   "id": "03_ingredient-09",
+   "translation": "Fragrance-free, colorant-free formula",
+   "note": ""
+  },
+  {
+   "id": "03_ingredient-10",
+   "translation": "All ingredients are listed on the product container and the individual box.",
+   "note": ""
+  }
+ ]
+}

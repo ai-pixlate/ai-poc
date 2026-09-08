@@ -1,0 +1,46 @@
+{
+ "image": "08_notice.synthetic",
+ "model": "gpt",
+ "translations": [
+  {
+   "id": "08_notice-01",
+   "translation": "Precautions for Use",
+   "note": ""
+  },
+  {
+   "id": "08_notice-02",
+   "translation": "Do not use on wounded areas",
+   "note": ""
+  },
+  {
+   "id": "08_notice-03",
+   "translation": "If redness, swelling, itching, or other abnormalities occur during use, stop use and consult a specialist",
+   "note": ""
+  },
+  {
+   "id": "08_notice-04",
+   "translation": "Store in a cool place away from direct sunlight",
+   "note": ""
+  },
+  {
+   "id": "08_notice-05",
+   "translation": "Keep out of reach of children",
+   "note": ""
+  },
+  {
+   "id": "08_notice-06",
+   "translation": "This product is not a medicine and is not intended for disease care",
+   "note": "‘치료’를 규제 매핑에 따라 ‘care’로 대체"
+  },
+  {
+   "id": "08_notice-07",
+   "translation": "Use as soon as possible after opening",
+   "note": ""
+  },
+  {
+   "id": "08_notice-08",
+   "translation": "Exchanges and refunds are available within 7 days of receipt",
+   "note": ""
+  }
+ ]
+}

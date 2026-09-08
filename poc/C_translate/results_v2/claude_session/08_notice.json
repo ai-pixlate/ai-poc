@@ -1,0 +1,49 @@
+{
+ "image": "08_notice.synthetic",
+ "model": "claude_session",
+ "kind": "예비 실행 — 벤치마크 아님",
+ "target_lang": "영어",
+ "regulation_table_is_test": true,
+ "translations": [
+  {
+   "id": "08_notice-01",
+   "translation": "Precautions for Use",
+   "note": ""
+  },
+  {
+   "id": "08_notice-02",
+   "translation": "Avoid use on wounded areas",
+   "note": ""
+  },
+  {
+   "id": "08_notice-03",
+   "translation": "If red spots, swelling, or itching occur during use, discontinue use and consult a specialist",
+   "note": ""
+  },
+  {
+   "id": "08_notice-04",
+   "translation": "Store in a cool place away from direct sunlight",
+   "note": ""
+  },
+  {
+   "id": "08_notice-05",
+   "translation": "Keep out of reach of children",
+   "note": ""
+  },
+  {
+   "id": "08_notice-06",
+   "translation": "This product is not a drug and cannot be used for the purpose of treating disease",
+   "note": "⚠️ 규제표는 '치료 → care'를 지시하나 **따르지 않았음**. 이 문장은 효능을 주장하는 것이 아니라 '치료 목적으로 쓸 수 없다'고 부인하는 법정 고지문이다. 치환하면 문장이 무의미해지고 고지 기능이 깨진다"
+  },
+  {
+   "id": "08_notice-07",
+   "translation": "Use as soon as possible after opening",
+   "note": ""
+  },
+  {
+   "id": "08_notice-08",
+   "translation": "Exchanges and refunds are available within 7 days of receipt",
+   "note": ""
+  }
+ ]
+}

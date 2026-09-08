@@ -1,0 +1,64 @@
+{
+ "image": "10.jpg",
+ "model": "claude_session",
+ "kind": "예비 실행 — 벤치마크 아님",
+ "target_lang": "영어",
+ "regulation_table_is_test": true,
+ "translations": [
+  {
+   "id": "10-02",
+   "translation": "Extra Gift",
+   "note": ""
+  },
+  {
+   "id": "10-05",
+   "translation": "OLIVE YOUNG",
+   "note": ""
+  },
+  {
+   "id": "10-06",
+   "translation": "Exclusive Deal",
+   "note": ""
+  },
+  {
+   "id": "10-08",
+   "translation": "Skin Irritation",
+   "note": ""
+  },
+  {
+   "id": "10-10",
+   "translation": "Review Event",
+   "note": ""
+  },
+  {
+   "id": "10-11",
+   "translation": "KRW 3,000",
+   "note": "통화 단위 명시"
+  },
+  {
+   "id": "10-12",
+   "translation": "SUNG HANBIN's PICK",
+   "note": "인물명 로마자 표기"
+  },
+  {
+   "id": "10-14",
+   "translation": "No.1",
+   "note": ""
+  },
+  {
+   "id": "10-15",
+   "translation": "Pack Cleanser",
+   "note": ""
+  },
+  {
+   "id": "10-16",
+   "translation": "*No.1 in the OLIVE YOUNG online mall cleansing category sales ranking, as of 09:00 on 2026.01.30",
+   "note": ""
+  },
+  {
+   "id": "10-17",
+   "translation": "*No.1 in the OLIVE YOUNG online mall cleansing category sales ranking, as of 08:00 and 09:00 on 2026.06.29",
+   "note": ""
+  }
+ ]
+}

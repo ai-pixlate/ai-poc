@@ -1,0 +1,11 @@
+{
+ "model_id": "qwen-mt-plus",
+ "kind": "참고 측정",
+ "segments": 89,
+ "input_tokens": 29120,
+ "output_tokens": 1154,
+ "total_sec": 14.0,
+ "cost_upper_bound_usd": 0.0652,
+ "cost_note": "qwen-mt-plus 단가 미공개. qwen3.8-max 단가($2/$6)로 계산한 상한",
+ "run_at": "2026-08-25 13:41:41"
+}

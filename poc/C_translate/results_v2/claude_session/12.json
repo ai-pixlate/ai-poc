@@ -1,0 +1,29 @@
+{
+ "image": "12.jpg",
+ "model": "claude_session",
+ "kind": "예비 실행 — 벤치마크 아님",
+ "target_lang": "영어",
+ "regulation_table_is_test": true,
+ "translations": [
+  {
+   "id": "12-04",
+   "translation": "WONI",
+   "note": ""
+  },
+  {
+   "id": "12-11",
+   "translation": "Collagen",
+   "note": ""
+  },
+  {
+   "id": "12-12",
+   "translation": "Moisture",
+   "note": ""
+  },
+  {
+   "id": "12-13",
+   "translation": "Cream",
+   "note": ""
+  }
+ ]
+}

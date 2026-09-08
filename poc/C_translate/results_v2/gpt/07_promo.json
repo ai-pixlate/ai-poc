@@ -1,0 +1,46 @@
+{
+ "image": "07_promo.synthetic",
+ "model": "gpt",
+ "translations": [
+  {
+   "id": "07_promo-01",
+   "translation": "Exclusive Limited Offer",
+   "note": ""
+  },
+  {
+   "id": "07_promo-02",
+   "translation": "1+1 Double Deal",
+   "note": ""
+  },
+  {
+   "id": "07_promo-03",
+   "translation": "First 3,000 Customers",
+   "note": ""
+  },
+  {
+   "id": "07_promo-04",
+   "translation": "Free 10ml Mini with Purchase",
+   "note": ""
+  },
+  {
+   "id": "07_promo-05",
+   "translation": "Earn KRW 3,000 Points for a Review",
+   "note": ""
+  },
+  {
+   "id": "07_promo-06",
+   "translation": "Gift Period: Aug 19–Aug 23 (Ends early if sold out)",
+   "note": ""
+  },
+  {
+   "id": "07_promo-07",
+   "translation": "No.1 Seller in Online Mall Skincare*",
+   "note": ""
+  },
+  {
+   "id": "07_promo-08",
+   "translation": "*Based on official online store sales, June 2026",
+   "note": ""
+  }
+ ]
+}

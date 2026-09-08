@@ -1,0 +1,56 @@
+{
+ "image": "02_benefit.synthetic",
+ "model": "gemini",
+ "translations": [
+  {
+   "id": "02_benefit-01",
+   "translation": "Brightening functional cosmetic",
+   "note": "규제 매핑 적용: 미백 → brightening"
+  },
+  {
+   "id": "02_benefit-02",
+   "translation": "Dual-functional to help reduce the look of fine lines",
+   "note": "규제 매핑 적용: 주름 개선 → helps reduce the look of fine lines"
+  },
+  {
+   "id": "02_benefit-03",
+   "translation": "Aids in renewing tired skin",
+   "note": "규제 매핑 적용: 재생 → renewing"
+  },
+  {
+   "id": "02_benefit-04",
+   "translation": "Fast-acting plumping hydration",
+   "note": "규제 매핑 적용: 즉각 → fast-acting"
+  },
+  {
+   "id": "02_benefit-05",
+   "translation": "The start of age-defying care",
+   "note": "규제 매핑 적용: 안티에이징 → age-defying"
+  },
+  {
+   "id": "02_benefit-06",
+   "translation": "Illuminates dull skin tone",
+   "note": ""
+  },
+  {
+   "id": "02_benefit-07",
+   "translation": "For sagging skin lacking elasticity",
+   "note": ""
+  },
+  {
+   "id": "02_benefit-08",
+   "translation": "Even flaky skin caused by dryness",
+   "note": ""
+  },
+  {
+   "id": "02_benefit-09",
+   "translation": "Skin-hugging texture that fills every single pore",
+   "note": ""
+  },
+  {
+   "id": "02_benefit-10",
+   "translation": "92% satisfaction after 4 weeks of use*",
+   "note": ""
+  }
+ ]
+}

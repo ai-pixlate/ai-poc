@@ -1,0 +1,31 @@
+{
+ "image": "06_texture.synthetic",
+ "model": "gemini",
+ "translations": [
+  {
+   "id": "06_texture-01",
+   "translation": "Quick-absorbing watery texture",
+   "note": ""
+  },
+  {
+   "id": "06_texture-02",
+   "translation": "Non-sticky finish",
+   "note": ""
+  },
+  {
+   "id": "06_texture-03",
+   "translation": "Weightless under makeup",
+   "note": ""
+  },
+  {
+   "id": "06_texture-04",
+   "translation": "Thin, seamless adherence",
+   "note": ""
+  },
+  {
+   "id": "06_texture-05",
+   "translation": "Subtle glowing finish",
+   "note": ""
+  }
+ ]
+}

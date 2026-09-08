@@ -1,0 +1,46 @@
+{
+ "image": "04_safety.synthetic",
+ "model": "claude",
+ "translations": [
+  {
+   "id": "04_safety-01",
+   "translation": "Low-irritation skin test completed",
+   "note": ""
+  },
+  {
+   "id": "04_safety-02",
+   "translation": "Free of 25 common allergens",
+   "note": ""
+  },
+  {
+   "id": "04_safety-03",
+   "translation": "Compliant with MFDS notified standards",
+   "note": "식약처를 영어권 통용 표기 MFDS(Ministry of Food and Drug Safety)로 옮김"
+  },
+  {
+   "id": "04_safety-04",
+   "translation": "Vegan certified",
+   "note": ""
+  },
+  {
+   "id": "04_safety-05",
+   "translation": "Not tested on animals",
+   "note": ""
+  },
+  {
+   "id": "04_safety-06",
+   "translation": "Gentle formula, confirmed mild",
+   "note": "규제 매핑 적용: '부작용 없음' → 'gentle formula'"
+  },
+  {
+   "id": "04_safety-07",
+   "translation": "Clinically tested on sensitive skin",
+   "note": ""
+  },
+  {
+   "id": "04_safety-08",
+   "translation": "*Human application test under dermatologist supervision, 32 adult women, 4 weeks",
+   "note": ""
+  }
+ ]
+}

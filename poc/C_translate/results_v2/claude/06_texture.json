@@ -1,0 +1,31 @@
+{
+ "image": "06_texture.synthetic",
+ "model": "claude",
+ "translations": [
+  {
+   "id": "06_texture-01",
+   "translation": "A watery texture that sinks in fresh",
+   "note": ""
+  },
+  {
+   "id": "06_texture-02",
+   "translation": "A non-sticky, clean finish",
+   "note": ""
+  },
+  {
+   "id": "06_texture-03",
+   "translation": "Lightweight even before makeup",
+   "note": ""
+  },
+  {
+   "id": "06_texture-04",
+   "translation": "Thin, close-hugging application",
+   "note": ""
+  },
+  {
+   "id": "06_texture-05",
+   "translation": "A finish with a subtle glow",
+   "note": ""
+  }
+ ]
+}

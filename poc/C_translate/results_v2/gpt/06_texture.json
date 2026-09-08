@@ -1,0 +1,31 @@
+{
+ "image": "06_texture.synthetic",
+ "model": "gpt",
+ "translations": [
+  {
+   "id": "06_texture-01",
+   "translation": "Light, watery texture that sinks in",
+   "note": ""
+  },
+  {
+   "id": "06_texture-02",
+   "translation": "Non-sticky finish",
+   "note": ""
+  },
+  {
+   "id": "06_texture-03",
+   "translation": "Comfortable even before makeup",
+   "note": ""
+  },
+  {
+   "id": "06_texture-04",
+   "translation": "Applies thinly and adheres closely",
+   "note": ""
+  },
+  {
+   "id": "06_texture-05",
+   "translation": "A finish with a subtle glow",
+   "note": ""
+  }
+ ]
+}

@@ -1,0 +1,46 @@
+{
+ "image": "04_safety.synthetic",
+ "model": "gpt",
+ "translations": [
+  {
+   "id": "04_safety-01",
+   "translation": "Skin irritation test completed",
+   "note": ""
+  },
+  {
+   "id": "04_safety-02",
+   "translation": "Free from 25 allergenic ingredients",
+   "note": ""
+  },
+  {
+   "id": "04_safety-03",
+   "translation": "Complies with MFDS standards",
+   "note": ""
+  },
+  {
+   "id": "04_safety-04",
+   "translation": "Vegan certified",
+   "note": ""
+  },
+  {
+   "id": "04_safety-05",
+   "translation": "Not tested on animals",
+   "note": ""
+  },
+  {
+   "id": "04_safety-06",
+   "translation": "Gentle formula",
+   "note": "Replaced “부작용 없음” with the required regulatory alternative “gentle formula.”"
+  },
+  {
+   "id": "04_safety-07",
+   "translation": "Clinical test on sensitive skin completed",
+   "note": ""
+  },
+  {
+   "id": "04_safety-08",
+   "translation": "*Human application test under dermatologist supervision, 32 adult women, 4 weeks",
+   "note": ""
+  }
+ ]
+}

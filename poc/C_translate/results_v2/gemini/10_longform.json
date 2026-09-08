@@ -1,0 +1,56 @@
+{
+ "image": "10_longform.synthetic",
+ "model": "gemini",
+ "translations": [
+  {
+   "id": "10_longform-01",
+   "translation": "For skin exhausted by daily irritation and dryness, low-molecular collagen and hyaluronic acid absorb layer by layer to comfortably plump from within.",
+   "note": ""
+  },
+  {
+   "id": "10_longform-02",
+   "translation": "Apply right after cleansing while skin is still damp to help active ingredients absorb deeper and deliver all-day moisture.",
+   "note": ""
+  },
+  {
+   "id": "10_longform-03",
+   "translation": "Leaves a fresh, non-sticky finish while relieving inner tightness, making it a perfect lightweight prep step before makeup.",
+   "note": ""
+  },
+  {
+   "id": "10_longform-04",
+   "translation": "A bouncy, skin-hugging texture that perfectly preps skin for makeup.",
+   "note": "'화잘먹'을 'preps skin for makeup'으로 자연스럽게 의역함"
+  },
+  {
+   "id": "10_longform-05",
+   "translation": "A dual-moisturizing system that keeps the surface fresh and the inside hydrated.",
+   "note": ""
+  },
+  {
+   "id": "10_longform-06",
+   "translation": "Absorbs gently, even into sensitive skin that gets irritated during seasonal changes.",
+   "note": ""
+  },
+  {
+   "id": "10_longform-07",
+   "translation": "Upon application, it forms a thin moisture barrier to prevent moisture loss.",
+   "note": ""
+  },
+  {
+   "id": "10_longform-08",
+   "translation": "The Centella Asiatica extract used in this product is refined from Madagascar ingredients via cold extraction to minimize active ingredient loss.",
+   "note": ""
+  },
+  {
+   "id": "10_longform-09",
+   "translation": "We recommend applying a small amount to the inner wrist to check for any skin reactions before applying it to your face.",
+   "note": "'손등 안쪽'은 실제 패치 테스트 부위를 고려하여 자연스러운 표현인 'inner wrist'로 대체함"
+  },
+  {
+   "id": "10_longform-10",
+   "translation": "This text is based on individual user experiences and does not guarantee the same results for all users.",
+   "note": ""
+  }
+ ]
+}

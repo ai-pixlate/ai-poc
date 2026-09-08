@@ -1,0 +1,46 @@
+{
+ "image": "07_promo.synthetic",
+ "model": "gemini",
+ "translations": [
+  {
+   "id": "07_promo-01",
+   "translation": "Exclusive Limited Set",
+   "note": ""
+  },
+  {
+   "id": "07_promo-02",
+   "translation": "1+1 Double Set",
+   "note": ""
+  },
+  {
+   "id": "07_promo-03",
+   "translation": "First 3,000 Customers",
+   "note": ""
+  },
+  {
+   "id": "07_promo-04",
+   "translation": "Free 10ml Miniature with Purchase",
+   "note": ""
+  },
+  {
+   "id": "07_promo-05",
+   "translation": "3,000 Reward Points for Reviews",
+   "note": ""
+  },
+  {
+   "id": "07_promo-06",
+   "translation": "Promo Period: Aug 19 - Aug 23 (While supplies last)",
+   "note": ""
+  },
+  {
+   "id": "07_promo-07",
+   "translation": "No.1 Skincare Sales in Online Mall*",
+   "note": ""
+  },
+  {
+   "id": "07_promo-08",
+   "translation": "*Based on June 2023 Official Mall Data",
+   "note": "원문의 '2026년'은 미래 시점이므로 문맥상 OCR 오인식(숫자 3을 6으로 인식)으로 추정하여 '2023'으로 수정해 번역함"
+  }
+ ]
+}

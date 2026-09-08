@@ -1,0 +1,56 @@
+{
+ "image": "10_longform.synthetic",
+ "model": "qwen",
+ "translations": [
+  {
+   "id": "10_longform-01",
+   "translation": "For skin tired by daily irritation and dryness, low-molecular-weight collagen and hyaluronic acid absorb layer by layer, comfortably filling skin from within.",
+   "note": ""
+  },
+  {
+   "id": "10_longform-02",
+   "translation": "When used right after cleansing while skin is still damp, active ingredients settle deeper and hydration lasts all day.",
+   "note": ""
+  },
+  {
+   "id": "10_longform-03",
+   "translation": "Leaves a fresh, non-sticky finish while keeping inner tightness at bay, so it can be used effortlessly before makeup.",
+   "note": ""
+  },
+  {
+   "id": "10_longform-04",
+   "translation": "A bouncy, skin-hugging texture for makeup-ready skin.",
+   "note": ""
+  },
+  {
+   "id": "10_longform-05",
+   "translation": "Dual moisturizing design that keeps skin fresh on the surface and hydrated within.",
+   "note": ""
+  },
+  {
+   "id": "10_longform-06",
+   "translation": "Gently absorbs into sensitive skin that becomes unsettled during seasonal transitions.",
+   "note": ""
+  },
+  {
+   "id": "10_longform-07",
+   "translation": "Upon application, a thin moisturizing barrier forms on skin to help prevent moisture loss.",
+   "note": ""
+  },
+  {
+   "id": "10_longform-08",
+   "translation": "The Centella asiatica extract used in this product is refined from Madagascar-sourced ingredients by low-temperature extraction to minimize loss of active ingredients.",
+   "note": ""
+  },
+  {
+   "id": "10_longform-09",
+   "translation": "We recommend applying a small amount to the inner side of your hand before use, checking for any unusual reaction, then applying to the face.",
+   "note": ""
+  },
+  {
+   "id": "10_longform-10",
+   "translation": "This ad copy is based on individual usage experiences and does not guarantee the same results for all users.",
+   "note": ""
+  }
+ ]
+}

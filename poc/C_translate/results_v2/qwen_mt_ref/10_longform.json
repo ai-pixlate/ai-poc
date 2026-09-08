@@ -1,0 +1,58 @@
+{
+ "image": "10_longform.synthetic",
+ "model": "qwen_mt_ref",
+ "kind": "참고 측정 — 벤치마크 후보 아님",
+ "model_id": "qwen-mt-plus",
+ "translations": [
+  {
+   "id": "10_longform-01",
+   "translation": "For skin tired from daily irritation and dryness, low-molecular collagen and hyaluronic acid penetrate layer by layer to gently hydrate from within.",
+   "note": ""
+  },
+  {
+   "id": "10_longform-02",
+   "translation": "Apply while your skin is still damp right after cleansing to help the active ingredients penetrate deeper, keeping your skin hydrated all day long.",
+   "note": ""
+  },
+  {
+   "id": "10_longform-03",
+   "translation": "It delivers a fresh, non-sticky finish while addressing tightness, making it easy to use even as the first step before makeup.",
+   "note": ""
+  },
+  {
+   "id": "10_longform-04",
+   "translation": "A firm, adherent texture that creates healthy-looking skin",
+   "note": ""
+  },
+  {
+   "id": "10_longform-05",
+   "translation": "A dual-hydration formula that leaves the surface feeling fresh while deeply moisturizing the skin.",
+   "note": ""
+  },
+  {
+   "id": "10_longform-06",
+   "translation": "It gently absorbs even into sensitive skin that tends to flare up with the changing seasons.",
+   "note": ""
+  },
+  {
+   "id": "10_longform-07",
+   "translation": "The moment it’s applied, a thin moisturizing film forms on the skin to prevent moisture from evaporating.",
+   "note": ""
+  },
+  {
+   "id": "10_longform-08",
+   "translation": "The centella asiatica extract used in this product is refined from Madagascar-sourced raw materials using a low-temperature extraction method, minimizing the loss of active ingredients.",
+   "note": ""
+  },
+  {
+   "id": "10_longform-09",
+   "translation": "We recommend applying a small amount to the back of your hand before use to check for any adverse reactions, then using it on your face.",
+   "note": ""
+  },
+  {
+   "id": "10_longform-10",
+   "translation": "This advertising copy is based on individual user experiences and does not guarantee the same results for all users.",
+   "note": ""
+  }
+ ]
+}

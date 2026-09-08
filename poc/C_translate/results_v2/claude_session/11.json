@@ -1,0 +1,54 @@
+{
+ "image": "11.jpg",
+ "model": "claude_session",
+ "kind": "예비 실행 — 벤치마크 아님",
+ "target_lang": "영어",
+ "regulation_table_is_test": true,
+ "translations": [
+  {
+   "id": "11-09",
+   "translation": "Stick-On Collagen Ampoule",
+   "note": ""
+  },
+  {
+   "id": "11-16",
+   "translation": "#ElasticityLifting #PoreFilling",
+   "note": "해시태그 형식 유지"
+  },
+  {
+   "id": "11-26",
+   "translation": "MEDIHEAL Hyper Collagen Mask",
+   "note": "OCR '이디협 하이퍼 클라견아스크' → 문맥의 MEDIHEAL / HYPER COLLAGEN으로 복원"
+  },
+  {
+   "id": "11-28",
+   "translation": "Limited Deal",
+   "note": ""
+  },
+  {
+   "id": "11-31",
+   "translation": "Extra Gift!",
+   "note": ""
+  },
+  {
+   "id": "11-32",
+   "translation": "",
+   "note": "OCR '이이' — 복원 불가. 문맥상 '8+1'의 일부로 보이나 확정 못 함"
+  },
+  {
+   "id": "11-44",
+   "translation": "Exclusive",
+   "note": ""
+  },
+  {
+   "id": "11-45",
+   "translation": "Deal",
+   "note": ""
+  },
+  {
+   "id": "11-46",
+   "translation": "OLIVE YOUNG",
+   "note": ""
+  }
+ ]
+}

@@ -1,0 +1,46 @@
+{
+ "image": "01_intro.synthetic",
+ "model": "gemini",
+ "translations": [
+  {
+   "id": "01_intro-01",
+   "translation": "Lumiere Collagen Ampoule",
+   "note": ""
+  },
+  {
+   "id": "01_intro-02",
+   "translation": "Start your firming routine now",
+   "note": ""
+  },
+  {
+   "id": "01_intro-03",
+   "translation": "One drop a day, lightly layered daily",
+   "note": ""
+  },
+  {
+   "id": "01_intro-04",
+   "translation": "Low-molecular collagen filling from within",
+   "note": ""
+  },
+  {
+   "id": "01_intro-05",
+   "translation": "Time for your skin to transform",
+   "note": ""
+  },
+  {
+   "id": "01_intro-06",
+   "translation": "Comfortable even for sensitive skin",
+   "note": ""
+  },
+  {
+   "id": "01_intro-07",
+   "translation": "Daily Ampoule 30ml",
+   "note": ""
+  },
+  {
+   "id": "01_intro-08",
+   "translation": "Celebrating the new launch",
+   "note": ""
+  }
+ ]
+}

@@ -1,0 +1,56 @@
+{
+ "image": "02_benefit.synthetic",
+ "model": "qwen",
+ "translations": [
+  {
+   "id": "02_benefit-01",
+   "translation": "Brightening functional cosmetic",
+   "note": "'미백'을 'brightening'으로 대체"
+  },
+  {
+   "id": "02_benefit-02",
+   "translation": "Dual functional that helps reduce the look of fine lines",
+   "note": "'주름 개선'을 'helps reduce the look of fine lines'로 대체"
+  },
+  {
+   "id": "02_benefit-03",
+   "translation": "Renewing care for tired skin",
+   "note": "'재생'을 'renewing'으로 대체"
+  },
+  {
+   "id": "02_benefit-04",
+   "translation": "Fast-acting plumping hydration",
+   "note": "'즉각'을 'fast-acting'으로 대체"
+  },
+  {
+   "id": "02_benefit-05",
+   "translation": "Start of age-defying care",
+   "note": "'안티에이징'을 'age-defying'으로 대체"
+  },
+  {
+   "id": "02_benefit-06",
+   "translation": "Brightens dull skin tone",
+   "note": ""
+  },
+  {
+   "id": "02_benefit-07",
+   "translation": "For sagging skin lacking firmness",
+   "note": ""
+  },
+  {
+   "id": "02_benefit-08",
+   "translation": "Even flaking from dryness",
+   "note": ""
+  },
+  {
+   "id": "02_benefit-09",
+   "translation": "Close-fitting texture filling every pore",
+   "note": ""
+  },
+  {
+   "id": "02_benefit-10",
+   "translation": "92% satisfaction after 4 weeks of use*",
+   "note": ""
+  }
+ ]
+}

@@ -1,0 +1,49 @@
+{
+ "image": "01_intro.synthetic",
+ "model": "claude_session",
+ "kind": "예비 실행 — 벤치마크 아님",
+ "target_lang": "영어",
+ "regulation_table_is_test": true,
+ "translations": [
+  {
+   "id": "01_intro-01",
+   "translation": "LUMIÈRE Collagen Ampoule",
+   "note": "브랜드명 원표기 유지"
+  },
+  {
+   "id": "01_intro-02",
+   "translation": "Start your firming routine now",
+   "note": ""
+  },
+  {
+   "id": "01_intro-03",
+   "translation": "One drop a day, lightly layered",
+   "note": ""
+  },
+  {
+   "id": "01_intro-04",
+   "translation": "Low-molecular collagen that fills from within",
+   "note": ""
+  },
+  {
+   "id": "01_intro-05",
+   "translation": "Time for a change in your skin",
+   "note": ""
+  },
+  {
+   "id": "01_intro-06",
+   "translation": "Comfortable even for sensitive skin",
+   "note": ""
+  },
+  {
+   "id": "01_intro-07",
+   "translation": "Daily Ampoule 30ml",
+   "note": ""
+  },
+  {
+   "id": "01_intro-08",
+   "translation": "Celebrating our new launch",
+   "note": ""
+  }
+ ]
+}

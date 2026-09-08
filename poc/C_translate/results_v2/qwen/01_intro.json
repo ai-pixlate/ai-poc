@@ -1,0 +1,46 @@
+{
+ "image": "01_intro.synthetic",
+ "model": "qwen",
+ "translations": [
+  {
+   "id": "01_intro-01",
+   "translation": "Lumiere Collagen Ampoule",
+   "note": "Brand name romanized as Lumiere"
+  },
+  {
+   "id": "01_intro-02",
+   "translation": "Start your elasticity routine",
+   "note": ""
+  },
+  {
+   "id": "01_intro-03",
+   "translation": "One drop daily, light care day by day",
+   "note": ""
+  },
+  {
+   "id": "01_intro-04",
+   "translation": "Low-molecular collagen, filling from within",
+   "note": ""
+  },
+  {
+   "id": "01_intro-05",
+   "translation": "Time for skin to change",
+   "note": ""
+  },
+  {
+   "id": "01_intro-06",
+   "translation": "Comfort for sensitive skin",
+   "note": ""
+  },
+  {
+   "id": "01_intro-07",
+   "translation": "Daily Ampoule 30ml",
+   "note": ""
+  },
+  {
+   "id": "01_intro-08",
+   "translation": "New Launch Celebration",
+   "note": ""
+  }
+ ]
+}

@@ -1,0 +1,46 @@
+{
+ "image": "04_safety.synthetic",
+ "model": "qwen",
+ "translations": [
+  {
+   "id": "04_safety-01",
+   "translation": "Hypoallergenic Tested",
+   "note": ""
+  },
+  {
+   "id": "04_safety-02",
+   "translation": "Free from 25 Allergens",
+   "note": "Condensed '알레르기 유발 성분' to 'allergens' for label brevity."
+  },
+  {
+   "id": "04_safety-03",
+   "translation": "MFDS Standards Compliant",
+   "note": "MFDS = Korean Ministry of Food and Drug Safety."
+  },
+  {
+   "id": "04_safety-04",
+   "translation": "Vegan Certified",
+   "note": ""
+  },
+  {
+   "id": "04_safety-05",
+   "translation": "No Animal Testing",
+   "note": ""
+  },
+  {
+   "id": "04_safety-06",
+   "translation": "gentle formula",
+   "note": "Replaced '부작용 없음' with 'gentle formula' per mapping."
+  },
+  {
+   "id": "04_safety-07",
+   "translation": "Clinically Tested on Sensitive Skin",
+   "note": ""
+  },
+  {
+   "id": "04_safety-08",
+   "translation": "*dermatologist-informed human application test, 32 adult women, 4 weeks",
+   "note": "Softened '피부과 전문의 감독 하' to 'dermatologist-informed' to reduce medical impression."
+  }
+ ]
+}

@@ -1,0 +1,34 @@
+{
+ "image": "06_texture.synthetic",
+ "model": "claude_session",
+ "kind": "예비 실행 — 벤치마크 아님",
+ "target_lang": "영어",
+ "regulation_table_is_test": true,
+ "translations": [
+  {
+   "id": "06_texture-01",
+   "translation": "A watery texture that sinks in fresh",
+   "note": ""
+  },
+  {
+   "id": "06_texture-02",
+   "translation": "Finishes without stickiness",
+   "note": ""
+  },
+  {
+   "id": "06_texture-03",
+   "translation": "Light enough to wear before makeup",
+   "note": ""
+  },
+  {
+   "id": "06_texture-04",
+   "translation": "Spreads thin and clings close",
+   "note": ""
+  },
+  {
+   "id": "06_texture-05",
+   "translation": "Leaves a subtle glow",
+   "note": ""
+  }
+ ]
+}

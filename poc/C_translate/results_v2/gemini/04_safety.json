@@ -1,0 +1,46 @@
+{
+ "image": "04_safety.synthetic",
+ "model": "gemini",
+ "translations": [
+  {
+   "id": "04_safety-01",
+   "translation": "Skin irritation test completed",
+   "note": ""
+  },
+  {
+   "id": "04_safety-02",
+   "translation": "Free of 25 allergens",
+   "note": ""
+  },
+  {
+   "id": "04_safety-03",
+   "translation": "Complies with MFDS standards",
+   "note": "식약처 translated to MFDS (Ministry of Food and Drug Safety)"
+  },
+  {
+   "id": "04_safety-04",
+   "translation": "Certified Vegan",
+   "note": ""
+  },
+  {
+   "id": "04_safety-05",
+   "translation": "Cruelty-free",
+   "note": ""
+  },
+  {
+   "id": "04_safety-06",
+   "translation": "Verified gentle formula",
+   "note": "규제 매핑 적용: '부작용 없음'을 'gentle formula'로 대체"
+  },
+  {
+   "id": "04_safety-07",
+   "translation": "Clinically tested on sensitive skin",
+   "note": ""
+  },
+  {
+   "id": "04_safety-08",
+   "translation": "*Human clinical trial under dermatologist supervision, 32 adult women, 4 weeks",
+   "note": ""
+  }
+ ]
+}

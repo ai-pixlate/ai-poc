@@ -1,0 +1,44 @@
+{
+ "image": "1.jpg",
+ "model": "claude_session",
+ "kind": "예비 실행 — 벤치마크 아님",
+ "target_lang": "영어",
+ "regulation_table_is_test": true,
+ "translations": [
+  {
+   "id": "1-05",
+   "translation": "Keycap Keyring",
+   "note": ""
+  },
+  {
+   "id": "1-06",
+   "translation": "While supplies last!",
+   "note": ""
+  },
+  {
+   "id": "1-09",
+   "translation": "Oisyu",
+   "note": "캐릭터명으로 판단해 음역 유지"
+  },
+  {
+   "id": "1-10",
+   "translation": "WONI's PICK! No.1",
+   "note": "OCR '윈이'를 인물명 '원이'로 추정"
+  },
+  {
+   "id": "1-11",
+   "translation": "Makeup-Ready",
+   "note": "'화잘먹' = 화장이 잘 받는다는 은어. 직역 대신 의미 전달"
+  },
+  {
+   "id": "1-12",
+   "translation": "Pore",
+   "note": ""
+  },
+  {
+   "id": "1-13",
+   "translation": "Serum",
+   "note": ""
+  }
+ ]
+}

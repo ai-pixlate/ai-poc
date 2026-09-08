@@ -1,0 +1,58 @@
+{
+ "image": "02_benefit.synthetic",
+ "model": "qwen_mt_ref",
+ "kind": "참고 측정 — 벤치마크 후보 아님",
+ "model_id": "qwen-mt-plus",
+ "translations": [
+  {
+   "id": "02_benefit-01",
+   "translation": "brightening functional cosmetics",
+   "note": ""
+  },
+  {
+   "id": "02_benefit-02",
+   "translation": "Dual-action brightening that helps reduce the look of fine lines",
+   "note": ""
+  },
+  {
+   "id": "02_benefit-03",
+   "translation": "It helps renew tired-looking skin.",
+   "note": ""
+  },
+  {
+   "id": "02_benefit-04",
+   "translation": "Fast-acting hydration",
+   "note": ""
+  },
+  {
+   "id": "02_benefit-05",
+   "translation": "The start of age-defying care",
+   "note": ""
+  },
+  {
+   "id": "02_benefit-06",
+   "translation": "brightening dull-looking skin tone",
+   "note": ""
+  },
+  {
+   "id": "02_benefit-07",
+   "translation": "For skin that lacks elasticity and appears sagging",
+   "note": ""
+  },
+  {
+   "id": "02_benefit-08",
+   "translation": "Even the flakiness caused by dryness",
+   "note": ""
+  },
+  {
+   "id": "02_benefit-09",
+   "translation": "A close-fitting texture that fills each pore",
+   "note": ""
+  },
+  {
+   "id": "02_benefit-10",
+   "translation": "92% satisfaction after 4 weeks of use*",
+   "note": ""
+  }
+ ]
+}

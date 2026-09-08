@@ -1,0 +1,81 @@
+{
+ "image": "09_regulation_edge.synthetic",
+ "model": "qwen",
+ "translations": [
+  {
+   "id": "09_regulation_edge-01",
+   "translation": "Brightening effects were confirmed in clinical trials.",
+   "note": ""
+  },
+  {
+   "id": "09_regulation_edge-02",
+   "translation": "This product does not guarantee brightening effects; results may vary.",
+   "note": ""
+  },
+  {
+   "id": "09_regulation_edge-03",
+   "translation": "Helps reduce the look of fine lines.",
+   "note": ""
+  },
+  {
+   "id": "09_regulation_edge-04",
+   "translation": "There is no dermatologist-informed evidence that it helps reduce the look of fine lines.",
+   "note": "'의학적으로' mapped to 'dermatologist-informed'; '주름 개선' mapped to required phrase."
+  },
+  {
+   "id": "09_regulation_edge-05",
+   "translation": "Intensive care for skin with reduced renewing ability.",
+   "note": "'재생력' interpreted as 'renewing ability' from context."
+  },
+  {
+   "id": "09_regulation_edge-06",
+   "translation": "A 4-week routine aligned with the skin's renewing cycle.",
+   "note": ""
+  },
+  {
+   "id": "09_regulation_edge-07",
+   "translation": "루미에르 미백 앰플 30ml (product name)",
+   "note": "Brand/product name kept in original Korean per instruction; regulated term inside product name left unchanged."
+  },
+  {
+   "id": "09_regulation_edge-08",
+   "translation": "New product launch in the age-defying line.",
+   "note": ""
+  },
+  {
+   "id": "09_regulation_edge-09",
+   "translation": "Customer review: 'I think my uneven-looking areas look lighter.' (individual user opinion)",
+   "note": ""
+  },
+  {
+   "id": "09_regulation_edge-10",
+   "translation": "During a dermatologist interview: 'This ingredient is not intended for care purposes.'",
+   "note": "'치료' mapped to 'care'."
+  },
+  {
+   "id": "09_regulation_edge-11",
+   "translation": "Dual functionality that provides brightening care and helps reduce the look of fine lines at once.",
+   "note": ""
+  },
+  {
+   "id": "09_regulation_edge-12",
+   "translation": "Together: fast-acting soothing for blemish-prone concerns, plus pore-refining appearance.",
+   "note": ""
+  },
+  {
+   "id": "09_regulation_edge-13",
+   "translation": "Supports renewing and is also for a firmer look.",
+   "note": "Restructured to keep required phrase 'for a firmer look'."
+  },
+  {
+   "id": "09_regulation_edge-14",
+   "translation": "Contains only pure naturally derived ingredients.",
+   "note": "'100%' replaced with 'pure'."
+  },
+  {
+   "id": "09_regulation_edge-15",
+   "translation": "Age-defying care in one step.",
+   "note": "'노화 방지' and '안티에이징' both map to 'age-defying'; consolidated to avoid duplication."
+  }
+ ]
+}

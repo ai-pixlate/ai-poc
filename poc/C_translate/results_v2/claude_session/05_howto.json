@@ -1,0 +1,44 @@
+{
+ "image": "05_howto.synthetic",
+ "model": "claude_session",
+ "kind": "예비 실행 — 벤치마크 아님",
+ "target_lang": "영어",
+ "regulation_table_is_test": true,
+ "translations": [
+  {
+   "id": "05_howto-01",
+   "translation": "How to Use",
+   "note": ""
+  },
+  {
+   "id": "05_howto-02",
+   "translation": "After cleansing, smooth the skin with toner",
+   "note": ""
+  },
+  {
+   "id": "05_howto-03",
+   "translation": "Dispense 2–3 drops and spread over the entire face",
+   "note": ""
+  },
+  {
+   "id": "05_howto-04",
+   "translation": "Press in with your palms to help it absorb",
+   "note": ""
+  },
+  {
+   "id": "05_howto-05",
+   "translation": "Recommended twice daily, morning and night",
+   "note": ""
+  },
+  {
+   "id": "05_howto-06",
+   "translation": "Layer again on dry areas",
+   "note": ""
+  },
+  {
+   "id": "05_howto-07",
+   "translation": "Best used before your cream step",
+   "note": ""
+  }
+ ]
+}

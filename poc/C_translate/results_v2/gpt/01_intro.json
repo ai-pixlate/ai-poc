@@ -1,0 +1,46 @@
+{
+ "image": "01_intro.synthetic",
+ "model": "gpt",
+ "translations": [
+  {
+   "id": "01_intro-01",
+   "translation": "루미에르 Collagen Ampoule",
+   "note": ""
+  },
+  {
+   "id": "01_intro-02",
+   "translation": "Start Your Firming Routine Today",
+   "note": ""
+  },
+  {
+   "id": "01_intro-03",
+   "translation": "One drop daily, layer on light care",
+   "note": ""
+  },
+  {
+   "id": "01_intro-04",
+   "translation": "Low-Molecular Collagen for a Plump Look",
+   "note": ""
+  },
+  {
+   "id": "01_intro-05",
+   "translation": "Time to see your skin feel different",
+   "note": ""
+  },
+  {
+   "id": "01_intro-06",
+   "translation": "Comfortable even for sensitive skin",
+   "note": ""
+  },
+  {
+   "id": "01_intro-07",
+   "translation": "Daily Ampoule 30 ml",
+   "note": ""
+  },
+  {
+   "id": "01_intro-08",
+   "translation": "Celebrating the New Launch",
+   "note": ""
+  }
+ ]
+}

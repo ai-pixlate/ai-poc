@@ -1,0 +1,48 @@
+{
+ "image": "08_notice.synthetic",
+ "model": "qwen_mt_ref",
+ "kind": "참고 측정 — 벤치마크 후보 아님",
+ "model_id": "qwen-mt-plus",
+ "translations": [
+  {
+   "id": "08_notice-01",
+   "translation": "Precautions for Use",
+   "note": ""
+  },
+  {
+   "id": "08_notice-02",
+   "translation": "Please avoid using on areas with wounds.",
+   "note": ""
+  },
+  {
+   "id": "08_notice-03",
+   "translation": "If you experience redness, swelling, itching, or any other abnormalities during use, discontinue use and consult a dermatologist.",
+   "note": ""
+  },
+  {
+   "id": "08_notice-04",
+   "translation": "Store in a cool, dark place away from direct sunlight",
+   "note": ""
+  },
+  {
+   "id": "08_notice-05",
+   "translation": "Keep out of reach of children",
+   "note": ""
+  },
+  {
+   "id": "08_notice-06",
+   "translation": "This product is not a medicine and should not be used for the treatment of any disease.",
+   "note": ""
+  },
+  {
+   "id": "08_notice-07",
+   "translation": "Use as soon as possible after opening.",
+   "note": ""
+  },
+  {
+   "id": "08_notice-08",
+   "translation": "Exchange and refund are available within 7 days of receipt.",
+   "note": ""
+  }
+ ]
+}

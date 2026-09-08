@@ -1,0 +1,59 @@
+{
+ "image": "02_benefit.synthetic",
+ "model": "claude_session",
+ "kind": "예비 실행 — 벤치마크 아님",
+ "target_lang": "영어",
+ "regulation_table_is_test": true,
+ "translations": [
+  {
+   "id": "02_benefit-01",
+   "translation": "Brightening functional cosmetic",
+   "note": "규제표 적용: 미백 → brightening"
+  },
+  {
+   "id": "02_benefit-02",
+   "translation": "Dual-function care that helps reduce the look of fine lines",
+   "note": "규제표 적용: 주름 개선 → helps reduce the look of fine lines"
+  },
+  {
+   "id": "02_benefit-03",
+   "translation": "Helps renew tired skin",
+   "note": "규제표 적용: 재생 → renewing"
+  },
+  {
+   "id": "02_benefit-04",
+   "translation": "A fast-acting surge of moisture",
+   "note": "규제표 적용: 즉각 → fast-acting"
+  },
+  {
+   "id": "02_benefit-05",
+   "translation": "The start of age-defying care",
+   "note": "규제표 적용: 안티에이징 → age-defying"
+  },
+  {
+   "id": "02_benefit-06",
+   "translation": "Brightens a dull-looking skin tone",
+   "note": ""
+  },
+  {
+   "id": "02_benefit-07",
+   "translation": "For skin that has lost its firmness",
+   "note": ""
+  },
+  {
+   "id": "02_benefit-08",
+   "translation": "Even flakiness caused by dryness",
+   "note": ""
+  },
+  {
+   "id": "02_benefit-09",
+   "translation": "A close-fitting texture that fills every pore",
+   "note": ""
+  },
+  {
+   "id": "02_benefit-10",
+   "translation": "92% satisfaction after 4 weeks of use*",
+   "note": ""
+  }
+ ]
+}

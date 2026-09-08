@@ -1,0 +1,46 @@
+{
+ "image": "01_intro.synthetic",
+ "model": "claude",
+ "translations": [
+  {
+   "id": "01_intro-01",
+   "translation": "Lumière Collagen Ampoule",
+   "note": "Brand/product name kept as-is; \"루미에르\" rendered in its standard French spelling Lumière (Lumiere also acceptable)."
+  },
+  {
+   "id": "01_intro-02",
+   "translation": "Start your firming routine now",
+   "note": "'탄력 루틴' rendered as 'firming routine' — a look-based claim, not a stated function."
+  },
+  {
+   "id": "01_intro-03",
+   "translation": "One drop a day, lightly layered",
+   "note": ""
+  },
+  {
+   "id": "01_intro-04",
+   "translation": "Low-molecular collagen for deep-down moisture",
+   "note": "'속부터 채우는' rendered as deep-down moisture; in EN markets 'fills from within' can read as a penetration claim, so scope limited to moisture."
+  },
+  {
+   "id": "01_intro-05",
+   "translation": "Time for skin that feels different",
+   "note": ""
+  },
+  {
+   "id": "01_intro-06",
+   "translation": "Comfortable even on sensitive skin",
+   "note": ""
+  },
+  {
+   "id": "01_intro-07",
+   "translation": "Daily Ampoule 30ml",
+   "note": ""
+  },
+  {
+   "id": "01_intro-08",
+   "translation": "New Launch Celebration",
+   "note": ""
+  }
+ ]
+}

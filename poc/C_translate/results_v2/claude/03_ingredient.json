@@ -1,0 +1,56 @@
+{
+ "image": "03_ingredient.synthetic",
+ "model": "claude",
+ "translations": [
+  {
+   "id": "03_ingredient-01",
+   "translation": "3 Key Ingredients",
+   "note": ""
+  },
+  {
+   "id": "03_ingredient-02",
+   "translation": "Hydrolyzed Collagen",
+   "note": ""
+  },
+  {
+   "id": "03_ingredient-03",
+   "translation": "2% Niacinamide",
+   "note": ""
+  },
+  {
+   "id": "03_ingredient-04",
+   "translation": "0.04% Adenosine",
+   "note": ""
+  },
+  {
+   "id": "03_ingredient-05",
+   "translation": "5-Type Hyaluronic Acid Complex",
+   "note": ""
+  },
+  {
+   "id": "03_ingredient-06",
+   "translation": "Panthenol & ceramides form a moisture barrier",
+   "note": ""
+  },
+  {
+   "id": "03_ingredient-07",
+   "translation": "Soothing Centella Asiatica extract",
+   "note": ""
+  },
+  {
+   "id": "03_ingredient-08",
+   "translation": "Ingredient blend for blemish-prone skin",
+   "note": "규제 매핑 적용: '여드름 완화' → 'for blemish-prone skin'"
+  },
+  {
+   "id": "03_ingredient-09",
+   "translation": "Fragrance-free, dye-free formula",
+   "note": ""
+  },
+  {
+   "id": "03_ingredient-10",
+   "translation": "Full ingredient list on the bottle and carton",
+   "note": ""
+  }
+ ]
+}

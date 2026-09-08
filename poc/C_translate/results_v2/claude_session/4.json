@@ -1,0 +1,49 @@
+{
+ "image": "4.jpg",
+ "model": "claude_session",
+ "kind": "예비 실행 — 벤치마크 아님",
+ "target_lang": "영어",
+ "regulation_table_is_test": true,
+ "translations": [
+  {
+   "id": "4-04",
+   "translation": "Starting now,",
+   "note": "OCR '운'은 다음 세그먼트로 이어지는 조각으로 판단해 생략"
+  },
+  {
+   "id": "4-05",
+   "translation": "WONI's Collagen",
+   "note": ""
+  },
+  {
+   "id": "4-06",
+   "translation": "With radiant WONI",
+   "note": ""
+  },
+  {
+   "id": "4-07",
+   "translation": "every day, light and easy",
+   "note": ""
+  },
+  {
+   "id": "4-08",
+   "translation": "building up",
+   "note": ""
+  },
+  {
+   "id": "4-09",
+   "translation": "bouncy",
+   "note": "OCR '쏜쏜한' → '쫀쫀한'으로 추정"
+  },
+  {
+   "id": "4-10",
+   "translation": "makeup-ready",
+   "note": ""
+  },
+  {
+   "id": "4-11",
+   "translation": "routine!",
+   "note": ""
+  }
+ ]
+}

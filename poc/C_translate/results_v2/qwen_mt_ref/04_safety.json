@@ -1,0 +1,48 @@
+{
+ "image": "04_safety.synthetic",
+ "model": "qwen_mt_ref",
+ "kind": "참고 측정 — 벤치마크 후보 아님",
+ "model_id": "qwen-mt-plus",
+ "translations": [
+  {
+   "id": "04_safety-01",
+   "translation": "Completed a skin-sensitivity test",
+   "note": ""
+  },
+  {
+   "id": "04_safety-02",
+   "translation": "Free from 25 allergy-causing ingredients",
+   "note": ""
+  },
+  {
+   "id": "04_safety-03",
+   "translation": "Complies with MFDS notification standards",
+   "note": ""
+  },
+  {
+   "id": "04_safety-04",
+   "translation": "Vegan certification obtained",
+   "note": ""
+  },
+  {
+   "id": "04_safety-05",
+   "translation": "No animal testing",
+   "note": ""
+  },
+  {
+   "id": "04_safety-06",
+   "translation": "A gentle formula confirmed to be free of side effects",
+   "note": ""
+  },
+  {
+   "id": "04_safety-07",
+   "translation": "Clinical trials completed for sensitive skin",
+   "note": ""
+  },
+  {
+   "id": "04_safety-08",
+   "translation": "*Clinical trial supervised by a dermatologist, 32 adult women, over 4 weeks",
+   "note": ""
+  }
+ ]
+}

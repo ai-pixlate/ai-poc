@@ -1,0 +1,1378 @@
+{
+ "built_at": "2026-08-24 09:33:49",
+ "source": "poc/B_ocr/results/baseline (B 채택 설정)",
+ "target_lang": null,
+ "filter": {
+  "min_len": 2,
+  "hangul_only": true
+ },
+ "documents": [
+  {
+   "image": "1.jpg",
+   "page_text": [
+    "My",
+    "First",
+    "Collagen",
+    "1+1",
+    "키캡키링",
+    "선착순!",
+    "Biodan",
+    "Buodance",
+    "오이쉬",
+    "윈이 PICK!1등",
+    "화잘먹",
+    "모공",
+    "세럼"
+   ],
+   "segments": [
+    {
+     "id": "1-05",
+     "region": 5,
+     "bbox": [
+      91,
+      603,
+      237,
+      649
+     ],
+     "source": "키캡키링",
+     "manual_fix": ""
+    },
+    {
+     "id": "1-06",
+     "region": 6,
+     "bbox": [
+      106,
+      651,
+      223,
+      699
+     ],
+     "source": "선착순!",
+     "manual_fix": ""
+    },
+    {
+     "id": "1-09",
+     "region": 9,
+     "bbox": [
+      148,
+      749,
+      195,
+      774
+     ],
+     "source": "오이쉬",
+     "manual_fix": ""
+    },
+    {
+     "id": "1-10",
+     "region": 10,
+     "bbox": [
+      28,
+      895,
+      490,
+      982
+     ],
+     "source": "윈이 PICK!1등",
+     "manual_fix": ""
+    },
+    {
+     "id": "1-11",
+     "region": 11,
+     "bbox": [
+      487,
+      899,
+      687,
+      978
+     ],
+     "source": "화잘먹",
+     "manual_fix": ""
+    },
+    {
+     "id": "1-12",
+     "region": 12,
+     "bbox": [
+      692,
+      901,
+      842,
+      977
+     ],
+     "source": "모공",
+     "manual_fix": ""
+    },
+    {
+     "id": "1-13",
+     "region": 13,
+     "bbox": [
+      826,
+      902,
+      965,
+      976
+     ],
+     "source": "세럼",
+     "manual_fix": ""
+    }
+   ]
+  },
+  {
+   "image": "2.jpg",
+   "page_text": [
+    "콜라겐 펩타이드 세럼 구매하면",
+    "리센느 원이 오이쉬스",
+    "키캡 키링 증정!",
+    "오이쉬",
+    "Biodance",
+    "×",
+    "WONI",
+    "Biodance",
+    "COULAGEN",
+    "PEPTIDE SERUM",
+    "Siog. Pen",
+    "키캡키링",
+    "선착순!",
+    "·증정 기간:8/19~ 8/23 (선착순 증정, 재고 소진 시 종료)",
+    "·증정품은 한정 수량으로 선착순 지급되며 조기 소진될 수 있습니다.",
+    "·정확한 증정품 내역은 주문 후 [주문상세내역]에서 확인 가능합니다.",
+    "·오늘 드림/픽업 서비스 주문 건은 증정품 제공되지 않습니다",
+    "•반품 시 증정품도 함께 반품해주셔야 합니다."
+   ],
+   "segments": [
+    {
+     "id": "2-01",
+     "region": 1,
+     "bbox": [
+      149,
+      94,
+      927,
+      161
+     ],
+     "source": "콜라겐 펩타이드 세럼 구매하면",
+     "manual_fix": ""
+    },
+    {
+     "id": "2-02",
+     "region": 2,
+     "bbox": [
+      73,
+      165,
+      646,
+      230
+     ],
+     "source": "리센느 원이 오이쉬스",
+     "manual_fix": ""
+    },
+    {
+     "id": "2-03",
+     "region": 3,
+     "bbox": [
+      609,
+      164,
+      1008,
+      233
+     ],
+     "source": "키캡 키링 증정!",
+     "manual_fix": ""
+    },
+    {
+     "id": "2-04",
+     "region": 4,
+     "bbox": [
+      368,
+      381,
+      441,
+      423
+     ],
+     "source": "오이쉬",
+     "manual_fix": ""
+    },
+    {
+     "id": "2-12",
+     "region": 12,
+     "bbox": [
+      193,
+      637,
+      365,
+      694
+     ],
+     "source": "키캡키링",
+     "manual_fix": ""
+    },
+    {
+     "id": "2-13",
+     "region": 13,
+     "bbox": [
+      205,
+      692,
+      355,
+      754
+     ],
+     "source": "선착순!",
+     "manual_fix": ""
+    },
+    {
+     "id": "2-14",
+     "region": 14,
+     "bbox": [
+      257,
+      791,
+      821,
+      820
+     ],
+     "source": "·증정 기간:8/19~ 8/23 (선착순 증정, 재고 소진 시 종료)",
+     "manual_fix": ""
+    },
+    {
+     "id": "2-15",
+     "region": 15,
+     "bbox": [
+      215,
+      824,
+      863,
+      851
+     ],
+     "source": "·증정품은 한정 수량으로 선착순 지급되며 조기 소진될 수 있습니다.",
+     "manual_fix": ""
+    },
+    {
+     "id": "2-16",
+     "region": 16,
+     "bbox": [
+      210,
+      854,
+      868,
+      884
+     ],
+     "source": "·정확한 증정품 내역은 주문 후 [주문상세내역]에서 확인 가능합니다.",
+     "manual_fix": ""
+    },
+    {
+     "id": "2-17",
+     "region": 17,
+     "bbox": [
+      249,
+      887,
+      831,
+      915
+     ],
+     "source": "·오늘 드림/픽업 서비스 주문 건은 증정품 제공되지 않습니다",
+     "manual_fix": ""
+    },
+    {
+     "id": "2-18",
+     "region": 18,
+     "bbox": [
+      316,
+      920,
+      755,
+      947
+     ],
+     "source": "•반품 시 증정품도 함께 반품해주셔야 합니다.",
+     "manual_fix": ""
+    }
+   ]
+  },
+  {
+   "image": "4.jpg",
+   "page_text": [
+    "My",
+    "First",
+    "Collagen",
+    "지금부터 시작하는 운",
+    "원이의 콜라겐",
+    "빛나는 원이와 함께",
+    "매일 가볍게",
+    "쌓아가는",
+    "쏜쏜한",
+    "화잘먹",
+    "루틴!"
+   ],
+   "segments": [
+    {
+     "id": "4-04",
+     "region": 4,
+     "bbox": [
+      250,
+      650,
+      652,
+      711
+     ],
+     "source": "지금부터 시작하는 운",
+     "manual_fix": ""
+    },
+    {
+     "id": "4-05",
+     "region": 5,
+     "bbox": [
+      617,
+      644,
+      969,
+      713
+     ],
+     "source": "원이의 콜라겐",
+     "manual_fix": ""
+    },
+    {
+     "id": "4-06",
+     "region": 6,
+     "bbox": [
+      301,
+      816,
+      760,
+      884
+     ],
+     "source": "빛나는 원이와 함께",
+     "manual_fix": ""
+    },
+    {
+     "id": "4-07",
+     "region": 7,
+     "bbox": [
+      276,
+      895,
+      563,
+      957
+     ],
+     "source": "매일 가볍게",
+     "manual_fix": ""
+    },
+    {
+     "id": "4-08",
+     "region": 8,
+     "bbox": [
+      561,
+      897,
+      781,
+      956
+     ],
+     "source": "쌓아가는",
+     "manual_fix": ""
+    },
+    {
+     "id": "4-09",
+     "region": 9,
+     "bbox": [
+      289,
+      972,
+      457,
+      1033
+     ],
+     "source": "쏜쏜한",
+     "manual_fix": ""
+    },
+    {
+     "id": "4-10",
+     "region": 10,
+     "bbox": [
+      456,
+      974,
+      622,
+      1032
+     ],
+     "source": "화잘먹",
+     "manual_fix": ""
+    },
+    {
+     "id": "4-11",
+     "region": 11,
+     "bbox": [
+      625,
+      974,
+      754,
+      1033
+     ],
+     "source": "루틴!",
+     "manual_fix": ""
+    }
+   ]
+  },
+  {
+   "image": "6.jpg",
+   "page_text": [
+    "Biodance | OLIVE YOUNG",
+    "1+1",
+    "더블",
+    "기획",
+    "단독",
+    "한정",
+    "기획",
+    "ONLY",
+    "올리브영",
+    "단독기획",
+    "용량",
+    "UP",
+    "Biodance",
+    "글 쪼쯤",
+    "x2",
+    "모공",
+    "Biodance",
+    "콜라겐",
+    "세럼",
+    "30ml",
+    "콜라겐 모공 세럼",
+    "포어 퍼펙팅 콜라겐 펩타이드 세럼",
+    "한정 더블 기획",
+    "30ml",
+    "Biodance",
+    "포어 퍼펙팅 콜라겐 펩타이드 세럼",
+    "Biodance",
+    "PORE PERFECTING"
+   ],
+   "segments": [
+    {
+     "id": "6-03",
+     "region": 3,
+     "bbox": [
+      673,
+      210,
+      860,
+      326
+     ],
+     "source": "더블",
+     "manual_fix": ""
+    },
+    {
+     "id": "6-04",
+     "region": 4,
+     "bbox": [
+      669,
+      324,
+      857,
+      438
+     ],
+     "source": "기획",
+     "manual_fix": ""
+    },
+    {
+     "id": "6-05",
+     "region": 5,
+     "bbox": [
+      421,
+      502,
+      534,
+      572
+     ],
+     "source": "단독",
+     "manual_fix": ""
+    },
+    {
+     "id": "6-06",
+     "region": 6,
+     "bbox": [
+      534,
+      499,
+      650,
+      571
+     ],
+     "source": "한정",
+     "manual_fix": ""
+    },
+    {
+     "id": "6-07",
+     "region": 7,
+     "bbox": [
+      651,
+      502,
+      761,
+      568
+     ],
+     "source": "기획",
+     "manual_fix": ""
+    },
+    {
+     "id": "6-09",
+     "region": 9,
+     "bbox": [
+      954,
+      729,
+      1062,
+      764
+     ],
+     "source": "올리브영",
+     "manual_fix": ""
+    },
+    {
+     "id": "6-10",
+     "region": 10,
+     "bbox": [
+      954,
+      761,
+      1063,
+      798
+     ],
+     "source": "단독기획",
+     "manual_fix": ""
+    },
+    {
+     "id": "6-11",
+     "region": 11,
+     "bbox": [
+      953,
+      892,
+      1060,
+      959
+     ],
+     "source": "용량",
+     "manual_fix": ""
+    },
+    {
+     "id": "6-14",
+     "region": 14,
+     "bbox": [
+      663,
+      1007,
+      767,
+      1064
+     ],
+     "source": "글 쪼쯤",
+     "manual_fix": ""
+    },
+    {
+     "id": "6-16",
+     "region": 16,
+     "bbox": [
+      603,
+      1011,
+      689,
+      1060
+     ],
+     "source": "모공",
+     "manual_fix": ""
+    },
+    {
+     "id": "6-18",
+     "region": 18,
+     "bbox": [
+      604,
+      1059,
+      719,
+      1107
+     ],
+     "source": "콜라겐",
+     "manual_fix": ""
+    },
+    {
+     "id": "6-19",
+     "region": 19,
+     "bbox": [
+      717,
+      1059,
+      798,
+      1109
+     ],
+     "source": "세럼",
+     "manual_fix": ""
+    },
+    {
+     "id": "6-21",
+     "region": 21,
+     "bbox": [
+      880,
+      1089,
+      1025,
+      1130
+     ],
+     "source": "콜라겐 모공 세럼",
+     "manual_fix": ""
+    },
+    {
+     "id": "6-22",
+     "region": 22,
+     "bbox": [
+      612,
+      1122,
+      856,
+      1142
+     ],
+     "source": "포어 퍼펙팅 콜라겐 펩타이드 세럼",
+     "manual_fix": ""
+    },
+    {
+     "id": "6-23",
+     "region": 23,
+     "bbox": [
+      880,
+      1127,
+      1025,
+      1173
+     ],
+     "source": "한정 더블 기획",
+     "manual_fix": ""
+    },
+    {
+     "id": "6-26",
+     "region": 26,
+     "bbox": [
+      882,
+      1176,
+      1024,
+      1199
+     ],
+     "source": "포어 퍼펙팅 콜라겐 펩타이드 세럼",
+     "manual_fix": ""
+    }
+   ]
+  },
+  {
+   "image": "7.jpg",
+   "page_text": [
+    "PORE PERFECIING",
+    "COLLAGEN",
+    "PEPTIDE SERUM",
+    "siodance",
+    "PEPTIDE SERUM",
+    "Biodance",
+    "Biodance",
+    "siodance",
+    "Pore Perfecting,",
+    "PORE PERFECTING",
+    "PORE PERFECTING",
+    "PEPECING",
+    "LAGEN",
+    "Pore Perfecting,",
+    "COLLAGEN",
+    "COLLAGEN",
+    " SL",
+    "Smoothing,Firming",
+    "PEPTIDE SERUM",
+    "PEPTIDE SERUM",
+    "Smoothing, Firming",
+    "NET 1.01 f1.0z. (30ml)",
+    "NET 1.01 f1.0Z. (30 m)",
+    "Pore Perlecting.",
+    "1toe.00m",
+    "Poce Pertectier",
+    "Smoothing. Firming",
+    "semoothing.F",
+    "NET 1.01 11.02. (30m",
+    "NET 1.0",
+    "1억장*",
+    "콜라겐 팩 노하우를 그대로!",
+    "[본품]포어 퍼펙팅콜라겐펩타이드세럼30m +30ml",
+    "*2021.04-2025.08 바이오던스 바이오 콜라겐 리얼 딥 마스크 생산 실적 기준"
+   ],
+   "segments": [
+    {
+     "id": "7-31",
+     "region": 31,
+     "bbox": [
+      207,
+      359,
+      361,
+      426
+     ],
+     "source": "1억장*",
+     "manual_fix": ""
+    },
+    {
+     "id": "7-32",
+     "region": 32,
+     "bbox": [
+      354,
+      352,
+      997,
+      432
+     ],
+     "source": "콜라겐 팩 노하우를 그대로!",
+     "manual_fix": ""
+    },
+    {
+     "id": "7-33",
+     "region": 33,
+     "bbox": [
+      113,
+      473,
+      1091,
+      546
+     ],
+     "source": "[본품]포어 퍼펙팅콜라겐펩타이드세럼30m +30ml",
+     "manual_fix": ""
+    },
+    {
+     "id": "7-34",
+     "region": 34,
+     "bbox": [
+      256,
+      616,
+      939,
+      640
+     ],
+     "source": "*2021.04-2025.08 바이오던스 바이오 콜라겐 리얼 딥 마스크 생산 실적 기준",
+     "manual_fix": ""
+    }
+   ]
+  },
+  {
+   "image": "8.jpg",
+   "page_text": [
+    "Biodance",
+    "BIODANCE'S SAFETY",
+    "바이오던스만의 균형있는피부를위한고집",
+    "25",
+    "",
+    "FREE",
+    "19가지의심성분",
+    "식약처 고시알레르기",
+    "피부저자극",
+    "무첨가*",
+    "유발25가지무첨가",
+    "테스트완료",
+    "·항목 페녹시에탄음 벤질알코을 벤즈익애씨드,클로페네신 디아줄리디닐우레아 소르빅애씨드, 벤조테는-3 어소프로팔알코음 트리에탄옵아민, 벤잘코눔클로라이드(C12C14)",
+    "부틸레이티드하이드록시루엔 프로필렌클라이플 테칠파라벤 에침파라벤,이소프로필파라벤,프로필파라벤 이소부틸따라벤,부틸파라벤,p-하이드목시벤조익에씨드"
+   ],
+   "segments": [
+    {
+     "id": "8-03",
+     "region": 3,
+     "bbox": [
+      268,
+      494,
+      927,
+      547
+     ],
+     "source": "바이오던스만의 균형있는피부를위한고집",
+     "manual_fix": ""
+    },
+    {
+     "id": "8-07",
+     "region": 7,
+     "bbox": [
+      129,
+      931,
+      370,
+      978
+     ],
+     "source": "19가지의심성분",
+     "manual_fix": ""
+    },
+    {
+     "id": "8-08",
+     "region": 8,
+     "bbox": [
+      455,
+      936,
+      746,
+      974
+     ],
+     "source": "식약처 고시알레르기",
+     "manual_fix": ""
+    },
+    {
+     "id": "8-09",
+     "region": 9,
+     "bbox": [
+      859,
+      926,
+      1035,
+      978
+     ],
+     "source": "피부저자극",
+     "manual_fix": ""
+    },
+    {
+     "id": "8-10",
+     "region": 10,
+     "bbox": [
+      191,
+      984,
+      310,
+      1028
+     ],
+     "source": "무첨가*",
+     "manual_fix": ""
+    },
+    {
+     "id": "8-11",
+     "region": 11,
+     "bbox": [
+      462,
+      984,
+      738,
+      1028
+     ],
+     "source": "유발25가지무첨가",
+     "manual_fix": ""
+    },
+    {
+     "id": "8-12",
+     "region": 12,
+     "bbox": [
+      863,
+      984,
+      1030,
+      1023
+     ],
+     "source": "테스트완료",
+     "manual_fix": ""
+    },
+    {
+     "id": "8-13",
+     "region": 13,
+     "bbox": [
+      193,
+      1124,
+      1005,
+      1141
+     ],
+     "source": "·항목 페녹시에탄음 벤질알코을 벤즈익애씨드,클로페네신 디아줄리디닐우레아 소르빅애씨드, 벤조테는-3 어소프로팔알코음 트리에탄옵아민, 벤잘코눔클로라이드(C12C14)",
+     "manual_fix": ""
+    },
+    {
+     "id": "8-14",
+     "region": 14,
+     "bbox": [
+      218,
+      1147,
+      979,
+      1161
+     ],
+     "source": "부틸레이티드하이드록시루엔 프로필렌클라이플 테칠파라벤 에침파라벤,이소프로필파라벤,프로필파라벤 이소부틸따라벤,부틸파라벤,p-하이드목시벤조익에씨드",
+     "manual_fix": ""
+    }
+   ]
+  },
+  {
+   "image": "9.jpg",
+   "page_text": [
+    "역대최대 한정기획",
+    "ONLY",
+    "더블X더블",
+    "올리브영",
+    "단독기획",
+    "블랙",
+    "+",
+    "ansing",
+    "",
+    "&",
+    "헤드",
+    "blackhead",
+    "cleansing",
+    "PHA",
+    "oil &",
+    "+",
+    "blackhead",
+    "leansing",
+    "oil&",
+    "O",
+    "Hanskin",
+    "blackhead",
+    "PHA",
+    "cleansing",
+    "200 ml/6.76 f.0z.",
+    "PHA",
+    "oil&",
+    "민감",
+    "blackhead",
+    "PHA",
+    "Hanskin",
+    "피부",
+    "200md/6.76 R.0z.",
+    "+",
+    "저자극",
+    "Hanskin",
+    "11",
+    "Hanskin",
+    "+1+1"
+   ],
+   "segments": [
+    {
+     "id": "9-01",
+     "region": 1,
+     "bbox": [
+      56,
+      53,
+      457,
+      105
+     ],
+     "source": "역대최대 한정기획",
+     "manual_fix": ""
+    },
+    {
+     "id": "9-03",
+     "region": 3,
+     "bbox": [
+      56,
+      109,
+      465,
+      197
+     ],
+     "source": "더블X더블",
+     "manual_fix": ""
+    },
+    {
+     "id": "9-04",
+     "region": 4,
+     "bbox": [
+      790,
+      147,
+      895,
+      179
+     ],
+     "source": "올리브영",
+     "manual_fix": ""
+    },
+    {
+     "id": "9-05",
+     "region": 5,
+     "bbox": [
+      789,
+      178,
+      895,
+      214
+     ],
+     "source": "단독기획",
+     "manual_fix": ""
+    },
+    {
+     "id": "9-06",
+     "region": 6,
+     "bbox": [
+      792,
+      311,
+      904,
+      372
+     ],
+     "source": "블랙",
+     "manual_fix": ""
+    },
+    {
+     "id": "9-11",
+     "region": 11,
+     "bbox": [
+      790,
+      373,
+      903,
+      434
+     ],
+     "source": "헤드",
+     "manual_fix": ""
+    },
+    {
+     "id": "9-28",
+     "region": 28,
+     "bbox": [
+      795,
+      523,
+      901,
+      582
+     ],
+     "source": "민감",
+     "manual_fix": ""
+    },
+    {
+     "id": "9-32",
+     "region": 32,
+     "bbox": [
+      794,
+      576,
+      900,
+      633
+     ],
+     "source": "피부",
+     "manual_fix": ""
+    },
+    {
+     "id": "9-35",
+     "region": 35,
+     "bbox": [
+      805,
+      630,
+      889,
+      666
+     ],
+     "source": "저자극",
+     "manual_fix": ""
+    }
+   ]
+  },
+  {
+   "image": "10.jpg",
+   "page_text": [
+    "50ml",
+    "추가 증정",
+    "ONLY",
+    "AM",
+    "올리브영",
+    "단독기획",
+    "LEMON CHUNG CLEA",
+    "피부자극",
+    "0.00",
+    "리뷰이벤트",
+    "3,000원",
+    "성한빈PICK",
+    "OLIVE YOUNG",
+    "1등",
+    "팩클렌저",
+    "*2026.01.30 09시 기준 올리브영 온라인몰 클렌징 부문 판매 랭킹 1위",
+    "*2026.06.29 08시,09시 기준 올리브영 온라인몰 클렌징 부문 판매 랭킹 1위"
+   ],
+   "segments": [
+    {
+     "id": "10-02",
+     "region": 2,
+     "bbox": [
+      797,
+      126,
+      933,
+      171
+     ],
+     "source": "추가 증정",
+     "manual_fix": ""
+    },
+    {
+     "id": "10-05",
+     "region": 5,
+     "bbox": [
+      825,
+      293,
+      909,
+      319
+     ],
+     "source": "올리브영",
+     "manual_fix": ""
+    },
+    {
+     "id": "10-06",
+     "region": 6,
+     "bbox": [
+      825,
+      319,
+      910,
+      347
+     ],
+     "source": "단독기획",
+     "manual_fix": ""
+    },
+    {
+     "id": "10-08",
+     "region": 8,
+     "bbox": [
+      830,
+      422,
+      901,
+      445
+     ],
+     "source": "피부자극",
+     "manual_fix": ""
+    },
+    {
+     "id": "10-10",
+     "region": 10,
+     "bbox": [
+      786,
+      565,
+      931,
+      610
+     ],
+     "source": "리뷰이벤트",
+     "manual_fix": ""
+    },
+    {
+     "id": "10-11",
+     "region": 11,
+     "bbox": [
+      781,
+      640,
+      940,
+      683
+     ],
+     "source": "3,000원",
+     "manual_fix": ""
+    },
+    {
+     "id": "10-12",
+     "region": 12,
+     "bbox": [
+      42,
+      674,
+      583,
+      782
+     ],
+     "source": "성한빈PICK",
+     "manual_fix": ""
+    },
+    {
+     "id": "10-14",
+     "region": 14,
+     "bbox": [
+      42,
+      785,
+      227,
+      915
+     ],
+     "source": "1등",
+     "manual_fix": ""
+    },
+    {
+     "id": "10-15",
+     "region": 15,
+     "bbox": [
+      241,
+      779,
+      699,
+      917
+     ],
+     "source": "팩클렌저",
+     "manual_fix": ""
+    },
+    {
+     "id": "10-16",
+     "region": 16,
+     "bbox": [
+      39,
+      923,
+      666,
+      948
+     ],
+     "source": "*2026.01.30 09시 기준 올리브영 온라인몰 클렌징 부문 판매 랭킹 1위",
+     "manual_fix": ""
+    },
+    {
+     "id": "10-17",
+     "region": 17,
+     "bbox": [
+      39,
+      959,
+      732,
+      982
+     ],
+     "source": "*2026.06.29 08시,09시 기준 올리브영 온라인몰 클렌징 부문 판매 랭킹 1위",
+     "manual_fix": ""
+    }
+   ]
+  },
+  {
+   "image": "11.jpg",
+   "page_text": [
+    "Slow",
+    "MEDIHEAL",
+    "Aging",
+    "PRODUCT KEY FACTS",
+    "AGCRPTONTME",
+    "30mn",
+    "HYPER COLLAGEN",
+    "1100",
+    "붙이는 콜라겐 앰플",
+    "2toUn",
+    "Uosone Daree",
+    "LovMeoir Otge",
+    "291m",
+    "500 0",
+    "0c %",
+    "#탄력리프팅#모공채움",
+    "PRODUCT KEY FACTS",
+    "MYPER PORN",
+    "10101",
+    "RRA",
+    "IDUCT KEY FACTS",
+    "HYPER COLLAGEN",
+    "OUCTKEYRACTS",
+    "LOW-MOLECULAR LIPOSOME",
+    "Becomes transparent in 2 hours",
+    "이디협 하이퍼 클라견아스크",
+    "Becomes transparent in 2 hours",
+    "한정기획",
+    "8+1",
+    "",
+    "추가증정!",
+    "이이",
+    "",
+    "6",
+    "XR SOUTONFONAL",
+    "OUR",
+    "SOLUTION,FOR ALL",
+    "FOR BEST RESULTS",
+    "USE UNTIL THE GEL MASK IS CLEAR IN COLCR",
+    "OURSOLUTION, FOR ALL",
+    "8",
+    "5",
+    "+",
+    "단독",
+    "기획",
+    "올리브영"
+   ],
+   "segments": [
+    {
+     "id": "11-09",
+     "region": 9,
+     "bbox": [
+      144,
+      191,
+      391,
+      255
+     ],
+     "source": "붙이는 콜라겐 앰플",
+     "manual_fix": ""
+    },
+    {
+     "id": "11-16",
+     "region": 16,
+     "bbox": [
+      147,
+      235,
+      267,
+      264
+     ],
+     "source": "#탄력리프팅#모공채움",
+     "manual_fix": ""
+    },
+    {
+     "id": "11-26",
+     "region": 26,
+     "bbox": [
+      147,
+      364,
+      241,
+      383
+     ],
+     "source": "이디협 하이퍼 클라견아스크",
+     "manual_fix": ""
+    },
+    {
+     "id": "11-28",
+     "region": 28,
+     "bbox": [
+      176,
+      427,
+      218,
+      446
+     ],
+     "source": "한정기획",
+     "manual_fix": ""
+    },
+    {
+     "id": "11-31",
+     "region": 31,
+     "bbox": [
+      169,
+      492,
+      223,
+      513
+     ],
+     "source": "추가증정!",
+     "manual_fix": ""
+    },
+    {
+     "id": "11-32",
+     "region": 32,
+     "bbox": [
+      78,
+      509,
+      105,
+      553
+     ],
+     "source": "이이",
+     "manual_fix": ""
+    },
+    {
+     "id": "11-44",
+     "region": 44,
+     "bbox": [
+      644,
+      897,
+      800,
+      982
+     ],
+     "source": "단독",
+     "manual_fix": ""
+    },
+    {
+     "id": "11-45",
+     "region": 45,
+     "bbox": [
+      808,
+      896,
+      964,
+      982
+     ],
+     "source": "기획",
+     "manual_fix": ""
+    },
+    {
+     "id": "11-46",
+     "region": 46,
+     "bbox": [
+      345,
+      900,
+      632,
+      979
+     ],
+     "source": "올리브영",
+     "manual_fix": ""
+    }
+   ]
+  },
+  {
+   "image": "12.jpg",
+   "page_text": [
+    "My",
+    "First",
+    "Collagen",
+    "원이",
+    "Pick",
+    "+10ml",
+    "Biodance",
+    "Biodance",
+    "PORE PERFECTING",
+    "COLLAGEN",
+    "콜라겐",
+    "수분",
+    "크림",
+    "PEPTIDE CREAM",
+    "Pore Perfectinp.",
+    "mggthing, Finming",
+    "NET 1.69 f1.0z. (50 ml)"
+   ],
+   "segments": [
+    {
+     "id": "12-04",
+     "region": 4,
+     "bbox": [
+      814,
+      154,
+      925,
+      215
+     ],
+     "source": "원이",
+     "manual_fix": ""
+    },
+    {
+     "id": "12-11",
+     "region": 11,
+     "bbox": [
+      18,
+      883,
+      282,
+      982
+     ],
+     "source": "콜라겐",
+     "manual_fix": ""
+    },
+    {
+     "id": "12-12",
+     "region": 12,
+     "bbox": [
+      289,
+      880,
+      475,
+      984
+     ],
+     "source": "수분",
+     "manual_fix": ""
+    },
+    {
+     "id": "12-13",
+     "region": 13,
+     "bbox": [
+      480,
+      880,
+      662,
+      985
+     ],
+     "source": "크림",
+     "manual_fix": ""
+    }
+   ]
+  }
+ ],
+ "counts": {
+  "documents": 10,
+  "segments": 88
+ }
+}

@@ -1,0 +1,64 @@
+{
+ "image": "2.jpg",
+ "model": "claude_session",
+ "kind": "예비 실행 — 벤치마크 아님",
+ "target_lang": "영어",
+ "regulation_table_is_test": true,
+ "translations": [
+  {
+   "id": "2-01",
+   "translation": "Buy the Collagen Peptide Serum",
+   "note": ""
+  },
+  {
+   "id": "2-02",
+   "translation": "Lisenne WONI Oisyu♡",
+   "note": "OCR '오이쉬스'의 끝 글자를 하트 기호 오인식으로 추정"
+  },
+  {
+   "id": "2-03",
+   "translation": "Keycap Keyring Gift!",
+   "note": ""
+  },
+  {
+   "id": "2-04",
+   "translation": "Oisyu",
+   "note": ""
+  },
+  {
+   "id": "2-12",
+   "translation": "Keycap Keyring",
+   "note": ""
+  },
+  {
+   "id": "2-13",
+   "translation": "While supplies last!",
+   "note": ""
+  },
+  {
+   "id": "2-14",
+   "translation": "· Gift period: 8/19–8/23 (first-come, ends when stock runs out)",
+   "note": ""
+  },
+  {
+   "id": "2-15",
+   "translation": "· Gifts are limited in quantity, given on a first-come basis, and may run out early.",
+   "note": ""
+  },
+  {
+   "id": "2-16",
+   "translation": "· Exact gift details can be checked in [Order Details] after ordering.",
+   "note": ""
+  },
+  {
+   "id": "2-17",
+   "translation": "· Today Dream / Pickup service orders are not eligible for gifts",
+   "note": ""
+  },
+  {
+   "id": "2-18",
+   "translation": "• Gifts must be returned together with the product upon return.",
+   "note": ""
+  }
+ ]
+}

@@ -1,0 +1,33 @@
+{
+ "image": "06_texture.synthetic",
+ "model": "qwen_mt_ref",
+ "kind": "참고 측정 — 벤치마크 후보 아님",
+ "model_id": "qwen-mt-plus",
+ "translations": [
+  {
+   "id": "06_texture-01",
+   "translation": "A refreshing, fast-acting watery formula",
+   "note": ""
+  },
+  {
+   "id": "06_texture-02",
+   "translation": "A fast-acting finish that feels non-sticky",
+   "note": ""
+  },
+  {
+   "id": "06_texture-03",
+   "translation": "Even before makeup, it feels gentle formula",
+   "note": ""
+  },
+  {
+   "id": "06_texture-04",
+   "translation": "A fast-acting, gentle formula that applies seamlessly",
+   "note": ""
+  },
+  {
+   "id": "06_texture-05",
+   "translation": "Leaves a subtle, radiant finish",
+   "note": ""
+  }
+ ]
+}

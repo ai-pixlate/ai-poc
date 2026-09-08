@@ -1,0 +1,56 @@
+{
+ "image": "03_ingredient.synthetic",
+ "model": "qwen",
+ "translations": [
+  {
+   "id": "03_ingredient-01",
+   "translation": "3 Key Ingredients",
+   "note": ""
+  },
+  {
+   "id": "03_ingredient-02",
+   "translation": "Hydrolyzed Collagen",
+   "note": ""
+  },
+  {
+   "id": "03_ingredient-03",
+   "translation": "Contains 2% Niacinamide",
+   "note": ""
+  },
+  {
+   "id": "03_ingredient-04",
+   "translation": "Contains 0.04% Adenosine",
+   "note": ""
+  },
+  {
+   "id": "03_ingredient-05",
+   "translation": "5-Type Hyaluronic Acid Complex",
+   "note": ""
+  },
+  {
+   "id": "03_ingredient-06",
+   "translation": "Forms moisture barrier with panthenol & ceramide",
+   "note": ""
+  },
+  {
+   "id": "03_ingredient-07",
+   "translation": "Soothes with Centella Asiatica Extract",
+   "note": ""
+  },
+  {
+   "id": "03_ingredient-08",
+   "translation": "Ingredient blend for blemish-prone skin",
+   "note": "Regulated expression '여드름 완화' replaced with 'for blemish-prone skin'"
+  },
+  {
+   "id": "03_ingredient-09",
+   "translation": "Fragrance-free, colorant-free formula",
+   "note": ""
+  },
+  {
+   "id": "03_ingredient-10",
+   "translation": "All ingredients listed on container and carton",
+   "note": ""
+  }
+ ]
+}

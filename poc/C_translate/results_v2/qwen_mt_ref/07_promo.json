@@ -1,0 +1,48 @@
+{
+ "image": "07_promo.synthetic",
+ "model": "qwen_mt_ref",
+ "kind": "참고 측정 — 벤치마크 후보 아님",
+ "model_id": "qwen-mt-plus",
+ "translations": [
+  {
+   "id": "07_promo-01",
+   "translation": "Exclusive limited-time offer",
+   "note": ""
+  },
+  {
+   "id": "07_promo-02",
+   "translation": "1+1 double promotion",
+   "note": ""
+  },
+  {
+   "id": "07_promo-03",
+   "translation": "First-come, first-served for 3,000 people",
+   "note": ""
+  },
+  {
+   "id": "07_promo-04",
+   "translation": "Receive a 10ml miniature with your purchase",
+   "note": ""
+  },
+  {
+   "id": "07_promo-05",
+   "translation": "Earn 3,000 won in reward points when you write a review",
+   "note": ""
+  },
+  {
+   "id": "07_promo-06",
+   "translation": "Brightening, helps reduce the look of fine lines, renewing care, for blemish-prone skin, age-defying, fast-acting, gentle formula, uneven-looking areas, pore-refining appearance, age-defying, blemish-prone concerns, pure, dermatologist-informed, for a firmer look",
+   "note": ""
+  },
+  {
+   "id": "07_promo-07",
+   "translation": "No. 1 in online skincare sales*",
+   "note": ""
+  },
+  {
+   "id": "07_promo-08",
+   "translation": "*As of June 2026, based on our official online store",
+   "note": ""
+  }
+ ]
+}

@@ -1,0 +1,49 @@
+{
+ "image": "07_promo.synthetic",
+ "model": "claude_session",
+ "kind": "예비 실행 — 벤치마크 아님",
+ "target_lang": "영어",
+ "regulation_table_is_test": true,
+ "translations": [
+  {
+   "id": "07_promo-01",
+   "translation": "Exclusive Limited Deal",
+   "note": ""
+  },
+  {
+   "id": "07_promo-02",
+   "translation": "1+1 Double Deal",
+   "note": ""
+  },
+  {
+   "id": "07_promo-03",
+   "translation": "First 3,000 customers",
+   "note": ""
+  },
+  {
+   "id": "07_promo-04",
+   "translation": "Free 10ml miniature with purchase",
+   "note": ""
+  },
+  {
+   "id": "07_promo-05",
+   "translation": "KRW 3,000 in points for writing a review",
+   "note": "통화 단위 명시"
+  },
+  {
+   "id": "07_promo-06",
+   "translation": "Gift period: Aug 19 – Aug 23 (ends early if stock runs out)",
+   "note": ""
+  },
+  {
+   "id": "07_promo-07",
+   "translation": "No.1 in online mall skincare category sales*",
+   "note": ""
+  },
+  {
+   "id": "07_promo-08",
+   "translation": "*Based on our own online store, June 2026",
+   "note": ""
+  }
+ ]
+}

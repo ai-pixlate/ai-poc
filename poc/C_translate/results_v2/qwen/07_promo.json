@@ -1,0 +1,46 @@
+{
+ "image": "07_promo.synthetic",
+ "model": "qwen",
+ "translations": [
+  {
+   "id": "07_promo-01",
+   "translation": "Exclusive Limited Offer",
+   "note": ""
+  },
+  {
+   "id": "07_promo-02",
+   "translation": "1+1 Double Deal",
+   "note": ""
+  },
+  {
+   "id": "07_promo-03",
+   "translation": "First 3,000 Only",
+   "note": ""
+  },
+  {
+   "id": "07_promo-04",
+   "translation": "Free 10ml Mini with Purchase",
+   "note": ""
+  },
+  {
+   "id": "07_promo-05",
+   "translation": "₩3,000 Credit for Review",
+   "note": ""
+  },
+  {
+   "id": "07_promo-06",
+   "translation": "Promotion Period: Aug 19–Aug 23 (May end early if sold out)",
+   "note": ""
+  },
+  {
+   "id": "07_promo-07",
+   "translation": "No.1 in Online Mall Skincare Sales*",
+   "note": ""
+  },
+  {
+   "id": "07_promo-08",
+   "translation": "*Based on official online mall sales, June 2026",
+   "note": ""
+  }
+ ]
+}

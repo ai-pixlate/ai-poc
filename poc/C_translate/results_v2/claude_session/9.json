@@ -1,0 +1,54 @@
+{
+ "image": "9.jpg",
+ "model": "claude_session",
+ "kind": "예비 실행 — 벤치마크 아님",
+ "target_lang": "영어",
+ "regulation_table_is_test": true,
+ "translations": [
+  {
+   "id": "9-01",
+   "translation": "Biggest Ever Limited Deal",
+   "note": ""
+  },
+  {
+   "id": "9-03",
+   "translation": "Double X Double",
+   "note": ""
+  },
+  {
+   "id": "9-04",
+   "translation": "OLIVE YOUNG",
+   "note": ""
+  },
+  {
+   "id": "9-05",
+   "translation": "Exclusive Deal",
+   "note": ""
+  },
+  {
+   "id": "9-06",
+   "translation": "Black",
+   "note": "'블랙'+'헤드'가 blackhead로 이어지는 조각"
+  },
+  {
+   "id": "9-11",
+   "translation": "head",
+   "note": "앞 조각과 합쳐 blackhead"
+  },
+  {
+   "id": "9-28",
+   "translation": "Sensitive",
+   "note": ""
+  },
+  {
+   "id": "9-32",
+   "translation": "Skin",
+   "note": ""
+  },
+  {
+   "id": "9-35",
+   "translation": "Low Irritation",
+   "note": ""
+  }
+ ]
+}

@@ -1,0 +1,54 @@
+{
+ "image": "8.jpg",
+ "model": "claude_session",
+ "kind": "예비 실행 — 벤치마크 아님",
+ "target_lang": "영어",
+ "regulation_table_is_test": true,
+ "translations": [
+  {
+   "id": "8-03",
+   "translation": "Biodance's commitment to balanced skin",
+   "note": ""
+  },
+  {
+   "id": "8-07",
+   "translation": "19 ingredients of concern",
+   "note": ""
+  },
+  {
+   "id": "8-08",
+   "translation": "MFDS-listed allergens",
+   "note": "'식약처' → Ministry of Food and Drug Safety 약어"
+  },
+  {
+   "id": "8-09",
+   "translation": "Low skin irritation",
+   "note": ""
+  },
+  {
+   "id": "8-10",
+   "translation": "Free*",
+   "note": ""
+  },
+  {
+   "id": "8-11",
+   "translation": "25 allergen triggers free",
+   "note": ""
+  },
+  {
+   "id": "8-12",
+   "translation": "Test completed",
+   "note": ""
+  },
+  {
+   "id": "8-13",
+   "translation": "· Items: Phenoxyethanol, Benzyl Alcohol, Benzoic Acid, Chlorphenesin, Diazolidinyl Urea, Sorbic Acid, Benzophenone-3, Isopropyl Alcohol, Triethanolamine, Benzalkonium Chloride (C12-C14)",
+   "note": "OCR 훼손 심함. 성분명 10개를 표준 INCI 표기로 복원 추정 — 원문 대조 필요"
+  },
+  {
+   "id": "8-14",
+   "translation": "Butylated Hydroxytoluene, Propylene Glycol, Methylparaben, Ethylparaben, Isopropylparaben, Propylparaben, Isobutylparaben, Butylparaben, p-Hydroxybenzoic Acid",
+   "note": "OCR 훼손 심함. 성분명 9개 복원 추정 — 원문 대조 필요"
+  }
+ ]
+}

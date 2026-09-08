@@ -1,0 +1,48 @@
+{
+ "image": "01_intro.synthetic",
+ "model": "qwen_mt_ref",
+ "kind": "참고 측정 — 벤치마크 후보 아님",
+ "model_id": "qwen-mt-plus",
+ "translations": [
+  {
+   "id": "01_intro-01",
+   "translation": "Lumière Collagen Ampoule",
+   "note": ""
+  },
+  {
+   "id": "01_intro-02",
+   "translation": "A fast-acting, brightening routine that helps reduce the look of fine lines, renewing and caring for blemish-prone skin with an age-defying, gentle formula. It addresses uneven-looking areas and pore-refining appearance while tackling blemish-prone concerns—pure, dermatologist-informed care designed to deliver an age-defying, firmer look.",
+   "note": ""
+  },
+  {
+   "id": "01_intro-03",
+   "translation": "One drop each day, building effortlessly day by day",
+   "note": ""
+  },
+  {
+   "id": "01_intro-04",
+   "translation": "Low-molecular collagen that replenishes from within",
+   "note": ""
+  },
+  {
+   "id": "01_intro-05",
+   "translation": "The time when your skin transforms",
+   "note": ""
+  },
+  {
+   "id": "01_intro-06",
+   "translation": "Gentle enough for sensitive skin",
+   "note": ""
+  },
+  {
+   "id": "01_intro-07",
+   "translation": "Daily Ampoule 30ml",
+   "note": ""
+  },
+  {
+   "id": "01_intro-08",
+   "translation": "New product launch celebration",
+   "note": ""
+  }
+ ]
+}

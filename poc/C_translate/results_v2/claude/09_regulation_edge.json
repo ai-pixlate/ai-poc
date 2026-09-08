@@ -1,0 +1,81 @@
+{
+ "image": "09_regulation_edge.synthetic",
+ "model": "claude",
+ "translations": [
+  {
+   "id": "09_regulation_edge-01",
+   "translation": "Brightening results confirmed in a clinical study",
+   "note": "'미백' → 'brightening' (규제 매핑 적용)"
+  },
+  {
+   "id": "09_regulation_edge-02",
+   "translation": "This product does not guarantee brightening results; individual results may vary",
+   "note": "'미백' → 'brightening' (규제 매핑 적용)"
+  },
+  {
+   "id": "09_regulation_edge-03",
+   "translation": "Helps reduce the look of fine lines",
+   "note": "'주름 개선' → 'helps reduce the look of fine lines' (규제 매핑 적용)"
+  },
+  {
+   "id": "09_regulation_edge-04",
+   "translation": "Helps reduce the look of fine lines — not dermatologist-informed proven",
+   "note": "'주름 개선' 및 '의학적' 매핑 적용. 원문은 부정 문맥(입증된 바 없음)이라 대체 표현 삽입 시 문장이 다소 어색해짐"
+  },
+  {
+   "id": "09_regulation_edge-05",
+   "translation": "Intensive care for skin lacking renewing vitality",
+   "note": "'재생' → 'renewing' (규제 매핑 적용)"
+  },
+  {
+   "id": "09_regulation_edge-06",
+   "translation": "A 4-week routine timed to skin's renewing cycle",
+   "note": "'재생' → 'renewing' (규제 매핑 적용)"
+  },
+  {
+   "id": "09_regulation_edge-07",
+   "translation": "Lumiere Brightening Ampoule 30ml (product name)",
+   "note": "브랜드/제품명은 원표기 유지하되 '미백'은 매핑 적용해 'Brightening'으로 표기"
+  },
+  {
+   "id": "09_regulation_edge-08",
+   "translation": "New launch in the age-defying line",
+   "note": "'안티에이징' → 'age-defying' (규제 매핑 적용)"
+  },
+  {
+   "id": "09_regulation_edge-09",
+   "translation": "Review: \"Uneven-looking areas seem lighter\" (individual opinion)",
+   "note": "'기미' → 'uneven-looking areas' (규제 매핑 적용)"
+  },
+  {
+   "id": "09_regulation_edge-10",
+   "translation": "From a dermatologist interview: \"This ingredient is not for care purposes\"",
+   "note": "'치료' → 'care' (규제 매핑 적용). 부정 문맥이라 의미가 다소 모호해짐"
+  },
+  {
+   "id": "09_regulation_edge-11",
+   "translation": "Dual function: brightening and helps reduce the look of fine lines",
+   "note": "'미백', '주름 개선' 매핑 적용"
+  },
+  {
+   "id": "09_regulation_edge-12",
+   "translation": "Fast-acting comfort for blemish-prone concerns, plus a pore-refining appearance",
+   "note": "'즉각', '트러블', '모공 축소' 매핑 적용"
+  },
+  {
+   "id": "09_regulation_edge-13",
+   "translation": "Supports renewing and helps for a firmer look",
+   "note": "'재생', '탄력 강화' 매핑 적용"
+  },
+  {
+   "id": "09_regulation_edge-14",
+   "translation": "Made with pure naturally derived ingredients",
+   "note": "'100%' → 'pure' (규제 매핑 적용)"
+  },
+  {
+   "id": "09_regulation_edge-15",
+   "translation": "Age-defying and age-defying care in one",
+   "note": "'노화 방지'와 '안티에이징' 모두 'age-defying'으로 매핑되어 중복 발생. 실제 배치 시 'Age-defying care in one step' 등 단일 표현 권장"
+  }
+ ]
+}

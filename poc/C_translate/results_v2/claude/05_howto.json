@@ -1,0 +1,41 @@
+{
+ "image": "05_howto.synthetic",
+ "model": "claude",
+ "translations": [
+  {
+   "id": "05_howto-01",
+   "translation": "How to Use",
+   "note": ""
+  },
+  {
+   "id": "05_howto-02",
+   "translation": "After cleansing, smooth skin with toner",
+   "note": ""
+  },
+  {
+   "id": "05_howto-03",
+   "translation": "Apply 2–3 drops of ampoule all over the face",
+   "note": ""
+  },
+  {
+   "id": "05_howto-04",
+   "translation": "Press gently with palms to absorb",
+   "note": ""
+  },
+  {
+   "id": "05_howto-05",
+   "translation": "Use twice daily, morning and night",
+   "note": ""
+  },
+  {
+   "id": "05_howto-06",
+   "translation": "Layer on extra where skin feels dry",
+   "note": ""
+  },
+  {
+   "id": "05_howto-07",
+   "translation": "Best used before your cream step",
+   "note": ""
+  }
+ ]
+}

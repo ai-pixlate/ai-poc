@@ -1,0 +1,31 @@
+{
+ "image": "06_texture.synthetic",
+ "model": "qwen",
+ "translations": [
+  {
+   "id": "06_texture-01",
+   "translation": "Freshly absorbing watery formula",
+   "note": ""
+  },
+  {
+   "id": "06_texture-02",
+   "translation": "Non-sticky finish feel",
+   "note": ""
+  },
+  {
+   "id": "06_texture-03",
+   "translation": "Weightless even before makeup",
+   "note": ""
+  },
+  {
+   "id": "06_texture-04",
+   "translation": "Thin, seamless adherence",
+   "note": ""
+  },
+  {
+   "id": "06_texture-05",
+   "translation": "Finish with subtle radiance",
+   "note": ""
+  }
+ ]
+}

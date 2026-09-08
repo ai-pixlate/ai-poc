@@ -1,0 +1,59 @@
+{
+ "image": "03_ingredient.synthetic",
+ "model": "claude_session",
+ "kind": "예비 실행 — 벤치마크 아님",
+ "target_lang": "영어",
+ "regulation_table_is_test": true,
+ "translations": [
+  {
+   "id": "03_ingredient-01",
+   "translation": "3 key ingredients",
+   "note": ""
+  },
+  {
+   "id": "03_ingredient-02",
+   "translation": "Hydrolyzed Collagen",
+   "note": "INCI 표기"
+  },
+  {
+   "id": "03_ingredient-03",
+   "translation": "Contains 2% Niacinamide",
+   "note": "INCI 표기, 함량 표기 유지"
+  },
+  {
+   "id": "03_ingredient-04",
+   "translation": "Contains 0.04% Adenosine",
+   "note": "INCI 표기, 함량 표기 유지"
+  },
+  {
+   "id": "03_ingredient-05",
+   "translation": "5-type Hyaluronic Acid complex",
+   "note": ""
+  },
+  {
+   "id": "03_ingredient-06",
+   "translation": "Panthenol and Ceramide form a moisture barrier",
+   "note": "INCI 표기"
+  },
+  {
+   "id": "03_ingredient-07",
+   "translation": "Soothing with Centella Asiatica Extract",
+   "note": "'병풀추출물'의 학명 표기를 채택 — 해외 시장 통용 표기"
+  },
+  {
+   "id": "03_ingredient-08",
+   "translation": "An ingredient blend for blemish-prone skin",
+   "note": "규제표 적용: 여드름 완화 → for blemish-prone skin"
+  },
+  {
+   "id": "03_ingredient-09",
+   "translation": "Fragrance-free, colorant-free formula",
+   "note": ""
+  },
+  {
+   "id": "03_ingredient-10",
+   "translation": "The full ingredient list is printed on the container and carton",
+   "note": ""
+  }
+ ]
+}

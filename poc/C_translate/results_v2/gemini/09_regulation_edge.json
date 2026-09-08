@@ -1,0 +1,81 @@
+{
+ "image": "09_regulation_edge.synthetic",
+ "model": "gemini",
+ "translations": [
+  {
+   "id": "09_regulation_edge-01",
+   "translation": "Brightening effect confirmed in clinical trials",
+   "note": "미백 -> brightening 대체"
+  },
+  {
+   "id": "09_regulation_edge-02",
+   "translation": "This product does not guarantee a brightening effect and individual results may vary",
+   "note": "미백 -> brightening 대체"
+  },
+  {
+   "id": "09_regulation_edge-03",
+   "translation": "It helps reduce the look of fine lines",
+   "note": "주름 개선 -> helps reduce the look of fine lines 대체"
+  },
+  {
+   "id": "09_regulation_edge-04",
+   "translation": "The effect that helps reduce the look of fine lines is not dermatologist-informed proven",
+   "note": "주름 개선 -> helps reduce the look of fine lines, 의학적 -> dermatologist-informed 대체"
+  },
+  {
+   "id": "09_regulation_edge-05",
+   "translation": "Intensive care for skin lacking renewing power",
+   "note": "재생 -> renewing 대체"
+  },
+  {
+   "id": "09_regulation_edge-06",
+   "translation": "A 4-week routine tailored to the skin's renewing cycle",
+   "note": "재생 -> renewing 대체"
+  },
+  {
+   "id": "09_regulation_edge-07",
+   "translation": "Lumière brightening ampoule 30ml (Product name)",
+   "note": "미백 -> brightening 대체 (브랜드명은 로마자 표기로 유지)"
+  },
+  {
+   "id": "09_regulation_edge-08",
+   "translation": "New age-defying line launched",
+   "note": "안티에이징 -> age-defying 대체"
+  },
+  {
+   "id": "09_regulation_edge-09",
+   "translation": "Customer review: \"My uneven-looking areas seem faded\" (Personal opinion)",
+   "note": "기미 -> uneven-looking areas 대체"
+  },
+  {
+   "id": "09_regulation_edge-10",
+   "translation": "During a dermatologist interview: \"This ingredient is not for care purposes\"",
+   "note": "치료 -> care 대체"
+  },
+  {
+   "id": "09_regulation_edge-11",
+   "translation": "Dual functionality for brightening and helps reduce the look of fine lines simultaneously",
+   "note": "미백 -> brightening, 주름 개선 -> helps reduce the look of fine lines 대체"
+  },
+  {
+   "id": "09_regulation_edge-12",
+   "translation": "Fast-acting soothing for blemish-prone concerns and a pore-refining appearance together",
+   "note": "즉각 -> fast-acting, 트러블 -> blemish-prone concerns, 모공 축소 -> pore-refining appearance 대체"
+  },
+  {
+   "id": "09_regulation_edge-13",
+   "translation": "Supports renewing and also contributes for a firmer look",
+   "note": "재생 -> renewing, 탄력 강화 -> for a firmer look 대체"
+  },
+  {
+   "id": "09_regulation_edge-14",
+   "translation": "Formulated with pure naturally derived ingredients only",
+   "note": "100% -> pure 대체"
+  },
+  {
+   "id": "09_regulation_edge-15",
+   "translation": "Age-defying and age-defying at once",
+   "note": "노화 방지 -> age-defying, 안티에이징 -> age-defying 대체 (중복 표기 의도 반영)"
+  }
+ ]
+}

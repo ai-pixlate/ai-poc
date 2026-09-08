@@ -1,0 +1,29 @@
+{
+ "image": "7.jpg",
+ "model": "claude_session",
+ "kind": "예비 실행 — 벤치마크 아님",
+ "target_lang": "영어",
+ "regulation_table_is_test": true,
+ "translations": [
+  {
+   "id": "7-31",
+   "translation": "100 Million Sheets*",
+   "note": ""
+  },
+  {
+   "id": "7-32",
+   "translation": "The same collagen mask know-how!",
+   "note": ""
+  },
+  {
+   "id": "7-33",
+   "translation": "[Main] Pore Perfecting Collagen Peptide Serum 30ml + 30ml",
+   "note": "OCR '30m'을 '30ml'로 보정"
+  },
+  {
+   "id": "7-34",
+   "translation": "*Based on Biodance Bio Collagen Real Deep Mask production volume, Apr 2021–Aug 2025",
+   "note": "'바이오던스' → 브랜드 영문 표기 Biodance"
+  }
+ ]
+}

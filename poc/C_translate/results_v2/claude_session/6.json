@@ -1,0 +1,89 @@
+{
+ "image": "6.jpg",
+ "model": "claude_session",
+ "kind": "예비 실행 — 벤치마크 아님",
+ "target_lang": "영어",
+ "regulation_table_is_test": true,
+ "translations": [
+  {
+   "id": "6-03",
+   "translation": "Double",
+   "note": ""
+  },
+  {
+   "id": "6-04",
+   "translation": "Deal",
+   "note": ""
+  },
+  {
+   "id": "6-05",
+   "translation": "Exclusive",
+   "note": ""
+  },
+  {
+   "id": "6-06",
+   "translation": "Limited",
+   "note": ""
+  },
+  {
+   "id": "6-07",
+   "translation": "Deal",
+   "note": ""
+  },
+  {
+   "id": "6-09",
+   "translation": "OLIVE YOUNG",
+   "note": "유통사명 원표기 유지"
+  },
+  {
+   "id": "6-10",
+   "translation": "Exclusive Deal",
+   "note": ""
+  },
+  {
+   "id": "6-11",
+   "translation": "Size",
+   "note": ""
+  },
+  {
+   "id": "6-14",
+   "translation": "Pore-Tightening",
+   "note": "OCR '글 쪼쯤' → '모공 쫀쫀'으로 추정. 확신 낮음"
+  },
+  {
+   "id": "6-16",
+   "translation": "Pore",
+   "note": ""
+  },
+  {
+   "id": "6-18",
+   "translation": "Collagen",
+   "note": ""
+  },
+  {
+   "id": "6-19",
+   "translation": "Serum",
+   "note": ""
+  },
+  {
+   "id": "6-21",
+   "translation": "Collagen Pore Serum",
+   "note": ""
+  },
+  {
+   "id": "6-22",
+   "translation": "Pore Perfecting Collagen Peptide Serum",
+   "note": "제품명 — 영문 공식 표기 사용"
+  },
+  {
+   "id": "6-23",
+   "translation": "Limited Double Deal",
+   "note": ""
+  },
+  {
+   "id": "6-26",
+   "translation": "Pore Perfecting Collagen Peptide Serum",
+   "note": ""
+  }
+ ]
+}
