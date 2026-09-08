@@ -159,6 +159,38 @@ def read_existing() -> dict[tuple[str, str], list[str]]:
     return got
 
 
+def propagate(
+    existing: dict[tuple[str, str], list[str]],
+    blocks: dict[tuple[str, str], list[dict]],
+    images: list[str],
+    names: list[str],
+) -> list[str]:
+    """블록 구성이 완전히 같은 variant끼리 판정을 복사한다.
+
+    구성 region이 하나도 다르지 않으면 과분할·과병합·오분류·라벨이 정의상
+    같은 값이다. 사람이 넣은 값을 그대로 옮길 뿐 새로 만들지 않는다.
+    한쪽만 채워져 있을 때만 복사하고, 양쪽이 다르게 채워져 있으면 손대지 않는다.
+    """
+    notes = []
+    for img in images:
+        sig = {n: {tuple(b["regions"]) for b in blocks[(n, img)]} for n in names}
+        for i, a in enumerate(names):
+            for b in names[i + 1 :]:
+                if sig[a] != sig[b]:
+                    continue
+                fa, fb = existing.get((img, a)), existing.get((img, b))
+                if fa and fb and fa[:-1] != fb[:-1]:
+                    notes.append(f"  ! {img} — `{a}`·`{b}` 블록이 같은데 판정이 다름. 그대로 둠")
+                    continue
+                if fa and not fb:
+                    existing[(img, b)] = fa[:-1] + [f"`{a}`에서 자동 복사"]
+                    notes.append(f"  = {img} — `{a}` → `{b}` 복사")
+                elif fb and not fa:
+                    existing[(img, a)] = fb[:-1] + [f"`{b}`에서 자동 복사"]
+                    notes.append(f"  = {img} — `{b}` → `{a}` 복사")
+    return notes
+
+
 def main() -> None:
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
@@ -179,6 +211,10 @@ def main() -> None:
         heights[img] = {i: r["bbox"][3] - r["bbox"][1] for i, r in enumerate(rs)}
         for n in names:
             blocks[(n, img)] = load_blocks(n, img)
+
+    copied = propagate(existing, blocks, images, names)
+    for line in copied:
+        print(line)
 
     L: list[str] = []
     L.append("# 줄·문단 병합 + 역할 분류 — 실행 결과")
@@ -261,6 +297,10 @@ def main() -> None:
     L.append("- **과분할** = 한 문단이 여러 블록으로 쪼개진 건")
     L.append("- **과병합** = 서로 다른 문단이 한 블록으로 붙은 건")
     L.append("- **오분류** = 역할 5종을 잘못 준 블록 수")
+    L.append("")
+    L.append("**블록 구성이 완전히 같은 variant는 한쪽만 채우면 됨** — 나머지 행은"
+             " `compare.py`가 복사하고 비고에 출처를 적음. 양쪽을 다르게 채우면 복사하지 않고"
+             " 그대로 둠.")
     L.append("")
     L.append("**등급 기준** — 건수만 채우면 6장이 산식 등급을 계산함.")
     L.append("")
