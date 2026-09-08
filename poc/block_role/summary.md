@@ -10,6 +10,7 @@
 |---|---|---|---|---|---|
 | `heuristic_v1` | `line_gap=1.0` `para_gap=0.8` `h_ratio=2.0` `overlap=0.4` `gutter=False` | 12 | 280 | 159 | 0.13s |
 | `heuristic_v2` | `line_gap=0.7` `para_gap=0.6` `h_ratio=1.5` `overlap=0.5` `gutter=True` | 12 | 280 | 176 | 0.13s |
+| `llm_assist` | `model=gemini-3.8-flash` `temperature=0` `source=heuristic_v2` | 12 | 280 | 110 | 79.85s |
 
 ## 2. 역할 분포 (기계 집계 — 정오 아님)
 
@@ -17,6 +18,7 @@
 |---|---|---|---|---|---|
 | `heuristic_v1` | 46 | 78 | 33 | 1 | 1 |
 | `heuristic_v2` | 50 | 85 | 39 | 1 | 1 |
+| `llm_assist` | 24 | 1 | 80 | 1 | 4 |
 
 ## 3. 보조 지표 (정답 없이 계산 — 정오 아님)
 
@@ -27,6 +29,7 @@
 |---|---|---|---|
 | `heuristic_v1` | 32 | 20 | 2.jpg(3), 3.jpg(3), 4.jpg(2), 5.jpg(2), 6.jpg(4), 7.jpg(2), 8.jpg(1), 9.jpg(4), 11.jpg(10), 12.jpg(1) |
 | `heuristic_v2` | 38 | 4 | 2.jpg(3), 3.jpg(3), 4.jpg(2), 5.jpg(2), 6.jpg(4), 7.jpg(4), 8.jpg(1), 9.jpg(5), 11.jpg(13), 12.jpg(1) |
+| `llm_assist` | 6 | 29 | 2.jpg(1), 9.jpg(2), 11.jpg(3) |
 
 **`heuristic_v1` ↔ `heuristic_v2` 블록 경계 일치율** — 구성 영역이 완전히 같은 블록 기준.
 
@@ -69,30 +72,42 @@
 
 | 이미지 | variant | 영역 | 블록 | 겹침 | 이질 | 과분할 | 과병합 | 오분류 | 라벨 | 비고 | 시각화 |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| 1.jpg | `heuristic_v1` | 13 | 7 | 0 | 0 |  |  |  |  |  | `results/heuristic_v1/vis/1.jpg` |
-| 1.jpg | `heuristic_v2` | 13 | 7 | 0 | 0 |  |  |  |  |  | `results/heuristic_v2/vis/1.jpg` |
-| 2.jpg | `heuristic_v1` | 18 | 9 | 3 | 1 |  |  |  |  |  | `results/heuristic_v1/vis/2.jpg` |
-| 2.jpg | `heuristic_v2` | 18 | 9 | 3 | 1 |  |  |  |  |  | `results/heuristic_v2/vis/2.jpg` |
-| 3.jpg | `heuristic_v1` | 5 | 4 | 3 | 0 |  |  |  |  |  | `results/heuristic_v1/vis/3.jpg` |
-| 3.jpg | `heuristic_v2` | 5 | 4 | 3 | 0 |  |  |  |  |  | `results/heuristic_v2/vis/3.jpg` |
-| 4.jpg | `heuristic_v1` | 11 | 5 | 2 | 0 |  |  |  |  |  | `results/heuristic_v1/vis/4.jpg` |
-| 4.jpg | `heuristic_v2` | 11 | 5 | 2 | 0 |  |  |  |  |  | `results/heuristic_v2/vis/4.jpg` |
-| 5.jpg | `heuristic_v1` | 38 | 24 | 2 | 2 |  |  |  |  |  | `results/heuristic_v1/vis/5.jpg` |
-| 5.jpg | `heuristic_v2` | 38 | 25 | 2 | 1 |  |  |  |  |  | `results/heuristic_v2/vis/5.jpg` |
-| 6.jpg | `heuristic_v1` | 28 | 15 | 4 | 1 |  |  |  |  |  | `results/heuristic_v1/vis/6.jpg` |
-| 6.jpg | `heuristic_v2` | 28 | 16 | 4 | 0 |  |  |  |  |  | `results/heuristic_v2/vis/6.jpg` |
-| 7.jpg | `heuristic_v1` | 34 | 17 | 2 | 4 |  |  |  |  |  | `results/heuristic_v1/vis/7.jpg` |
-| 7.jpg | `heuristic_v2` | 34 | 21 | 4 | 1 |  |  |  |  |  | `results/heuristic_v2/vis/7.jpg` |
-| 8.jpg | `heuristic_v1` | 14 | 10 | 1 | 0 |  |  |  |  |  | `results/heuristic_v1/vis/8.jpg` |
-| 8.jpg | `heuristic_v2` | 14 | 10 | 1 | 0 |  |  |  |  |  | `results/heuristic_v2/vis/8.jpg` |
-| 9.jpg | `heuristic_v1` | 39 | 19 | 4 | 5 |  |  |  |  |  | `results/heuristic_v1/vis/9.jpg` |
-| 9.jpg | `heuristic_v2` | 39 | 23 | 5 | 0 |  |  |  |  |  | `results/heuristic_v2/vis/9.jpg` |
-| 10.jpg | `heuristic_v1` | 17 | 9 | 0 | 1 |  |  |  |  |  | `results/heuristic_v1/vis/10.jpg` |
-| 10.jpg | `heuristic_v2` | 17 | 11 | 0 | 0 |  |  |  |  |  | `results/heuristic_v2/vis/10.jpg` |
-| 11.jpg | `heuristic_v1` | 46 | 32 | 10 | 5 |  |  |  |  |  | `results/heuristic_v1/vis/11.jpg` |
-| 11.jpg | `heuristic_v2` | 46 | 36 | 13 | 1 |  |  |  |  |  | `results/heuristic_v2/vis/11.jpg` |
-| 12.jpg | `heuristic_v1` | 17 | 8 | 1 | 1 |  |  |  |  |  | `results/heuristic_v1/vis/12.jpg` |
-| 12.jpg | `heuristic_v2` | 17 | 9 | 1 | 0 |  |  |  |  |  | `results/heuristic_v2/vis/12.jpg` |
+| 1.jpg | `heuristic_v1` | 13 | 7 | 0 | 0 | 0 | 0 | 0 | 3 |  | `results/heuristic_v1/vis/1.jpg` |
+| 1.jpg | `heuristic_v2` | 13 | 7 | 0 | 0 | 0 | 0 | 0 | 3 | `heuristic_v1`에서 자동 복사 | `results/heuristic_v2/vis/1.jpg` |
+| 1.jpg | `llm_assist` | 13 | 7 | 0 | 0 |  |  |  |  |  | `results/llm_assist/vis/1.jpg` |
+| 2.jpg | `heuristic_v1` | 18 | 9 | 3 | 1 | 1 | 0 | 0 | 5 |  | `results/heuristic_v1/vis/2.jpg` |
+| 2.jpg | `heuristic_v2` | 18 | 9 | 3 | 1 | 1 | 0 | 0 | 5 | `heuristic_v1`에서 자동 복사 | `results/heuristic_v2/vis/2.jpg` |
+| 2.jpg | `llm_assist` | 18 | 7 | 1 | 2 |  |  |  |  |  | `results/llm_assist/vis/2.jpg` |
+| 3.jpg | `heuristic_v1` | 5 | 4 | 3 | 0 | 0 | 0 | 0 | 4 |  | `results/heuristic_v1/vis/3.jpg` |
+| 3.jpg | `heuristic_v2` | 5 | 4 | 3 | 0 | 0 | 0 | 0 | 4 | `heuristic_v1`에서 자동 복사 | `results/heuristic_v2/vis/3.jpg` |
+| 3.jpg | `llm_assist` | 5 | 1 | 0 | 1 |  |  |  |  |  | `results/llm_assist/vis/3.jpg` |
+| 4.jpg | `heuristic_v1` | 11 | 5 | 2 | 0 | 2 | 0 | 0 | 0 |  | `results/heuristic_v1/vis/4.jpg` |
+| 4.jpg | `heuristic_v2` | 11 | 5 | 2 | 0 | 2 | 0 | 0 | 0 | `heuristic_v1`에서 자동 복사 | `results/heuristic_v2/vis/4.jpg` |
+| 4.jpg | `llm_assist` | 11 | 3 | 0 | 0 |  |  |  |  |  | `results/llm_assist/vis/4.jpg` |
+| 5.jpg | `heuristic_v1` | 38 | 24 | 2 | 2 | 0 | 0 | 0 | 23 |  | `results/heuristic_v1/vis/5.jpg` |
+| 5.jpg | `heuristic_v2` | 38 | 25 | 2 | 1 | 0 | 0 | 0 | 24 |  | `results/heuristic_v2/vis/5.jpg` |
+| 5.jpg | `llm_assist` | 38 | 17 | 0 | 4 |  |  |  |  |  | `results/llm_assist/vis/5.jpg` |
+| 6.jpg | `heuristic_v1` | 28 | 15 | 4 | 1 | 0 | 0 | 1 | 9 |  | `results/heuristic_v1/vis/6.jpg` |
+| 6.jpg | `heuristic_v2` | 28 | 16 | 4 | 0 | 0 | 0 | 1 | 10 |  | `results/heuristic_v2/vis/6.jpg` |
+| 6.jpg | `llm_assist` | 28 | 9 | 0 | 4 |  |  |  |  |  | `results/llm_assist/vis/6.jpg` |
+| 7.jpg | `heuristic_v1` | 34 | 17 | 2 | 4 | 0 | 1 | 1 | 15 |  | `results/heuristic_v1/vis/7.jpg` |
+| 7.jpg | `heuristic_v2` | 34 | 21 | 4 | 1 | 0 | 1 | 1 | 19 |  | `results/heuristic_v2/vis/7.jpg` |
+| 7.jpg | `llm_assist` | 34 | 7 | 0 | 5 |  |  |  |  |  | `results/llm_assist/vis/7.jpg` |
+| 8.jpg | `heuristic_v1` | 14 | 10 | 1 | 0 | 0 | 0 | 2 | 3 |  | `results/heuristic_v1/vis/8.jpg` |
+| 8.jpg | `heuristic_v2` | 14 | 10 | 1 | 0 | 0 | 0 | 2 | 3 | `heuristic_v1`에서 자동 복사 | `results/heuristic_v2/vis/8.jpg` |
+| 8.jpg | `llm_assist` | 14 | 8 | 0 | 1 |  |  |  |  |  | `results/llm_assist/vis/8.jpg` |
+| 9.jpg | `heuristic_v1` | 39 | 19 | 4 | 5 | 0 | 0 | 0 | 14 |  | `results/heuristic_v1/vis/9.jpg` |
+| 9.jpg | `heuristic_v2` | 39 | 23 | 5 | 0 | 0 | 0 | 0 | 16 |  | `results/heuristic_v2/vis/9.jpg` |
+| 9.jpg | `llm_assist` | 39 | 12 | 2 | 4 |  |  |  |  |  | `results/llm_assist/vis/9.jpg` |
+| 10.jpg | `heuristic_v1` | 17 | 9 | 0 | 1 | 0 | 1 | 0 | 2 |  | `results/heuristic_v1/vis/10.jpg` |
+| 10.jpg | `heuristic_v2` | 17 | 11 | 0 | 0 | 0 | 0 | 0 | 2 |  | `results/heuristic_v2/vis/10.jpg` |
+| 10.jpg | `llm_assist` | 17 | 10 | 0 | 1 |  |  |  |  |  | `results/llm_assist/vis/10.jpg` |
+| 11.jpg | `heuristic_v1` | 46 | 32 | 10 | 5 | 0 | 0 | 0 | 29 |  | `results/heuristic_v1/vis/11.jpg` |
+| 11.jpg | `heuristic_v2` | 46 | 36 | 13 | 1 | 0 | 0 | 0 | 32 |  | `results/heuristic_v2/vis/11.jpg` |
+| 11.jpg | `llm_assist` | 46 | 23 | 3 | 6 |  |  |  |  |  | `results/llm_assist/vis/11.jpg` |
+| 12.jpg | `heuristic_v1` | 17 | 8 | 1 | 1 | 0 | 0 | 0 | 4 |  | `results/heuristic_v1/vis/12.jpg` |
+| 12.jpg | `heuristic_v2` | 17 | 9 | 1 | 0 | 0 | 0 | 0 | 5 |  | `results/heuristic_v2/vis/12.jpg` |
+| 12.jpg | `llm_assist` | 17 | 6 | 0 | 1 |  |  |  |  |  | `results/llm_assist/vis/12.jpg` |
 
 ## 5. 등급 덮어쓰기 — 산식과 다르게 볼 때만
 
@@ -107,30 +122,78 @@
 |---|---|---|---|---|
 | 1.jpg | `heuristic_v1` |  |  |  |
 | 1.jpg | `heuristic_v2` |  |  |  |
+| 1.jpg | `llm_assist` |  |  |  |
 | 2.jpg | `heuristic_v1` |  |  |  |
 | 2.jpg | `heuristic_v2` |  |  |  |
+| 2.jpg | `llm_assist` |  |  |  |
 | 3.jpg | `heuristic_v1` |  |  |  |
 | 3.jpg | `heuristic_v2` |  |  |  |
+| 3.jpg | `llm_assist` |  |  |  |
 | 4.jpg | `heuristic_v1` |  |  |  |
 | 4.jpg | `heuristic_v2` |  |  |  |
+| 4.jpg | `llm_assist` |  |  |  |
 | 5.jpg | `heuristic_v1` |  |  |  |
 | 5.jpg | `heuristic_v2` |  |  |  |
+| 5.jpg | `llm_assist` |  |  |  |
 | 6.jpg | `heuristic_v1` |  |  |  |
 | 6.jpg | `heuristic_v2` |  |  |  |
+| 6.jpg | `llm_assist` |  |  |  |
 | 7.jpg | `heuristic_v1` |  |  |  |
 | 7.jpg | `heuristic_v2` |  |  |  |
+| 7.jpg | `llm_assist` |  |  |  |
 | 8.jpg | `heuristic_v1` |  |  |  |
 | 8.jpg | `heuristic_v2` |  |  |  |
+| 8.jpg | `llm_assist` |  |  |  |
 | 9.jpg | `heuristic_v1` |  |  |  |
 | 9.jpg | `heuristic_v2` |  |  |  |
+| 9.jpg | `llm_assist` |  |  |  |
 | 10.jpg | `heuristic_v1` |  |  |  |
 | 10.jpg | `heuristic_v2` |  |  |  |
+| 10.jpg | `llm_assist` |  |  |  |
 | 11.jpg | `heuristic_v1` |  |  |  |
 | 11.jpg | `heuristic_v2` |  |  |  |
+| 11.jpg | `llm_assist` |  |  |  |
 | 12.jpg | `heuristic_v1` |  |  |  |
 | 12.jpg | `heuristic_v2` |  |  |  |
+| 12.jpg | `llm_assist` |  |  |  |
 
 ## 6. 집계
 
-_판정 전_ — 4장에 채워진 건수 없음.
+건수가 채워진 행 24 / 36. 빈 행은 계산에서 뺌.
+
+| 이미지 | variant | 판정 블록 | 병합(산식) | 병합(최종) | 역할(산식) | 역할(최종) |
+|---|---|---|---|---|---|---|
+| 1.jpg | `heuristic_v1` | 4/7 | A | A | A | A |
+| 1.jpg | `heuristic_v2` | 4/7 | A | A | A | A |
+| 10.jpg | `heuristic_v1` | 7/9 | B | B | A | A |
+| 10.jpg | `heuristic_v2` | 9/11 | A | A | A | A |
+| 11.jpg | `heuristic_v1` | 3/32 | A | A | A | A |
+| 11.jpg | `heuristic_v2` | 4/36 | A | A | A | A |
+| 12.jpg | `heuristic_v1` | 4/8 | A | A | A | A |
+| 12.jpg | `heuristic_v2` | 4/9 | A | A | A | A |
+| 2.jpg | `heuristic_v1` | 4/9 | A | A | A | A |
+| 2.jpg | `heuristic_v2` | 4/9 | A | A | A | A |
+| 3.jpg | `heuristic_v1` | 0/4 | A | A | — | — |
+| 3.jpg | `heuristic_v2` | 0/4 | A | A | — | — |
+| 4.jpg | `heuristic_v1` | 5/5 | C | C | A | A |
+| 4.jpg | `heuristic_v2` | 5/5 | C | C | A | A |
+| 5.jpg | `heuristic_v1` | 1/24 | A | A | A | A |
+| 5.jpg | `heuristic_v2` | 1/25 | A | A | A | A |
+| 6.jpg | `heuristic_v1` | 6/15 | A | A | B | B |
+| 6.jpg | `heuristic_v2` | 6/16 | A | A | B | B |
+| 7.jpg | `heuristic_v1` | 2/17 | B | B | C | C |
+| 7.jpg | `heuristic_v2` | 2/21 | B | B | C | C |
+| 8.jpg | `heuristic_v1` | 7/10 | A | A | C | C |
+| 8.jpg | `heuristic_v2` | 7/10 | A | A | C | C |
+| 9.jpg | `heuristic_v1` | 5/19 | A | A | A | A |
+| 9.jpg | `heuristic_v2` | 7/23 | A | A | A | A |
+
+⚠ = 5장에서 사람이 덮어씀. 사유는 5장에 있음.
+
+- `heuristic_v1` 병합 — A 9 / B 2 / C 1 · **A+B 11/12 (92%) 통과**
+- `heuristic_v1` 역할 — A 8 / B 1 / C 2 · **A+B 9/11 (82%) 통과**
+- `heuristic_v2` 병합 — A 10 / B 1 / C 1 · **A+B 11/12 (92%) 통과**
+- `heuristic_v2` 역할 — A 8 / B 1 / C 2 · **A+B 9/11 (82%) 통과**
+
+**채택 게이트 — 12장 A+B 70% 이상.** 텍스트 인식·인페인팅과 같은 기준. 병합·역할 두 축 모두 통과해야 채택.
 

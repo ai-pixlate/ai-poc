@@ -181,7 +181,10 @@ def propagate(
     """
     notes = []
     for img in images:
-        sig = {n: {tuple(b["regions"]) for b in blocks[(n, img)]} for n in names}
+        # 역할까지 같아야 복사한다. 구성만 같고 역할이 다르면 오분류 건수가 달라진다.
+        sig = {
+            n: {(tuple(b["regions"]), b["role"]) for b in blocks[(n, img)]} for n in names
+        }
         for i, a in enumerate(names):
             for b in names[i + 1 :]:
                 if sig[a] != sig[b]:
