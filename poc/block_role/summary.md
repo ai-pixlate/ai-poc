@@ -92,7 +92,7 @@
 | 6.jpg | `llm_assist` | 28 | 9 | 0 | 4 | 0 | 0 | 0 | 0 |  | `results/llm_assist/vis/6.jpg` |
 | 7.jpg | `heuristic_v1` | 34 | 17 | 2 | 4 | 0 | 1 | 1 | 15 |  | `results/heuristic_v1/vis/7.jpg` |
 | 7.jpg | `heuristic_v2` | 34 | 21 | 4 | 1 | 0 | 1 | 1 | 19 |  | `results/heuristic_v2/vis/7.jpg` |
-| 7.jpg | `llm_assist` | 34 | 7 | 0 | 5 | 0 | 0 | 0 | 0 |  | `results/llm_assist/vis/7.jpg` |
+| 7.jpg | `llm_assist` | 34 | 7 | 0 | 5 | 0 | 1 | 0 | 0 | 휴리스틱 과병합이 상속됨 | `results/llm_assist/vis/7.jpg` |
 | 8.jpg | `heuristic_v1` | 14 | 10 | 1 | 0 | 0 | 0 | 2 | 3 |  | `results/heuristic_v1/vis/8.jpg` |
 | 8.jpg | `heuristic_v2` | 14 | 10 | 1 | 0 | 0 | 0 | 2 | 3 | `heuristic_v1`에서 자동 복사 | `results/heuristic_v2/vis/8.jpg` |
 | 8.jpg | `llm_assist` | 14 | 8 | 0 | 1 | 0 | 0 | 3 | 0 | 휴리스틱이 놓친 주의문구를 잡아냄 | `results/llm_assist/vis/8.jpg` |
@@ -192,7 +192,7 @@
 | 6.jpg | `llm_assist` | 9/9 | A | A | A | A |
 | 7.jpg | `heuristic_v1` | 2/17 | B | B | C | C |
 | 7.jpg | `heuristic_v2` | 2/21 | B | B | C | C |
-| 7.jpg | `llm_assist` | 7/7 | A | A | A | A |
+| 7.jpg | `llm_assist` | 7/7 | C | C | A | A |
 | 8.jpg | `heuristic_v1` | 7/10 | A | A | C | C |
 | 8.jpg | `heuristic_v2` | 7/10 | A | A | C | C |
 | 8.jpg | `llm_assist` | 8/8 | A | A | C | C |
@@ -206,7 +206,7 @@
 - `heuristic_v1` 역할 — A 8 / B 1 / C 2 · **A+B 9/11 (82%) 통과**
 - `heuristic_v2` 병합 — A 10 / B 1 / C 1 · **A+B 11/12 (92%) 통과**
 - `heuristic_v2` 역할 — A 8 / B 1 / C 2 · **A+B 9/11 (82%) 통과**
-- `llm_assist` 병합 — A 12 / B 0 / C 0 · **A+B 12/12 (100%) 통과**
+- `llm_assist` 병합 — A 11 / B 0 / C 1 · **A+B 11/12 (92%) 통과**
 - `llm_assist` 역할 — A 10 / B 1 / C 1 · **A+B 11/12 (92%) 통과**
 
 **채택 게이트 — 12장 A+B 70% 이상.** 텍스트 인식·인페인팅과 같은 기준. 병합·역할 두 축 모두 통과해야 채택.
