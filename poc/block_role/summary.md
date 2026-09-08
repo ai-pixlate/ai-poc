@@ -1,8 +1,8 @@
 # 줄·문단 병합 + 역할 분류 — 실행 결과
 
-> 이 파일은 `compare.py`가 생성함. **판정 칸은 사람이 채움.**
+> 이 파일은 `compare.py`가 생성함. **4장 건수 4칸이 사람이 채우는 전부임.**
 > 입력은 텍스트 인식 `baseline` 영역. 판정 기준·계획은 `PoC_추가검증_계획.md`.
-> **정답 라벨 없음** — 병합·역할의 정오는 육안 A/B/C로 판정함.
+> **정답 라벨 없음** — 병합·역할의 정오는 육안으로 봄.
 
 ## 1. 실행 조건
 
@@ -46,95 +46,91 @@
 | 12.jpg | 7 | 82% |
 | **전체** | **138** | **87%** |
 
-## 4. 판정표
+## 4. 판정표 — 건수
 
-**채울 칸은 `과분할`·`과병합`·`오분류`·`라벨` 4개뿐.** `겹침`·`이질`은 코드가 채움.
-
-| 열 | 누가 | 비우면 |
-|---|---|---|
-| 과분할·과병합·오분류·라벨 | **사람** | 그 행은 판정 안 된 것으로 봄 |
-| 병합·역할 | 비워둠이 기본 | **건수로 산출한 산식 등급을 그대로 씀** |
-| 겹침·이질 | 코드 | — |
-
-`병합`·`역할`에 값을 적는 건 **산식과 다르게 볼 때뿐**임. 적으면 사람 판단이 이기고 6장에 `⚠`로 표시됨 — 사유를 비고에 적을 것. 아래 두 경우가 해당함.
-
-- **주의문구 미탐** — 산식이 모르는 상한 규칙(1건 최대 B, 2건 이상 C)
-- 건수는 적은데 **한 건이 치명적**일 때 (문단 여러 개가 통째로 뭉친 과병합 등)
+**여기 채우는 칸은 4개뿐.** `겹침`·`이질`은 코드가 채움. 등급은 6장이 계산함.
 
 - **과분할** = 한 문단이 여러 블록으로 쪼개진 건
 - **과병합** = 서로 다른 문단이 한 블록으로 붙은 건
 - **오분류** = 역할 5종을 잘못 준 블록 수
+- **라벨** = 제품 인쇄 글자 블록 수. 역할 오분류율 분모에서 빠짐
 
-**블록 구성이 완전히 같은 variant는 한쪽만 채우면 됨** — 나머지 행은 `compare.py`가 복사하고 비고에 출처를 적음. 양쪽을 다르게 채우면 복사하지 않고 그대로 둠.
-
-**등급 기준** — 건수만 채우면 6장이 산식 등급을 계산함.
-
-| 축 | A | B | C |
-|---|---|---|---|
-| 병합 | 가중 오류율 ≤ 10% **그리고 과병합 0** | ≤ 25% | 그 외 |
-| 역할 | 오분류율 ≤ 10% | ≤ 25% | 그 외 |
-
-- 가중 오류 = 과분할 + 과병합 × 2. **과병합이 더 무거움** — 과분할은 조각이 제자리에 남지만 과병합은 되돌릴 수 없음
-- 블록 10개 미만 이미지는 가중 오류 1건까지 A (과병합 0일 때만)
-- **주의문구를 다른 역할로 준 건(미탐)이 1건 있으면 역할은 최대 B, 2건 이상이면 C.** 규제 판정이 통째로 빠지므로 산식보다 우선함 — 비고에 적고 사람이 직접 내릴 것
+**블록 구성이 완전히 같은 variant는 한쪽만 채우면 됨** — 나머지 행은 `compare.py`가 복사하고 비고에 출처를 적음. 양쪽을 다르게 채우면 복사하지 않음.
 
 **제외 관례 — 제품 인쇄 글자(라벨)**
 
 | 축 | 처리 |
 |---|---|
-| 역할 오분류 | **세지 않음.** 라벨 블록 수를 `라벨` 칸에 적을 것 |
+| 역할 오분류 | **세지 않음.** 블록 수를 `라벨` 칸에 적을 것 |
 | 과분할·과병합 | **그대로 셈** — 라벨이든 아니든 블록 경계는 맞아야 함 |
 | 역할 오분류율 분모 | **블록 수 − 라벨.** 전부 라벨이면 역할 등급은 `—` |
 
-제품 용기·패키지에 인쇄된 글자는 5종(제목·본문·캡션·가격·주의문구) 중 무엇으로 불러도 의미가 없음. **제품 라벨 판정 과업에서 별도로 판정함** — 여기서 억지로 5종에 넣어 세면 같은 블록을 서로 다른 기준으로 두 번 판정하게 됨. 인페인팅 판정에서 쓴 관례와 같음(`PoC_검증_계획_및_기록.md` 2.2).
+제품 용기·패키지에 인쇄된 글자는 5종 중 무엇으로 불러도 의미가 없음. **제품 라벨 판정 과업에서 별도로 판정함.** 인페인팅 판정 관례와 같음(`PoC_검증_계획_및_기록.md` 2.2).
 
-| 이미지 | variant | 영역 | 블록 | 겹침 | 이질 | 병합 | 역할 | 과분할 | 과병합 | 오분류 | 라벨 | 비고 | 시각화 |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| 1.jpg | `heuristic_v1` | 13 | 7 | 0 | 0 |  |  |  |  |  |  |  | `results/heuristic_v1/vis/1.jpg` |
-| 1.jpg | `heuristic_v2` | 13 | 7 | 0 | 0 |  |  |  |  |  |  |  | `results/heuristic_v2/vis/1.jpg` |
-| 2.jpg | `heuristic_v1` | 18 | 9 | 3 | 1 |  |  |  |  |  |  |  | `results/heuristic_v1/vis/2.jpg` |
-| 2.jpg | `heuristic_v2` | 18 | 9 | 3 | 1 |  |  |  |  |  |  |  | `results/heuristic_v2/vis/2.jpg` |
-| 3.jpg | `heuristic_v1` | 5 | 4 | 3 | 0 |  |  |  |  |  |  |  | `results/heuristic_v1/vis/3.jpg` |
-| 3.jpg | `heuristic_v2` | 5 | 4 | 3 | 0 |  |  |  |  |  |  |  | `results/heuristic_v2/vis/3.jpg` |
-| 4.jpg | `heuristic_v1` | 11 | 5 | 2 | 0 |  |  |  |  |  |  |  | `results/heuristic_v1/vis/4.jpg` |
-| 4.jpg | `heuristic_v2` | 11 | 5 | 2 | 0 |  |  |  |  |  |  |  | `results/heuristic_v2/vis/4.jpg` |
-| 5.jpg | `heuristic_v1` | 38 | 24 | 2 | 2 |  |  |  |  |  |  |  | `results/heuristic_v1/vis/5.jpg` |
-| 5.jpg | `heuristic_v2` | 38 | 25 | 2 | 1 |  |  |  |  |  |  |  | `results/heuristic_v2/vis/5.jpg` |
-| 6.jpg | `heuristic_v1` | 28 | 15 | 4 | 1 |  |  |  |  |  |  |  | `results/heuristic_v1/vis/6.jpg` |
-| 6.jpg | `heuristic_v2` | 28 | 16 | 4 | 0 |  |  |  |  |  |  |  | `results/heuristic_v2/vis/6.jpg` |
-| 7.jpg | `heuristic_v1` | 34 | 17 | 2 | 4 |  |  |  |  |  |  |  | `results/heuristic_v1/vis/7.jpg` |
-| 7.jpg | `heuristic_v2` | 34 | 21 | 4 | 1 |  |  |  |  |  |  |  | `results/heuristic_v2/vis/7.jpg` |
-| 8.jpg | `heuristic_v1` | 14 | 10 | 1 | 0 |  |  |  |  |  |  |  | `results/heuristic_v1/vis/8.jpg` |
-| 8.jpg | `heuristic_v2` | 14 | 10 | 1 | 0 |  |  |  |  |  |  |  | `results/heuristic_v2/vis/8.jpg` |
-| 9.jpg | `heuristic_v1` | 39 | 19 | 4 | 5 |  |  |  |  |  |  |  | `results/heuristic_v1/vis/9.jpg` |
-| 9.jpg | `heuristic_v2` | 39 | 23 | 5 | 0 |  |  |  |  |  |  |  | `results/heuristic_v2/vis/9.jpg` |
-| 10.jpg | `heuristic_v1` | 17 | 9 | 0 | 1 |  |  |  |  |  |  |  | `results/heuristic_v1/vis/10.jpg` |
-| 10.jpg | `heuristic_v2` | 17 | 11 | 0 | 0 |  |  |  |  |  |  |  | `results/heuristic_v2/vis/10.jpg` |
-| 11.jpg | `heuristic_v1` | 46 | 32 | 10 | 5 |  |  |  |  |  |  |  | `results/heuristic_v1/vis/11.jpg` |
-| 11.jpg | `heuristic_v2` | 46 | 36 | 13 | 1 |  |  |  |  |  |  |  | `results/heuristic_v2/vis/11.jpg` |
-| 12.jpg | `heuristic_v1` | 17 | 8 | 1 | 1 |  |  |  |  |  |  |  | `results/heuristic_v1/vis/12.jpg` |
-| 12.jpg | `heuristic_v2` | 17 | 9 | 1 | 0 |  |  |  |  |  |  |  | `results/heuristic_v2/vis/12.jpg` |
+| 이미지 | variant | 영역 | 블록 | 겹침 | 이질 | 과분할 | 과병합 | 오분류 | 라벨 | 비고 | 시각화 |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| 1.jpg | `heuristic_v1` | 13 | 7 | 0 | 0 |  |  |  |  |  | `results/heuristic_v1/vis/1.jpg` |
+| 1.jpg | `heuristic_v2` | 13 | 7 | 0 | 0 |  |  |  |  |  | `results/heuristic_v2/vis/1.jpg` |
+| 2.jpg | `heuristic_v1` | 18 | 9 | 3 | 1 |  |  |  |  |  | `results/heuristic_v1/vis/2.jpg` |
+| 2.jpg | `heuristic_v2` | 18 | 9 | 3 | 1 |  |  |  |  |  | `results/heuristic_v2/vis/2.jpg` |
+| 3.jpg | `heuristic_v1` | 5 | 4 | 3 | 0 |  |  |  |  |  | `results/heuristic_v1/vis/3.jpg` |
+| 3.jpg | `heuristic_v2` | 5 | 4 | 3 | 0 |  |  |  |  |  | `results/heuristic_v2/vis/3.jpg` |
+| 4.jpg | `heuristic_v1` | 11 | 5 | 2 | 0 |  |  |  |  |  | `results/heuristic_v1/vis/4.jpg` |
+| 4.jpg | `heuristic_v2` | 11 | 5 | 2 | 0 |  |  |  |  |  | `results/heuristic_v2/vis/4.jpg` |
+| 5.jpg | `heuristic_v1` | 38 | 24 | 2 | 2 |  |  |  |  |  | `results/heuristic_v1/vis/5.jpg` |
+| 5.jpg | `heuristic_v2` | 38 | 25 | 2 | 1 |  |  |  |  |  | `results/heuristic_v2/vis/5.jpg` |
+| 6.jpg | `heuristic_v1` | 28 | 15 | 4 | 1 |  |  |  |  |  | `results/heuristic_v1/vis/6.jpg` |
+| 6.jpg | `heuristic_v2` | 28 | 16 | 4 | 0 |  |  |  |  |  | `results/heuristic_v2/vis/6.jpg` |
+| 7.jpg | `heuristic_v1` | 34 | 17 | 2 | 4 |  |  |  |  |  | `results/heuristic_v1/vis/7.jpg` |
+| 7.jpg | `heuristic_v2` | 34 | 21 | 4 | 1 |  |  |  |  |  | `results/heuristic_v2/vis/7.jpg` |
+| 8.jpg | `heuristic_v1` | 14 | 10 | 1 | 0 |  |  |  |  |  | `results/heuristic_v1/vis/8.jpg` |
+| 8.jpg | `heuristic_v2` | 14 | 10 | 1 | 0 |  |  |  |  |  | `results/heuristic_v2/vis/8.jpg` |
+| 9.jpg | `heuristic_v1` | 39 | 19 | 4 | 5 |  |  |  |  |  | `results/heuristic_v1/vis/9.jpg` |
+| 9.jpg | `heuristic_v2` | 39 | 23 | 5 | 0 |  |  |  |  |  | `results/heuristic_v2/vis/9.jpg` |
+| 10.jpg | `heuristic_v1` | 17 | 9 | 0 | 1 |  |  |  |  |  | `results/heuristic_v1/vis/10.jpg` |
+| 10.jpg | `heuristic_v2` | 17 | 11 | 0 | 0 |  |  |  |  |  | `results/heuristic_v2/vis/10.jpg` |
+| 11.jpg | `heuristic_v1` | 46 | 32 | 10 | 5 |  |  |  |  |  | `results/heuristic_v1/vis/11.jpg` |
+| 11.jpg | `heuristic_v2` | 46 | 36 | 13 | 1 |  |  |  |  |  | `results/heuristic_v2/vis/11.jpg` |
+| 12.jpg | `heuristic_v1` | 17 | 8 | 1 | 1 |  |  |  |  |  | `results/heuristic_v1/vis/12.jpg` |
+| 12.jpg | `heuristic_v2` | 17 | 9 | 1 | 0 |  |  |  |  |  | `results/heuristic_v2/vis/12.jpg` |
 
-## 5. `heuristic_v1` vs `heuristic_v2` — 블록 수 차이
+## 5. 등급 덮어쓰기 — 산식과 다르게 볼 때만
 
-차이가 큰 이미지부터 보면 임계 변경의 효과를 빨리 판단할 수 있음.
+**기본은 비워둠.** 비워두면 6장의 산식 등급이 최종임. 여기 적으면 **사람 판단이 최종**이 되고 6장에 `⚠`로 표시됨.
 
-| 이미지 | `heuristic_v1` | `heuristic_v2` | 차이 |
-|---|---|---|---|
-| 7.jpg | 17 | 21 | +4 |
-| 9.jpg | 19 | 23 | +4 |
-| 11.jpg | 32 | 36 | +4 |
-| 10.jpg | 9 | 11 | +2 |
-| 5.jpg | 24 | 25 | +1 |
-| 6.jpg | 15 | 16 | +1 |
-| 12.jpg | 8 | 9 | +1 |
-| 1.jpg | 7 | 7 | +0 |
-| 2.jpg | 9 | 9 | +0 |
-| 3.jpg | 4 | 4 | +0 |
-| 4.jpg | 5 | 5 | +0 |
-| 8.jpg | 10 | 10 | +0 |
+적어야 하는 경우
+
+- **주의문구 미탐** — 산식이 모르는 상한 규칙. 1건이면 역할 최대 B, 2건 이상이면 C
+- **한 건이 치명적일 때** — 문단 여러 개가 통째로 뭉친 과병합 등. 건수는 적어도 등급을 내려야 함
+
+| 이미지 | variant | 병합 | 역할 | 사유 |
+|---|---|---|---|---|
+| 1.jpg | `heuristic_v1` |  |  |  |
+| 1.jpg | `heuristic_v2` |  |  |  |
+| 2.jpg | `heuristic_v1` |  |  |  |
+| 2.jpg | `heuristic_v2` |  |  |  |
+| 3.jpg | `heuristic_v1` |  |  |  |
+| 3.jpg | `heuristic_v2` |  |  |  |
+| 4.jpg | `heuristic_v1` |  |  |  |
+| 4.jpg | `heuristic_v2` |  |  |  |
+| 5.jpg | `heuristic_v1` |  |  |  |
+| 5.jpg | `heuristic_v2` |  |  |  |
+| 6.jpg | `heuristic_v1` |  |  |  |
+| 6.jpg | `heuristic_v2` |  |  |  |
+| 7.jpg | `heuristic_v1` |  |  |  |
+| 7.jpg | `heuristic_v2` |  |  |  |
+| 8.jpg | `heuristic_v1` |  |  |  |
+| 8.jpg | `heuristic_v2` |  |  |  |
+| 9.jpg | `heuristic_v1` |  |  |  |
+| 9.jpg | `heuristic_v2` |  |  |  |
+| 10.jpg | `heuristic_v1` |  |  |  |
+| 10.jpg | `heuristic_v2` |  |  |  |
+| 11.jpg | `heuristic_v1` |  |  |  |
+| 11.jpg | `heuristic_v2` |  |  |  |
+| 12.jpg | `heuristic_v1` |  |  |  |
+| 12.jpg | `heuristic_v2` |  |  |  |
 
 ## 6. 집계
 
-_판정 전_ — 채워진 칸 없음.
+_판정 전_ — 4장에 채워진 건수 없음.
 

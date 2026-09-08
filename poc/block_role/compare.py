@@ -1,22 +1,25 @@
 """줄·문단 병합 + 역할 분류 — variant 비교표 생성기.
 
 results/ 아래 실행된 모든 variant를 읽어 summary.md를 만든다.
-등급 칸은 비워둔다. 채우는 건 사람 몫.
+사람이 채우는 건 4장 판정표의 건수 4칸뿐이다.
+
+  과분할 / 과병합 / 오분류 / 라벨
+
+등급(A/B/C)은 그 건수에서 산식으로 나온다. 산식과 다르게 볼 때만
+5장 덮어쓰기 표에 등급을 적는다. 적으면 사람 판단이 최종이다.
 
 **정답 라벨을 만들지 않기로 함(2026-09-08).** 병합·역할의 정오는 사람이
-육안 A/B/C로 판정한다. 대신 정답 없이도 계산되는 보조 지표 3종을 붙여
-어느 이미지를 먼저 볼지 고르는 데 쓴다. 보조 지표는 **정오가 아니다.**
+육안으로 본다. 대신 정답 없이도 계산되는 보조 지표를 붙여 어느 이미지를
+먼저 볼지 고르는 데 쓴다. 보조 지표는 **정오가 아니다.**
 
   겹침  — 블록 bbox끼리 겹치는 쌍의 수. 과병합에서도 늘지만 원래 겹쳐
-          배치된 레이아웃(제품 패키지 사진 등)에서도 는다. 어느 쪽인지는
-          vis를 봐야 갈린다.
+          배치된 레이아웃(제품 패키지 사진 등)에서도 는다.
   이질  — 한 블록 안에서 글자 높이가 1.5배 넘게 벌어진 블록 수.
           h_ratio가 직접 누르는 값이라 variant 간 차이는 설계상 당연하다.
-          쓸모는 총수가 아니라 **어느 블록인지**에 있다.
-  일치율 — variant 간 블록 경계가 같은 비율. 임계 민감도
+  일치율 — variant 간 블록 경계가 같은 비율. 임계 민감도.
 
-**이미 채워진 등급은 재실행해도 보존한다.** 기존 summary.md의 판정표를
-(이미지, variant) 키로 읽어 되돌려 넣는다.
+**이미 채워진 값은 재실행해도 보존한다.** 두 표를 (이미지, variant) 키로
+읽어 되돌려 넣는다.
 
 사용법
     python compare.py
@@ -34,13 +37,11 @@ OUT = HERE / "summary.md"
 
 ROLES = ["제목", "본문", "캡션", "가격", "주의문구"]
 
-# 기계 집계 열 — 코드가 채운다.
+# 4장 판정표 — 기계 열과 사람 열.
 MACHINE_COLS = ["겹침", "이질"]
-# 판정 열 — 전부 빈 칸으로 생성한다.
-#   병합 / 역할 : 이미지 단위 A/B/C 육안 등급
-#   과분할·과병합·오분류 : 사람이 vis/ 를 보고 센 건수
-#   라벨 : 제품 인쇄 글자 블록 수. 역할 오분류율의 분모에서 빠진다
-GRADE_COLS = ["병합", "역할", "과분할", "과병합", "오분류", "라벨", "비고"]
+COUNT_COLS = ["과분할", "과병합", "오분류", "라벨", "비고"]
+# 5장 덮어쓰기 표 — 산식과 다르게 볼 때만 채운다.
+OVERRIDE_COLS = ["병합", "역할", "사유"]
 
 # 한 블록 안에서 이 배수를 넘게 글자 높이가 벌어지면 이질로 센다.
 HETERO_RATIO = 1.5
@@ -52,6 +53,7 @@ OVER_MERGE_WEIGHT = 2
 MERGE_A, MERGE_B = 0.10, 0.25     # 가중 오류율 상한
 ROLE_A, ROLE_B = 0.10, 0.25       # 역할 오분류율 상한
 SMALL_BLOCKS = 10                 # 블록이 이보다 적으면 1건까지 A로 봐준다
+GATE = 0.70                       # 채택 게이트 — 12장 A+B 비율
 
 
 def grade_merge(over_split: int, over_merge: int, blocks: int) -> str:
@@ -71,7 +73,7 @@ def grade_role(mis: int, blocks: int, labels: int = 0) -> str:
     """오분류 건수 → 역할 등급.
 
     제품 인쇄 글자(라벨) 블록은 5종 어디에도 해당하지 않으므로 분모에서 뺀다.
-    주의문구 미탐 상한은 사람이 비고에 적고 직접 내린다.
+    주의문구 미탐 상한은 산식이 모른다 — 사람이 덮어쓰기 표에서 내린다.
     """
     judged = blocks - labels
     if judged <= 0:
@@ -132,44 +134,50 @@ def agreement(a: list[dict], b: list[dict]) -> tuple[int, float]:
     return same, same / denom
 
 
-# ---------------------------------------------------------------- 판정 보존
+# ---------------------------------------------------------------- 입력 보존
 
-def read_existing() -> dict[tuple[str, str], list[str]]:
-    """기존 summary.md 판정표에서 채워진 등급을 회수한다.
+Table = dict[tuple[str, str], list[str]]
 
-    행 형식: | 이미지 | `variant` | 영역 | 블록 | 기계 2칸 | 판정 6칸 | 시각화 |
+
+def read_table(cols: list[str], lead: int) -> Table:
+    """summary.md의 표에서 채워진 행을 회수한다.
+
+    lead = 이미지·variant 뒤에 오는 자동 생성 열의 수.
+    끝에 시각화 열이 붙는 표도 있어 너비를 두 가지로 허용한다.
     """
     if not OUT.exists():
         return {}
-    width = 4 + len(MACHINE_COLS) + len(GRADE_COLS) + 1
-    start = 4 + len(MACHINE_COLS)
-    got: dict[tuple[str, str], list[str]] = {}
+    got: Table = {}
+    widths = {2 + lead + len(cols), 2 + lead + len(cols) + 1}
     for line in OUT.read_text(encoding="utf-8").splitlines():
         if not line.startswith("|"):
             continue
         cells = [c.strip() for c in line.strip().strip("|").split("|")]
-        if len(cells) != width:
+        if len(cells) not in widths:
             continue
         img, variant = cells[0], cells[1]
+        if not img.lower().endswith((".jpg", ".jpeg", ".png", ".webp")):
+            continue
         if not (variant.startswith("`") and variant.endswith("`")):
             continue
-        vals = cells[start : start + len(GRADE_COLS)]
+        vals = cells[2 + lead : 2 + lead + len(cols)]
         if any(vals):
             got[(img, variant.strip("`"))] = vals
     return got
 
 
 def propagate(
-    existing: dict[tuple[str, str], list[str]],
+    table: Table,
     blocks: dict[tuple[str, str], list[dict]],
     images: list[str],
     names: list[str],
+    label: str,
 ) -> list[str]:
-    """블록 구성이 완전히 같은 variant끼리 판정을 복사한다.
+    """블록 구성이 완전히 같은 variant끼리 입력을 복사한다.
 
-    구성 region이 하나도 다르지 않으면 과분할·과병합·오분류·라벨이 정의상
-    같은 값이다. 사람이 넣은 값을 그대로 옮길 뿐 새로 만들지 않는다.
-    한쪽만 채워져 있을 때만 복사하고, 양쪽이 다르게 채워져 있으면 손대지 않는다.
+    구성 region이 하나도 다르지 않으면 건수가 정의상 같은 값이다.
+    사람이 넣은 값을 옮길 뿐 새로 만들지 않는다. 한쪽만 채워져 있을 때만
+    복사하고, 양쪽이 다르게 채워져 있으면 손대지 않는다.
     """
     notes = []
     for img in images:
@@ -178,16 +186,18 @@ def propagate(
             for b in names[i + 1 :]:
                 if sig[a] != sig[b]:
                     continue
-                fa, fb = existing.get((img, a)), existing.get((img, b))
+                fa, fb = table.get((img, a)), table.get((img, b))
                 if fa and fb and fa[:-1] != fb[:-1]:
-                    notes.append(f"  ! {img} — `{a}`·`{b}` 블록이 같은데 판정이 다름. 그대로 둠")
+                    notes.append(
+                        f"  ! {img} {label} — `{a}`·`{b}` 블록이 같은데 값이 다름. 그대로 둠"
+                    )
                     continue
                 if fa and not fb:
-                    existing[(img, b)] = fa[:-1] + [f"`{a}`에서 자동 복사"]
-                    notes.append(f"  = {img} — `{a}` → `{b}` 복사")
+                    table[(img, b)] = fa[:-1] + [f"`{a}`에서 자동 복사"]
+                    notes.append(f"  = {img} {label} — `{a}` → `{b}` 복사")
                 elif fb and not fa:
-                    existing[(img, a)] = fb[:-1] + [f"`{b}`에서 자동 복사"]
-                    notes.append(f"  = {img} — `{b}` → `{a}` 복사")
+                    table[(img, a)] = fb[:-1] + [f"`{b}`에서 자동 복사"]
+                    notes.append(f"  = {img} {label} — `{b}` → `{a}` 복사")
     return notes
 
 
@@ -199,10 +209,11 @@ def main() -> None:
         raise SystemExit(f"{RESULTS} 아래 실행 결과 없음 — run.py 를 먼저 돌릴 것")
 
     metas = {n: json.loads((RESULTS / n / "meta.json").read_text(encoding="utf-8")) for n in names}
-    existing = read_existing()
     images = [p["image"] for p in metas[names[0]]["per_image"]]
 
-    # 블록·영역 높이 적재
+    counts = read_table(COUNT_COLS, lead=4)       # 영역·블록·겹침·이질 뒤
+    overrides = read_table(OVERRIDE_COLS, lead=0)
+
     blocks: dict[tuple[str, str], list[dict]] = {}
     heights: dict[str, dict[int, int]] = {}
     src = HERE.parents[1] / "poc" / "B_ocr" / "results" / "baseline" / "regions"
@@ -212,16 +223,17 @@ def main() -> None:
         for n in names:
             blocks[(n, img)] = load_blocks(n, img)
 
-    copied = propagate(existing, blocks, images, names)
-    for line in copied:
+    for line in propagate(counts, blocks, images, names, "건수"):
+        print(line)
+    for line in propagate(overrides, blocks, images, names, "덮어쓰기"):
         print(line)
 
     L: list[str] = []
     L.append("# 줄·문단 병합 + 역할 분류 — 실행 결과")
     L.append("")
-    L.append("> 이 파일은 `compare.py`가 생성함. **판정 칸은 사람이 채움.**")
+    L.append("> 이 파일은 `compare.py`가 생성함. **4장 건수 4칸이 사람이 채우는 전부임.**")
     L.append("> 입력은 텍스트 인식 `baseline` 영역. 판정 기준·계획은 `PoC_추가검증_계획.md`.")
-    L.append("> **정답 라벨 없음** — 병합·역할의 정오는 육안 A/B/C로 판정함.")
+    L.append("> **정답 라벨 없음** — 병합·역할의 정오는 육안으로 봄.")
     L.append("")
 
     # 1. 실행 조건
@@ -259,14 +271,14 @@ def main() -> None:
     L.append("")
     L.append("| variant | 겹침 | 이질 | 겹침 있는 이미지 |")
     L.append("|---|---|---|---|")
-    per_var_machine: dict[tuple[str, str], tuple[int, int]] = {}
+    machine: dict[tuple[str, str], tuple[int, int]] = {}
     for n in names:
         ov_total = het_total = 0
         dirty = []
         for img in images:
             ov = overlap_pairs(blocks[(n, img)])
             het = hetero_blocks(blocks[(n, img)], heights[img])
-            per_var_machine[(n, img)] = (ov, het)
+            machine[(n, img)] = (ov, het)
             ov_total += ov
             het_total += het
             if ov:
@@ -289,78 +301,45 @@ def main() -> None:
         L.append(f"| **전체** | **{int(tot_same)}** | **{tot_rate / len(images):.0%}** |")
         L.append("")
 
-    # 4. 판정표
-    L.append("## 4. 판정표")
+    # 4. 판정표 — 건수
+    L.append("## 4. 판정표 — 건수")
     L.append("")
-    L.append("**채울 칸은 `과분할`·`과병합`·`오분류`·`라벨` 4개뿐.**"
-             " `겹침`·`이질`은 코드가 채움.")
-    L.append("")
-    L.append("| 열 | 누가 | 비우면 |")
-    L.append("|---|---|---|")
-    L.append("| 과분할·과병합·오분류·라벨 | **사람** | 그 행은 판정 안 된 것으로 봄 |")
-    L.append("| 병합·역할 | 비워둠이 기본 | **건수로 산출한 산식 등급을 그대로 씀** |")
-    L.append("| 겹침·이질 | 코드 | — |")
-    L.append("")
-    L.append("`병합`·`역할`에 값을 적는 건 **산식과 다르게 볼 때뿐**임. 적으면 사람 판단이"
-             " 이기고 6장에 `⚠`로 표시됨 — 사유를 비고에 적을 것. 아래 두 경우가 해당함.")
-    L.append("")
-    L.append("- **주의문구 미탐** — 산식이 모르는 상한 규칙(1건 최대 B, 2건 이상 C)")
-    L.append("- 건수는 적은데 **한 건이 치명적**일 때 (문단 여러 개가 통째로 뭉친 과병합 등)")
+    L.append("**여기 채우는 칸은 4개뿐.** `겹침`·`이질`은 코드가 채움. 등급은 6장이 계산함.")
     L.append("")
     L.append("- **과분할** = 한 문단이 여러 블록으로 쪼개진 건")
     L.append("- **과병합** = 서로 다른 문단이 한 블록으로 붙은 건")
     L.append("- **오분류** = 역할 5종을 잘못 준 블록 수")
+    L.append("- **라벨** = 제품 인쇄 글자 블록 수. 역할 오분류율 분모에서 빠짐")
     L.append("")
     L.append("**블록 구성이 완전히 같은 variant는 한쪽만 채우면 됨** — 나머지 행은"
-             " `compare.py`가 복사하고 비고에 출처를 적음. 양쪽을 다르게 채우면 복사하지 않고"
-             " 그대로 둠.")
-    L.append("")
-    L.append("**등급 기준** — 건수만 채우면 6장이 산식 등급을 계산함.")
-    L.append("")
-    L.append("| 축 | A | B | C |")
-    L.append("|---|---|---|---|")
-    L.append(
-        f"| 병합 | 가중 오류율 ≤ {MERGE_A:.0%} **그리고 과병합 0** | ≤ {MERGE_B:.0%} | 그 외 |"
-    )
-    L.append(f"| 역할 | 오분류율 ≤ {ROLE_A:.0%} | ≤ {ROLE_B:.0%} | 그 외 |")
-    L.append("")
-    L.append(
-        f"- 가중 오류 = 과분할 + 과병합 × {OVER_MERGE_WEIGHT}. "
-        "**과병합이 더 무거움** — 과분할은 조각이 제자리에 남지만 과병합은 되돌릴 수 없음"
-    )
-    L.append(f"- 블록 {SMALL_BLOCKS}개 미만 이미지는 가중 오류 1건까지 A (과병합 0일 때만)")
-    L.append(
-        "- **주의문구를 다른 역할로 준 건(미탐)이 1건 있으면 역할은 최대 B, 2건 이상이면 C.** "
-        "규제 판정이 통째로 빠지므로 산식보다 우선함 — 비고에 적고 사람이 직접 내릴 것"
-    )
+             " `compare.py`가 복사하고 비고에 출처를 적음. 양쪽을 다르게 채우면 복사하지 않음.")
     L.append("")
     L.append("**제외 관례 — 제품 인쇄 글자(라벨)**")
     L.append("")
     L.append("| 축 | 처리 |")
     L.append("|---|---|")
-    L.append("| 역할 오분류 | **세지 않음.** 라벨 블록 수를 `라벨` 칸에 적을 것 |")
+    L.append("| 역할 오분류 | **세지 않음.** 블록 수를 `라벨` 칸에 적을 것 |")
     L.append("| 과분할·과병합 | **그대로 셈** — 라벨이든 아니든 블록 경계는 맞아야 함 |")
     L.append("| 역할 오분류율 분모 | **블록 수 − 라벨.** 전부 라벨이면 역할 등급은 `—` |")
     L.append("")
-    L.append("제품 용기·패키지에 인쇄된 글자는 5종(제목·본문·캡션·가격·주의문구) 중 "
-             "무엇으로 불러도 의미가 없음. **제품 라벨 판정 과업에서 별도로 판정함** — "
-             "여기서 억지로 5종에 넣어 세면 같은 블록을 서로 다른 기준으로 두 번 판정하게 됨. "
-             "인페인팅 판정에서 쓴 관례와 같음(`PoC_검증_계획_및_기록.md` 2.2).")
+    L.append("제품 용기·패키지에 인쇄된 글자는 5종 중 무엇으로 불러도 의미가 없음."
+             " **제품 라벨 판정 과업에서 별도로 판정함.**"
+             " 인페인팅 판정 관례와 같음(`PoC_검증_계획_및_기록.md` 2.2).")
     L.append("")
     L.append(
         "| 이미지 | variant | 영역 | 블록 | "
-        + " | ".join(MACHINE_COLS + GRADE_COLS)
+        + " | ".join(MACHINE_COLS + COUNT_COLS)
         + " | 시각화 |"
     )
-    L.append("|---|---|---|---|" + "---|" * (len(MACHINE_COLS) + len(GRADE_COLS)) + "---|")
+    L.append("|---|---|---|---|" + "---|" * (len(MACHINE_COLS) + len(COUNT_COLS)) + "---|")
     for img in images:
         stem = Path(img).stem
         for n in names:
             per = next((p for p in metas[n]["per_image"] if p["image"] == img), None)
             if per is None:
                 continue
-            ov, het = per_var_machine[(n, img)]
-            vals = existing.get((img, n), [""] * len(GRADE_COLS))
+            ov, het = machine[(n, img)]
+            vals = counts.get((img, n), [""] * len(COUNT_COLS))
             L.append(
                 f"| {img} | `{n}` | {per['regions']} | {per['blocks']} | {ov} | {het} | "
                 + " | ".join(vals)
@@ -368,65 +347,74 @@ def main() -> None:
             )
     L.append("")
 
-    # 5. variant 간 블록 수 차이 — 볼 순서 정하는 용도
-    if len(names) >= 2:
-        a, b = names[0], names[1]
-        L.append(f"## 5. `{a}` vs `{b}` — 블록 수 차이")
-        L.append("")
-        L.append("차이가 큰 이미지부터 보면 임계 변경의 효과를 빨리 판단할 수 있음.")
-        L.append("")
-        L.append(f"| 이미지 | `{a}` | `{b}` | 차이 |")
-        L.append("|---|---|---|---|")
-        rows = []
-        for img in images:
-            pa = next((p for p in metas[a]["per_image"] if p["image"] == img), None)
-            pb = next((p for p in metas[b]["per_image"] if p["image"] == img), None)
-            if pa and pb:
-                rows.append((img, pa["blocks"], pb["blocks"], pb["blocks"] - pa["blocks"]))
-        for img, x, y, d in sorted(rows, key=lambda r: -abs(r[3])):
-            L.append(f"| {img} | {x} | {y} | {d:+d} |")
-        L.append("")
+    # 5. 덮어쓰기
+    L.append("## 5. 등급 덮어쓰기 — 산식과 다르게 볼 때만")
+    L.append("")
+    L.append("**기본은 비워둠.** 비워두면 6장의 산식 등급이 최종임."
+             " 여기 적으면 **사람 판단이 최종**이 되고 6장에 `⚠`로 표시됨.")
+    L.append("")
+    L.append("적어야 하는 경우")
+    L.append("")
+    L.append("- **주의문구 미탐** — 산식이 모르는 상한 규칙. 1건이면 역할 최대 B, 2건 이상이면 C")
+    L.append("- **한 건이 치명적일 때** — 문단 여러 개가 통째로 뭉친 과병합 등."
+             " 건수는 적어도 등급을 내려야 함")
+    L.append("")
+    L.append("| 이미지 | variant | " + " | ".join(OVERRIDE_COLS) + " |")
+    L.append("|---|---|" + "---|" * len(OVERRIDE_COLS))
+    for img in images:
+        for n in names:
+            vals = overrides.get((img, n), [""] * len(OVERRIDE_COLS))
+            L.append(f"| {img} | `{n}` | " + " | ".join(vals) + " |")
+    L.append("")
 
-    # 6. 집계 — 채워진 칸에서만
+    # 6. 집계
     L.append("## 6. 집계")
     L.append("")
-    if not existing:
-        L.append("_판정 전_ — 채워진 칸 없음.")
+    if not counts:
+        L.append("_판정 전_ — 4장에 채워진 건수 없음.")
     else:
-        L.append(f"채워진 행 {len(existing)} / {len(images) * len(names)}. 빈 칸은 계산에서 뺌.")
+        L.append(
+            f"건수가 채워진 행 {len(counts)} / {len(images) * len(names)}. 빈 행은 계산에서 뺌."
+        )
         L.append("")
-        L.append("| 이미지 | variant | 판정 블록 | 병합(입력) | 병합(산식) | 역할(입력) | 역할(산식) |")
+        L.append("| 이미지 | variant | 판정 블록 | 병합(산식) | 병합(최종) | "
+                 "역할(산식) | 역할(최종) |")
         L.append("|---|---|---|---|---|---|---|")
-        tally: dict[str, list[str]] = {n: [] for n in names}
-        for (img, n), v in sorted(existing.items()):
+        tally: dict[str, dict[str, list[str]]] = {n: {"병합": [], "역할": []} for n in names}
+        for (img, n), v in sorted(counts.items()):
             per = next((p for p in metas[n]["per_image"] if p["image"] == img), None)
             nb = per["blocks"] if per else 0
             try:
-                osp, omg, mis = int(v[2]), int(v[3]), int(v[4])
-                lab = int(v[5]) if v[5] else 0
+                osp, omg, mis = int(v[0]), int(v[1]), int(v[2])
+                lab = int(v[3]) if v[3] else 0
             except ValueError:
                 continue
-            gm, gr = grade_merge(osp, omg, nb), grade_role(mis, nb, lab)
-            mark = lambda got, calc: f"{got or '—'}{'' if got in ('', calc) else ' ⚠'}"
-            L.append(
-                f"| {img} | `{n}` | {nb - lab}/{nb} | {mark(v[0], gm)} | {gm} | "
-                f"{mark(v[1], gr)} | {gr} |"
-            )
-            tally[n].append(v[0] or gm)
+            calc = {"병합": grade_merge(osp, omg, nb), "역할": grade_role(mis, nb, lab)}
+            ov = overrides.get((img, n), ["", "", ""])
+            final = {k: (ov[i] or calc[k]) for i, k in enumerate(("병합", "역할"))}
+            cells = []
+            for k in ("병합", "역할"):
+                mark = " ⚠" if final[k] != calc[k] else ""
+                cells += [calc[k], f"{final[k]}{mark}"]
+                tally[n][k].append(final[k])
+            L.append(f"| {img} | `{n}` | {nb - lab}/{nb} | " + " | ".join(cells) + " |")
         L.append("")
-        L.append("`입력`이 `—`면 비워둔 것 — **그 행은 산식 등급을 최종으로 씀.**"
-             " ⚠ = 사람이 산식과 다르게 적음. 이 경우 사람 판단이 최종이며 사유는 비고에 있음.")
+        L.append("⚠ = 5장에서 사람이 덮어씀. 사유는 5장에 있음.")
         L.append("")
         for n in names:
-            g = tally[n]
-            if g:
+            for k in ("병합", "역할"):
+                g = [x for x in tally[n][k] if x in {"A", "B", "C"}]
+                if not g:
+                    continue
                 ab = sum(1 for x in g if x in {"A", "B"})
+                gate = "통과" if ab / len(g) >= GATE else "미달"
                 L.append(
-                    f"- `{n}` 병합 — A {g.count('A')} / B {g.count('B')} / C {g.count('C')} · "
-                    f"**A+B {ab}/{len(g)} ({ab / len(g):.0%})**"
+                    f"- `{n}` {k} — A {g.count('A')} / B {g.count('B')} / C {g.count('C')} · "
+                    f"**A+B {ab}/{len(g)} ({ab / len(g):.0%}) {gate}**"
                 )
         L.append("")
-        L.append("**채택 게이트 — 12장 A+B 70% 이상.** 텍스트 인식·인페인팅과 같은 기준.")
+        L.append(f"**채택 게이트 — 12장 A+B {GATE:.0%} 이상.** 텍스트 인식·인페인팅과 같은 기준."
+                 " 병합·역할 두 축 모두 통과해야 채택.")
     L.append("")
 
     OUT.write_text("\n".join(L) + "\n", encoding="utf-8")
