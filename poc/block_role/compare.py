@@ -44,6 +44,37 @@ GRADE_COLS = ["병합", "역할", "과분할", "과병합", "오분류", "비고
 # 한 블록 안에서 이 배수를 넘게 글자 높이가 벌어지면 이질로 센다.
 HETERO_RATIO = 1.5
 
+# 등급 산식 (2026-09-08 확정)
+#   과병합에 2배 가중 — 과분할은 조각이 제자리에 남아 배치가 유지되지만,
+#   과병합은 서로 다른 자리의 문단이 한 박스가 돼 되돌릴 수 없다.
+OVER_MERGE_WEIGHT = 2
+MERGE_A, MERGE_B = 0.10, 0.25     # 가중 오류율 상한
+ROLE_A, ROLE_B = 0.10, 0.25       # 역할 오분류율 상한
+SMALL_BLOCKS = 10                 # 블록이 이보다 적으면 1건까지 A로 봐준다
+
+
+def grade_merge(over_split: int, over_merge: int, blocks: int) -> str:
+    """과분할·과병합 건수 → 병합 등급. 사람이 넣은 값의 산술 결과일 뿐이다."""
+    w = over_split + over_merge * OVER_MERGE_WEIGHT
+    if blocks < SMALL_BLOCKS and w <= 1 and over_merge == 0:
+        return "A"
+    rate = w / max(1, blocks)
+    if rate <= MERGE_A and over_merge == 0:
+        return "A"
+    if rate <= MERGE_B:
+        return "B"
+    return "C"
+
+
+def grade_role(mis: int, blocks: int) -> str:
+    """오분류 건수 → 역할 등급. 주의문구 미탐 상한은 사람이 비고에 적고 직접 내린다."""
+    rate = mis / max(1, blocks)
+    if rate <= ROLE_A:
+        return "A"
+    if rate <= ROLE_B:
+        return "B"
+    return "C"
+
 
 def variants() -> list[str]:
     if not RESULTS.exists():
@@ -223,6 +254,25 @@ def main() -> None:
     L.append("- **과병합** = 서로 다른 문단이 한 블록으로 붙은 건")
     L.append("- **오분류** = 역할 5종을 잘못 준 블록 수")
     L.append("")
+    L.append("**등급 기준** — 건수만 채우면 6장이 산식 등급을 계산함.")
+    L.append("")
+    L.append("| 축 | A | B | C |")
+    L.append("|---|---|---|---|")
+    L.append(
+        f"| 병합 | 가중 오류율 ≤ {MERGE_A:.0%} **그리고 과병합 0** | ≤ {MERGE_B:.0%} | 그 외 |"
+    )
+    L.append(f"| 역할 | 오분류율 ≤ {ROLE_A:.0%} | ≤ {ROLE_B:.0%} | 그 외 |")
+    L.append("")
+    L.append(
+        f"- 가중 오류 = 과분할 + 과병합 × {OVER_MERGE_WEIGHT}. "
+        "**과병합이 더 무거움** — 과분할은 조각이 제자리에 남지만 과병합은 되돌릴 수 없음"
+    )
+    L.append(f"- 블록 {SMALL_BLOCKS}개 미만 이미지는 가중 오류 1건까지 A (과병합 0일 때만)")
+    L.append(
+        "- **주의문구를 다른 역할로 준 건(미탐)이 1건 있으면 역할은 최대 B, 2건 이상이면 C.** "
+        "규제 판정이 통째로 빠지므로 산식보다 우선함 — 비고에 적고 사람이 직접 내릴 것"
+    )
+    L.append("")
     L.append(
         "| 이미지 | variant | 영역 | 블록 | "
         + " | ".join(MACHINE_COLS + GRADE_COLS)
@@ -270,15 +320,36 @@ def main() -> None:
         L.append("_판정 전_ — 채워진 칸 없음.")
     else:
         L.append(f"채워진 행 {len(existing)} / {len(images) * len(names)}. 빈 칸은 계산에서 뺌.")
+        L.append("")
+        L.append("| 이미지 | variant | 병합(입력) | 병합(산식) | 역할(입력) | 역할(산식) |")
+        L.append("|---|---|---|---|---|---|")
+        tally: dict[str, list[str]] = {n: [] for n in names}
+        for (img, n), v in sorted(existing.items()):
+            per = next((p for p in metas[n]["per_image"] if p["image"] == img), None)
+            nb = per["blocks"] if per else 0
+            try:
+                osp, omg, mis = int(v[2]), int(v[3]), int(v[4])
+            except ValueError:
+                continue
+            gm, gr = grade_merge(osp, omg, nb), grade_role(mis, nb)
+            mark = lambda got, calc: f"{got or '—'}{'' if got in ('', calc) else ' ⚠'}"
+            L.append(
+                f"| {img} | `{n}` | {mark(v[0], gm)} | {gm} | {mark(v[1], gr)} | {gr} |"
+            )
+            tally[n].append(v[0] or gm)
+        L.append("")
+        L.append("⚠ = 입력 등급과 산식 등급이 다름. 사람 판단이 우선이며 사유를 비고에 적을 것.")
+        L.append("")
         for n in names:
-            got = [v for (img, var), v in existing.items() if var == n]
-            grades = [v[0] for v in got if v[0] in {"A", "B", "C"}]
-            if grades:
-                ab = sum(1 for g in grades if g in {"A", "B"})
+            g = tally[n]
+            if g:
+                ab = sum(1 for x in g if x in {"A", "B"})
                 L.append(
-                    f"- `{n}` 병합 — A {grades.count('A')} / B {grades.count('B')} / "
-                    f"C {grades.count('C')} · A+B {ab}/{len(grades)}"
+                    f"- `{n}` 병합 — A {g.count('A')} / B {g.count('B')} / C {g.count('C')} · "
+                    f"**A+B {ab}/{len(g)} ({ab / len(g):.0%})**"
                 )
+        L.append("")
+        L.append("**채택 게이트 — 12장 A+B 70% 이상.** 텍스트 인식·인페인팅과 같은 기준.")
     L.append("")
 
     OUT.write_text("\n".join(L) + "\n", encoding="utf-8")
