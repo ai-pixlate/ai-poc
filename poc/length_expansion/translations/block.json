@@ -1,0 +1,435 @@
+{
+ "input": "block",
+ "model": "gemini-3.8-flash",
+ "segments": [
+  {
+   "id": "1-03",
+   "text": "키캡키링 선착순!",
+   "bbox": [
+    91,
+    603,
+    237,
+    699
+   ],
+   "role": "캡션",
+   "image": "1.jpg",
+   "target": "Keycap Keyring: First-Come, First-Served!"
+  },
+  {
+   "id": "1-07",
+   "text": "윈이 PICK!1등 화잘먹 모공 세럼",
+   "bbox": [
+    28,
+    895,
+    965,
+    982
+   ],
+   "role": "제목",
+   "image": "1.jpg",
+   "target": "Win's Pick! #1 Makeup-Prepping Pore Serum"
+  },
+  {
+   "id": "2-01",
+   "text": "콜라겐 펩타이드 세럼 구매하면 키캡 키링 증정!",
+   "bbox": [
+    149,
+    94,
+    1008,
+    233
+   ],
+   "role": "제목",
+   "image": "2.jpg",
+   "target": "Buy Collagen Peptide Serum and get a free keycap keyring!"
+  },
+  {
+   "id": "2-02",
+   "text": "리센느 원이 오이쉬스",
+   "bbox": [
+    73,
+    165,
+    646,
+    230
+   ],
+   "role": "제목",
+   "image": "2.jpg",
+   "target": "RESCENE WONI Oishis"
+  },
+  {
+   "id": "2-06",
+   "text": "키캡키링 선착순!",
+   "bbox": [
+    193,
+    637,
+    365,
+    754
+   ],
+   "role": "제목",
+   "image": "2.jpg",
+   "target": "Keycap Keyring: First-Come, First-Served!"
+  },
+  {
+   "id": "2-07",
+   "text": "·증정 기간:8/19~ 8/23 (선착순 증정, 재고 소진 시 종료) ·증정품은 한정 수량으로 선착순 지급되며 조기 소진될 수 있습니다. ·정확한 증정품 내역은 주문 후 [주문상세내역]에서 확인 가능합니다. ·오늘 드림/픽업 서비스 주문 건은 증정품 제공되지 않습니다 •반품 시 증정품도 함께 반품해주셔야 합니다.",
+   "bbox": [
+    210,
+    791,
+    868,
+    947
+   ],
+   "role": "주의문구",
+   "image": "2.jpg",
+   "target": "· Event Period: 8/19–8/23 (First-come, first-served; ends when out of stock) · Gifts are limited in quantity, offered on a first-come, first-served basis, and may run out early. · Exact gift details can be verified in [Order Details] after placing your order. · Gifts are not provided for Same-Day Delivery or Store Pickup orders. · In the event of a return, gifts must be returned together with the product."
+  },
+  {
+   "id": "4-02",
+   "text": "지금부터 시작하는 운 원이의 콜라겐",
+   "bbox": [
+    250,
+    644,
+    969,
+    713
+   ],
+   "role": "제목",
+   "image": "4.jpg",
+   "target": "Collagen with Woni, starting right now"
+  },
+  {
+   "id": "4-03",
+   "text": "빛나는 원이와 함께 매일 가볍게 쌓아가는 쏜쏜한 화잘먹 루틴!",
+   "bbox": [
+    276,
+    816,
+    781,
+    1033
+   ],
+   "role": "본문",
+   "image": "4.jpg",
+   "target": "An easy daily routine for plump, makeup-ready skin with glowing Woni!"
+  },
+  {
+   "id": "6-02",
+   "text": "1+1 더블 기획",
+   "bbox": [
+    318,
+    186,
+    860,
+    464
+   ],
+   "role": "제목",
+   "image": "6.jpg",
+   "target": "1+1 Double Set"
+  },
+  {
+   "id": "6-03",
+   "text": "단독 한정 기획",
+   "bbox": [
+    421,
+    499,
+    761,
+    572
+   ],
+   "role": "제목",
+   "image": "6.jpg",
+   "target": "Limited Exclusive Set"
+  },
+  {
+   "id": "6-04",
+   "text": "ONLY 올리브영 단독기획",
+   "bbox": [
+    937,
+    680,
+    1078,
+    798
+   ],
+   "role": "캡션",
+   "image": "6.jpg",
+   "target": "ONLY Olive Young Exclusive"
+  },
+  {
+   "id": "6-05",
+   "text": "용량 UP",
+   "bbox": [
+    953,
+    892,
+    1060,
+    1014
+   ],
+   "role": "캡션",
+   "image": "6.jpg",
+   "target": "Volume UP"
+  },
+  {
+   "id": "7-06",
+   "text": "1억장* 콜라겐 팩 노하우를 그대로! [본품]포어 퍼펙팅콜라겐펩타이드세럼30m +30ml",
+   "bbox": [
+    113,
+    352,
+    1091,
+    546
+   ],
+   "role": "제목",
+   "image": "7.jpg",
+   "target": "100 million sheets* of collagen mask expertise, distilled! [Full size] Pore Perfecting Collagen Peptide Serum 30ml + 30ml"
+  },
+  {
+   "id": "7-07",
+   "text": "*2021.04-2025.08 바이오던스 바이오 콜라겐 리얼 딥 마스크 생산 실적 기준",
+   "bbox": [
+    256,
+    616,
+    939,
+    640
+   ],
+   "role": "캡션",
+   "image": "7.jpg",
+   "target": "*Based on Biodance Bio-Collagen Real Deep Mask production volume from 2021.04 to 2025.08"
+  },
+  {
+   "id": "8-02",
+   "text": "BIODANCE'S SAFETY 바이오던스만의 균형있는피부를위한고집",
+   "bbox": [
+    268,
+    341,
+    927,
+    547
+   ],
+   "role": "제목",
+   "image": "8.jpg",
+   "target": "BIODANCE'S SAFETY: Biodance's Dedication to Balanced Skin"
+  },
+  {
+   "id": "8-05",
+   "text": "피부저자극 테스트완료",
+   "bbox": [
+    859,
+    926,
+    1035,
+    1023
+   ],
+   "role": "캡션",
+   "image": "8.jpg",
+   "target": "Skin Irritation Tested"
+  },
+  {
+   "id": "8-06",
+   "text": "19가지의심성분 무첨가*",
+   "bbox": [
+    129,
+    931,
+    370,
+    1028
+   ],
+   "role": "캡션",
+   "image": "8.jpg",
+   "target": "Free of 19 Potential Ingredients of Concern*"
+  },
+  {
+   "id": "8-07",
+   "text": "식약처 고시알레르기 유발25가지무첨가",
+   "bbox": [
+    455,
+    936,
+    746,
+    1028
+   ],
+   "role": "캡션",
+   "image": "8.jpg",
+   "target": "Free of 25 MFDS-Listed Allergens"
+  },
+  {
+   "id": "8-08",
+   "text": "·항목 페녹시에탄음 벤질알코을 벤즈익애씨드,클로페네신 디아줄리디닐우레아 소르빅애씨드, 벤조테는-3 어소프로팔알코음 트리에탄옵아민, 벤잘코눔클로라이드(C12C14) 부틸레이티드하이드록시루엔 프로필렌클라이플 테칠파라벤 에침파라벤,이소프로필파라벤,프로필파라벤 이소부틸따라벤,부틸파라벤,p-하이드목시벤조익에씨드",
+   "bbox": [
+    193,
+    1124,
+    1005,
+    1161
+   ],
+   "role": "주의문구",
+   "image": "8.jpg",
+   "target": "· Tested Ingredients: Phenoxyethanol, Benzyl Alcohol, Benzoic Acid, Chlorphenesin, Diazolidinyl Urea, Sorbic Acid, Benzophenone-3, Isopropyl Alcohol, Triethanolamine, Benzalkonium Chloride (C12, C14), Butylated Hydroxytoluene (BHT), Propylene Glycol, Methylparaben, Ethylparaben, Isopropylparaben, Propylparaben, Isobutylparaben, Butylparaben, p-Hydroxybenzoic Acid"
+  },
+  {
+   "id": "9-01",
+   "text": "역대최대 한정기획 더블X더블",
+   "bbox": [
+    56,
+    53,
+    465,
+    197
+   ],
+   "role": "제목",
+   "image": "9.jpg",
+   "target": "Biggest Ever Limited Set Double X Double"
+  },
+  {
+   "id": "9-02",
+   "text": "ONLY 올리브영 단독기획",
+   "bbox": [
+    773,
+    98,
+    912,
+    214
+   ],
+   "role": "제목",
+   "image": "9.jpg",
+   "target": "ONLY Olive Young Exclusive Set"
+  },
+  {
+   "id": "9-03",
+   "text": "블랙 헤드",
+   "bbox": [
+    790,
+    311,
+    904,
+    434
+   ],
+   "role": "캡션",
+   "image": "9.jpg",
+   "target": "Blackheads"
+  },
+  {
+   "id": "9-10",
+   "text": "민감 피부 저자극",
+   "bbox": [
+    794,
+    523,
+    901,
+    666
+   ],
+   "role": "캡션",
+   "image": "9.jpg",
+   "target": "Gentle for Sensitive Skin"
+  },
+  {
+   "id": "10-01",
+   "text": "50ml 추가 증정",
+   "bbox": [
+    797,
+    73,
+    933,
+    171
+   ],
+   "role": "캡션",
+   "image": "10.jpg",
+   "target": "+ Extra 50ml Gift"
+  },
+  {
+   "id": "10-02",
+   "text": "ONLY 올리브영 단독기획",
+   "bbox": [
+    810,
+    252,
+    923,
+    347
+   ],
+   "role": "캡션",
+   "image": "10.jpg",
+   "target": "ONLY OLIVE YOUNG Exclusive Set"
+  },
+  {
+   "id": "10-05",
+   "text": "피부자극 0.00",
+   "bbox": [
+    808,
+    422,
+    921,
+    501
+   ],
+   "role": "캡션",
+   "image": "10.jpg",
+   "target": "0.00 Skin Irritation Score"
+  },
+  {
+   "id": "10-06",
+   "text": "리뷰이벤트",
+   "bbox": [
+    786,
+    565,
+    931,
+    610
+   ],
+   "role": "제목",
+   "image": "10.jpg",
+   "target": "Review Event"
+  },
+  {
+   "id": "10-07",
+   "text": "3,000원",
+   "bbox": [
+    781,
+    640,
+    940,
+    683
+   ],
+   "role": "가격",
+   "image": "10.jpg",
+   "target": "₩3,000"
+  },
+  {
+   "id": "10-08",
+   "text": "성한빈PICK 1등 팩클렌저",
+   "bbox": [
+    42,
+    674,
+    699,
+    917
+   ],
+   "role": "제목",
+   "image": "10.jpg",
+   "target": "SUNG HAN BIN's PICK No. 1 Pack Cleanser"
+  },
+  {
+   "id": "10-10",
+   "text": "*2026.01.30 09시 기준 올리브영 온라인몰 클렌징 부문 판매 랭킹 1위 *2026.06.29 08시,09시 기준 올리브영 온라인몰 클렌징 부문 판매 랭킹 1위",
+   "bbox": [
+    39,
+    923,
+    732,
+    982
+   ],
+   "role": "주의문구",
+   "image": "10.jpg",
+   "target": "*Ranked No. 1 in the OLIVE YOUNG Online Mall Cleansing Category as of 09:00, 2026.01.30 *Ranked No. 1 in the OLIVE YOUNG Online Mall Cleansing Category as of 08:00 & 09:00, 2026.06.29"
+  },
+  {
+   "id": "11-23",
+   "text": "올리브영 단독 기획",
+   "bbox": [
+    345,
+    896,
+    964,
+    982
+   ],
+   "role": "제목",
+   "image": "11.jpg",
+   "target": "Olive Young Exclusive Edition"
+  },
+  {
+   "id": "12-02",
+   "text": "원이 Pick",
+   "bbox": [
+    806,
+    154,
+    932,
+    269
+   ],
+   "role": "캡션",
+   "image": "12.jpg",
+   "target": "Woni's Pick"
+  },
+  {
+   "id": "12-06",
+   "text": "콜라겐 수분 크림",
+   "bbox": [
+    18,
+    880,
+    662,
+    985
+   ],
+   "role": "제목",
+   "image": "12.jpg",
+   "target": "Collagen Hydrating Cream"
+  }
+ ]
+}

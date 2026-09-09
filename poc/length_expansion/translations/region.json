@@ -1,0 +1,1150 @@
+{
+ "input": "region",
+ "model": "gemini-3.8-flash",
+ "segments": [
+  {
+   "id": "1-05",
+   "text": "키캡키링",
+   "bbox": [
+    91,
+    603,
+    237,
+    649
+   ],
+   "role": null,
+   "image": "1.jpg",
+   "target": "Keycap Keychain"
+  },
+  {
+   "id": "1-06",
+   "text": "선착순!",
+   "bbox": [
+    106,
+    651,
+    223,
+    699
+   ],
+   "role": null,
+   "image": "1.jpg",
+   "target": "First-Come, First-Served!"
+  },
+  {
+   "id": "1-09",
+   "text": "오이쉬",
+   "bbox": [
+    148,
+    749,
+    195,
+    774
+   ],
+   "role": null,
+   "image": "1.jpg",
+   "target": "Oishi"
+  },
+  {
+   "id": "1-10",
+   "text": "윈이 PICK!1등",
+   "bbox": [
+    28,
+    895,
+    490,
+    982
+   ],
+   "role": null,
+   "image": "1.jpg",
+   "target": "Win's PICK! No. 1"
+  },
+  {
+   "id": "1-11",
+   "text": "화잘먹",
+   "bbox": [
+    487,
+    899,
+    687,
+    978
+   ],
+   "role": null,
+   "image": "1.jpg",
+   "target": "Makeup-Ready"
+  },
+  {
+   "id": "1-12",
+   "text": "모공",
+   "bbox": [
+    692,
+    901,
+    842,
+    977
+   ],
+   "role": null,
+   "image": "1.jpg",
+   "target": "Pore"
+  },
+  {
+   "id": "1-13",
+   "text": "세럼",
+   "bbox": [
+    826,
+    902,
+    965,
+    976
+   ],
+   "role": null,
+   "image": "1.jpg",
+   "target": "Serum"
+  },
+  {
+   "id": "2-01",
+   "text": "콜라겐 펩타이드 세럼 구매하면",
+   "bbox": [
+    149,
+    94,
+    927,
+    161
+   ],
+   "role": null,
+   "image": "2.jpg",
+   "target": "Buy Collagen Peptide Serum and get"
+  },
+  {
+   "id": "2-02",
+   "text": "리센느 원이 오이쉬스",
+   "bbox": [
+    73,
+    165,
+    646,
+    230
+   ],
+   "role": null,
+   "image": "2.jpg",
+   "target": "RESCENE WONI Oishi-s"
+  },
+  {
+   "id": "2-03",
+   "text": "키캡 키링 증정!",
+   "bbox": [
+    609,
+    164,
+    1008,
+    233
+   ],
+   "role": null,
+   "image": "2.jpg",
+   "target": "Free Keycap Keyring!"
+  },
+  {
+   "id": "2-04",
+   "text": "오이쉬",
+   "bbox": [
+    368,
+    381,
+    441,
+    423
+   ],
+   "role": null,
+   "image": "2.jpg",
+   "target": "Oishi"
+  },
+  {
+   "id": "2-12",
+   "text": "키캡키링",
+   "bbox": [
+    193,
+    637,
+    365,
+    694
+   ],
+   "role": null,
+   "image": "2.jpg",
+   "target": "Keycap Keyring"
+  },
+  {
+   "id": "2-13",
+   "text": "선착순!",
+   "bbox": [
+    205,
+    692,
+    355,
+    754
+   ],
+   "role": null,
+   "image": "2.jpg",
+   "target": "First-Come, First-Served!"
+  },
+  {
+   "id": "2-14",
+   "text": "·증정 기간:8/19~ 8/23 (선착순 증정, 재고 소진 시 종료)",
+   "bbox": [
+    257,
+    791,
+    821,
+    820
+   ],
+   "role": null,
+   "image": "2.jpg",
+   "target": "· Event Period: 8/19–8/23 (First-come, first-served; ends while supplies last)"
+  },
+  {
+   "id": "2-15",
+   "text": "·증정품은 한정 수량으로 선착순 지급되며 조기 소진될 수 있습니다.",
+   "bbox": [
+    215,
+    824,
+    863,
+    851
+   ],
+   "role": null,
+   "image": "2.jpg",
+   "target": "· Free gifts are limited in quantity and may run out early on a first-come, first-served basis."
+  },
+  {
+   "id": "2-16",
+   "text": "·정확한 증정품 내역은 주문 후 [주문상세내역]에서 확인 가능합니다.",
+   "bbox": [
+    210,
+    854,
+    868,
+    884
+   ],
+   "role": null,
+   "image": "2.jpg",
+   "target": "· Exact free gift details can be verified under [Order Details] after ordering."
+  },
+  {
+   "id": "2-17",
+   "text": "·오늘 드림/픽업 서비스 주문 건은 증정품 제공되지 않습니다",
+   "bbox": [
+    249,
+    887,
+    831,
+    915
+   ],
+   "role": null,
+   "image": "2.jpg",
+   "target": "· Same-day delivery / in-store pickup orders are not eligible for free gifts."
+  },
+  {
+   "id": "2-18",
+   "text": "•반품 시 증정품도 함께 반품해주셔야 합니다.",
+   "bbox": [
+    316,
+    920,
+    755,
+    947
+   ],
+   "role": null,
+   "image": "2.jpg",
+   "target": "• Free gifts must be returned together when requesting a return."
+  },
+  {
+   "id": "4-04",
+   "text": "지금부터 시작하는 운",
+   "bbox": [
+    250,
+    650,
+    652,
+    711
+   ],
+   "role": null,
+   "image": "4.jpg",
+   "target": "Starting right now,"
+  },
+  {
+   "id": "4-05",
+   "text": "원이의 콜라겐",
+   "bbox": [
+    617,
+    644,
+    969,
+    713
+   ],
+   "role": null,
+   "image": "4.jpg",
+   "target": "Woni's Collagen"
+  },
+  {
+   "id": "4-06",
+   "text": "빛나는 원이와 함께",
+   "bbox": [
+    301,
+    816,
+    760,
+    884
+   ],
+   "role": null,
+   "image": "4.jpg",
+   "target": "With radiant Woni,"
+  },
+  {
+   "id": "4-07",
+   "text": "매일 가볍게",
+   "bbox": [
+    276,
+    895,
+    563,
+    957
+   ],
+   "role": null,
+   "image": "4.jpg",
+   "target": "Lightly every day,"
+  },
+  {
+   "id": "4-08",
+   "text": "쌓아가는",
+   "bbox": [
+    561,
+    897,
+    781,
+    956
+   ],
+   "role": null,
+   "image": "4.jpg",
+   "target": "building up"
+  },
+  {
+   "id": "4-09",
+   "text": "쏜쏜한",
+   "bbox": [
+    289,
+    972,
+    457,
+    1033
+   ],
+   "role": null,
+   "image": "4.jpg",
+   "target": "a plump,"
+  },
+  {
+   "id": "4-10",
+   "text": "화잘먹",
+   "bbox": [
+    456,
+    974,
+    622,
+    1032
+   ],
+   "role": null,
+   "image": "4.jpg",
+   "target": "makeup-ready"
+  },
+  {
+   "id": "4-11",
+   "text": "루틴!",
+   "bbox": [
+    625,
+    974,
+    754,
+    1033
+   ],
+   "role": null,
+   "image": "4.jpg",
+   "target": "routine!"
+  },
+  {
+   "id": "6-03",
+   "text": "더블",
+   "bbox": [
+    673,
+    210,
+    860,
+    326
+   ],
+   "role": null,
+   "image": "6.jpg",
+   "target": "Double"
+  },
+  {
+   "id": "6-04",
+   "text": "기획",
+   "bbox": [
+    669,
+    324,
+    857,
+    438
+   ],
+   "role": null,
+   "image": "6.jpg",
+   "target": "Special Set"
+  },
+  {
+   "id": "6-05",
+   "text": "단독",
+   "bbox": [
+    421,
+    502,
+    534,
+    572
+   ],
+   "role": null,
+   "image": "6.jpg",
+   "target": "Exclusive"
+  },
+  {
+   "id": "6-06",
+   "text": "한정",
+   "bbox": [
+    534,
+    499,
+    650,
+    571
+   ],
+   "role": null,
+   "image": "6.jpg",
+   "target": "Limited"
+  },
+  {
+   "id": "6-07",
+   "text": "기획",
+   "bbox": [
+    651,
+    502,
+    761,
+    568
+   ],
+   "role": null,
+   "image": "6.jpg",
+   "target": "Special Set"
+  },
+  {
+   "id": "6-09",
+   "text": "올리브영",
+   "bbox": [
+    954,
+    729,
+    1062,
+    764
+   ],
+   "role": null,
+   "image": "6.jpg",
+   "target": "OLIVE YOUNG"
+  },
+  {
+   "id": "6-10",
+   "text": "단독기획",
+   "bbox": [
+    954,
+    761,
+    1063,
+    798
+   ],
+   "role": null,
+   "image": "6.jpg",
+   "target": "Exclusive Set"
+  },
+  {
+   "id": "6-11",
+   "text": "용량",
+   "bbox": [
+    953,
+    892,
+    1060,
+    959
+   ],
+   "role": null,
+   "image": "6.jpg",
+   "target": "Volume"
+  },
+  {
+   "id": "6-14",
+   "text": "글 쪼쯤",
+   "bbox": [
+    663,
+    1007,
+    767,
+    1064
+   ],
+   "role": null,
+   "image": "6.jpg",
+   "target": "Tightening"
+  },
+  {
+   "id": "6-16",
+   "text": "모공",
+   "bbox": [
+    603,
+    1011,
+    689,
+    1060
+   ],
+   "role": null,
+   "image": "6.jpg",
+   "target": "Pores"
+  },
+  {
+   "id": "6-18",
+   "text": "콜라겐",
+   "bbox": [
+    604,
+    1059,
+    719,
+    1107
+   ],
+   "role": null,
+   "image": "6.jpg",
+   "target": "Collagen"
+  },
+  {
+   "id": "6-19",
+   "text": "세럼",
+   "bbox": [
+    717,
+    1059,
+    798,
+    1109
+   ],
+   "role": null,
+   "image": "6.jpg",
+   "target": "Serum"
+  },
+  {
+   "id": "6-21",
+   "text": "콜라겐 모공 세럼",
+   "bbox": [
+    880,
+    1089,
+    1025,
+    1130
+   ],
+   "role": null,
+   "image": "6.jpg",
+   "target": "Collagen Pore Serum"
+  },
+  {
+   "id": "6-22",
+   "text": "포어 퍼펙팅 콜라겐 펩타이드 세럼",
+   "bbox": [
+    612,
+    1122,
+    856,
+    1142
+   ],
+   "role": null,
+   "image": "6.jpg",
+   "target": "Pore Perfecting Collagen Peptide Serum"
+  },
+  {
+   "id": "6-23",
+   "text": "한정 더블 기획",
+   "bbox": [
+    880,
+    1127,
+    1025,
+    1173
+   ],
+   "role": null,
+   "image": "6.jpg",
+   "target": "Limited Double Set"
+  },
+  {
+   "id": "6-26",
+   "text": "포어 퍼펙팅 콜라겐 펩타이드 세럼",
+   "bbox": [
+    882,
+    1176,
+    1024,
+    1199
+   ],
+   "role": null,
+   "image": "6.jpg",
+   "target": "Pore Perfecting Collagen Peptide Serum"
+  },
+  {
+   "id": "7-31",
+   "text": "1억장*",
+   "bbox": [
+    207,
+    359,
+    361,
+    426
+   ],
+   "role": null,
+   "image": "7.jpg",
+   "target": "100 Million Sheets*"
+  },
+  {
+   "id": "7-32",
+   "text": "콜라겐 팩 노하우를 그대로!",
+   "bbox": [
+    354,
+    352,
+    997,
+    432
+   ],
+   "role": null,
+   "image": "7.jpg",
+   "target": "All the collagen mask know-how in one!"
+  },
+  {
+   "id": "7-33",
+   "text": "[본품]포어 퍼펙팅콜라겐펩타이드세럼30m +30ml",
+   "bbox": [
+    113,
+    473,
+    1091,
+    546
+   ],
+   "role": null,
+   "image": "7.jpg",
+   "target": "[Full Size] Pore Perfecting Collagen Peptide Serum 30ml + 30ml"
+  },
+  {
+   "id": "7-34",
+   "text": "*2021.04-2025.08 바이오던스 바이오 콜라겐 리얼 딥 마스크 생산 실적 기준",
+   "bbox": [
+    256,
+    616,
+    939,
+    640
+   ],
+   "role": null,
+   "image": "7.jpg",
+   "target": "*Based on production volume of Biodance Bio-Collagen Real Deep Mask (2021.04–2025.08)"
+  },
+  {
+   "id": "8-03",
+   "text": "바이오던스만의 균형있는피부를위한고집",
+   "bbox": [
+    268,
+    494,
+    927,
+    547
+   ],
+   "role": null,
+   "image": "8.jpg",
+   "target": "BIODANCE's Dedication to Balanced Skin"
+  },
+  {
+   "id": "8-07",
+   "text": "19가지의심성분",
+   "bbox": [
+    129,
+    931,
+    370,
+    978
+   ],
+   "role": null,
+   "image": "8.jpg",
+   "target": "19 Suspected Ingredients"
+  },
+  {
+   "id": "8-08",
+   "text": "식약처 고시알레르기",
+   "bbox": [
+    455,
+    936,
+    746,
+    974
+   ],
+   "role": null,
+   "image": "8.jpg",
+   "target": "MFDS-Listed Potential Allergens"
+  },
+  {
+   "id": "8-09",
+   "text": "피부저자극",
+   "bbox": [
+    859,
+    926,
+    1035,
+    978
+   ],
+   "role": null,
+   "image": "8.jpg",
+   "target": "Low Skin Irritation"
+  },
+  {
+   "id": "8-10",
+   "text": "무첨가*",
+   "bbox": [
+    191,
+    984,
+    310,
+    1028
+   ],
+   "role": null,
+   "image": "8.jpg",
+   "target": "Free*"
+  },
+  {
+   "id": "8-11",
+   "text": "유발25가지무첨가",
+   "bbox": [
+    462,
+    984,
+    738,
+    1028
+   ],
+   "role": null,
+   "image": "8.jpg",
+   "target": "Free of 25 Notified Allergens"
+  },
+  {
+   "id": "8-12",
+   "text": "테스트완료",
+   "bbox": [
+    863,
+    984,
+    1030,
+    1023
+   ],
+   "role": null,
+   "image": "8.jpg",
+   "target": "Tested"
+  },
+  {
+   "id": "8-13",
+   "text": "·항목 페녹시에탄음 벤질알코을 벤즈익애씨드,클로페네신 디아줄리디닐우레아 소르빅애씨드, 벤조테는-3 어소프로팔알코음 트리에탄옵아민, 벤잘코눔클로라이드(C12C14)",
+   "bbox": [
+    193,
+    1124,
+    1005,
+    1141
+   ],
+   "role": null,
+   "image": "8.jpg",
+   "target": "· Tested Items: Phenoxyethanol, Benzyl Alcohol, Benzoic Acid, Chlorphenesin, Diazolidinyl Urea, Sorbic Acid, Benzophenone-3, Isopropyl Alcohol, Triethanolamine, Benzalkonium Chloride (C12, C14)"
+  },
+  {
+   "id": "8-14",
+   "text": "부틸레이티드하이드록시루엔 프로필렌클라이플 테칠파라벤 에침파라벤,이소프로필파라벤,프로필파라벤 이소부틸따라벤,부틸파라벤,p-하이드목시벤조익에씨드",
+   "bbox": [
+    218,
+    1147,
+    979,
+    1161
+   ],
+   "role": null,
+   "image": "8.jpg",
+   "target": "Butylated Hydroxytoluene, Propylene Glycol, Methylparaben, Ethylparaben, Isopropylparaben, Propylparaben, Isobutylparaben, Butylparaben, p-Hydroxybenzoic Acid"
+  },
+  {
+   "id": "9-01",
+   "text": "역대최대 한정기획",
+   "bbox": [
+    56,
+    53,
+    457,
+    105
+   ],
+   "role": null,
+   "image": "9.jpg",
+   "target": "Biggest Ever Limited Set"
+  },
+  {
+   "id": "9-03",
+   "text": "더블X더블",
+   "bbox": [
+    56,
+    109,
+    465,
+    197
+   ],
+   "role": null,
+   "image": "9.jpg",
+   "target": "Double X Double"
+  },
+  {
+   "id": "9-04",
+   "text": "올리브영",
+   "bbox": [
+    790,
+    147,
+    895,
+    179
+   ],
+   "role": null,
+   "image": "9.jpg",
+   "target": "Olive Young"
+  },
+  {
+   "id": "9-05",
+   "text": "단독기획",
+   "bbox": [
+    789,
+    178,
+    895,
+    214
+   ],
+   "role": null,
+   "image": "9.jpg",
+   "target": "Exclusive Set"
+  },
+  {
+   "id": "9-06",
+   "text": "블랙",
+   "bbox": [
+    792,
+    311,
+    904,
+    372
+   ],
+   "role": null,
+   "image": "9.jpg",
+   "target": "Black"
+  },
+  {
+   "id": "9-11",
+   "text": "헤드",
+   "bbox": [
+    790,
+    373,
+    903,
+    434
+   ],
+   "role": null,
+   "image": "9.jpg",
+   "target": "head"
+  },
+  {
+   "id": "9-28",
+   "text": "민감",
+   "bbox": [
+    795,
+    523,
+    901,
+    582
+   ],
+   "role": null,
+   "image": "9.jpg",
+   "target": "Sensitive"
+  },
+  {
+   "id": "9-32",
+   "text": "피부",
+   "bbox": [
+    794,
+    576,
+    900,
+    633
+   ],
+   "role": null,
+   "image": "9.jpg",
+   "target": "Skin"
+  },
+  {
+   "id": "9-35",
+   "text": "저자극",
+   "bbox": [
+    805,
+    630,
+    889,
+    666
+   ],
+   "role": null,
+   "image": "9.jpg",
+   "target": "Gentle"
+  },
+  {
+   "id": "10-02",
+   "text": "추가 증정",
+   "bbox": [
+    797,
+    126,
+    933,
+    171
+   ],
+   "role": null,
+   "image": "10.jpg",
+   "target": "Bonus Gift"
+  },
+  {
+   "id": "10-05",
+   "text": "올리브영",
+   "bbox": [
+    825,
+    293,
+    909,
+    319
+   ],
+   "role": null,
+   "image": "10.jpg",
+   "target": "Olive Young"
+  },
+  {
+   "id": "10-06",
+   "text": "단독기획",
+   "bbox": [
+    825,
+    319,
+    910,
+    347
+   ],
+   "role": null,
+   "image": "10.jpg",
+   "target": "Exclusive Set"
+  },
+  {
+   "id": "10-08",
+   "text": "피부자극",
+   "bbox": [
+    830,
+    422,
+    901,
+    445
+   ],
+   "role": null,
+   "image": "10.jpg",
+   "target": "Skin Irritation"
+  },
+  {
+   "id": "10-10",
+   "text": "리뷰이벤트",
+   "bbox": [
+    786,
+    565,
+    931,
+    610
+   ],
+   "role": null,
+   "image": "10.jpg",
+   "target": "Review Event"
+  },
+  {
+   "id": "10-11",
+   "text": "3,000원",
+   "bbox": [
+    781,
+    640,
+    940,
+    683
+   ],
+   "role": null,
+   "image": "10.jpg",
+   "target": "₩3,000"
+  },
+  {
+   "id": "10-12",
+   "text": "성한빈PICK",
+   "bbox": [
+    42,
+    674,
+    583,
+    782
+   ],
+   "role": null,
+   "image": "10.jpg",
+   "target": "SUNG HAN BIN's PICK"
+  },
+  {
+   "id": "10-14",
+   "text": "1등",
+   "bbox": [
+    42,
+    785,
+    227,
+    915
+   ],
+   "role": null,
+   "image": "10.jpg",
+   "target": "No. 1"
+  },
+  {
+   "id": "10-15",
+   "text": "팩클렌저",
+   "bbox": [
+    241,
+    779,
+    699,
+    917
+   ],
+   "role": null,
+   "image": "10.jpg",
+   "target": "Pack Cleanser"
+  },
+  {
+   "id": "10-16",
+   "text": "*2026.01.30 09시 기준 올리브영 온라인몰 클렌징 부문 판매 랭킹 1위",
+   "bbox": [
+    39,
+    923,
+    666,
+    948
+   ],
+   "role": null,
+   "image": "10.jpg",
+   "target": "*Ranked #1 in Cleansing on Olive Young Online Mall as of 09:00, Jan 30, 2026"
+  },
+  {
+   "id": "10-17",
+   "text": "*2026.06.29 08시,09시 기준 올리브영 온라인몰 클렌징 부문 판매 랭킹 1위",
+   "bbox": [
+    39,
+    959,
+    732,
+    982
+   ],
+   "role": null,
+   "image": "10.jpg",
+   "target": "*Ranked #1 in Cleansing on Olive Young Online Mall as of 08:00 & 09:00, Jun 29, 2026"
+  },
+  {
+   "id": "11-09",
+   "text": "붙이는 콜라겐 앰플",
+   "bbox": [
+    144,
+    191,
+    391,
+    255
+   ],
+   "role": null,
+   "image": "11.jpg",
+   "target": "Wearable Collagen Ampoule"
+  },
+  {
+   "id": "11-16",
+   "text": "#탄력리프팅#모공채움",
+   "bbox": [
+    147,
+    235,
+    267,
+    264
+   ],
+   "role": null,
+   "image": "11.jpg",
+   "target": "#FirmerLook #PoreRefiningAppearance"
+  },
+  {
+   "id": "11-26",
+   "text": "이디협 하이퍼 클라견아스크",
+   "bbox": [
+    147,
+    364,
+    241,
+    383
+   ],
+   "role": null,
+   "image": "11.jpg",
+   "target": "MEDIHEAL Hyper Collagen Mask"
+  },
+  {
+   "id": "11-28",
+   "text": "한정기획",
+   "bbox": [
+    176,
+    427,
+    218,
+    446
+   ],
+   "role": null,
+   "image": "11.jpg",
+   "target": "Limited Edition"
+  },
+  {
+   "id": "11-31",
+   "text": "추가증정!",
+   "bbox": [
+    169,
+    492,
+    223,
+    513
+   ],
+   "role": null,
+   "image": "11.jpg",
+   "target": "Bonus Included!"
+  },
+  {
+   "id": "11-32",
+   "text": "이이",
+   "bbox": [
+    78,
+    509,
+    105,
+    553
+   ],
+   "role": null,
+   "image": "11.jpg",
+   "target": ""
+  },
+  {
+   "id": "11-44",
+   "text": "단독",
+   "bbox": [
+    644,
+    897,
+    800,
+    982
+   ],
+   "role": null,
+   "image": "11.jpg",
+   "target": "Exclusive"
+  },
+  {
+   "id": "11-45",
+   "text": "기획",
+   "bbox": [
+    808,
+    896,
+    964,
+    982
+   ],
+   "role": null,
+   "image": "11.jpg",
+   "target": "Special Set"
+  },
+  {
+   "id": "11-46",
+   "text": "올리브영",
+   "bbox": [
+    345,
+    900,
+    632,
+    979
+   ],
+   "role": null,
+   "image": "11.jpg",
+   "target": "Olive Young"
+  },
+  {
+   "id": "12-04",
+   "text": "원이",
+   "bbox": [
+    814,
+    154,
+    925,
+    215
+   ],
+   "role": null,
+   "image": "12.jpg",
+   "target": "Woni's"
+  },
+  {
+   "id": "12-11",
+   "text": "콜라겐",
+   "bbox": [
+    18,
+    883,
+    282,
+    982
+   ],
+   "role": null,
+   "image": "12.jpg",
+   "target": "Collagen"
+  },
+  {
+   "id": "12-12",
+   "text": "수분",
+   "bbox": [
+    289,
+    880,
+    475,
+    984
+   ],
+   "role": null,
+   "image": "12.jpg",
+   "target": "Hydrating"
+  },
+  {
+   "id": "12-13",
+   "text": "크림",
+   "bbox": [
+    480,
+    880,
+    662,
+    985
+   ],
+   "role": null,
+   "image": "12.jpg",
+   "target": "Cream"
+  }
+ ]
+}

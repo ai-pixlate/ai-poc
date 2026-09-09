@@ -1,0 +1,14 @@
+{
+ "input": "region",
+ "model": "gemini-3.8-flash",
+ "documents": 10,
+ "segments": 88,
+ "tokens": {
+  "in": 10422,
+  "out": 3535
+ },
+ "cost_usd": 0.0211,
+ "total_sec": 41.67,
+ "prompt_has_length_rule": true,
+ "run_at": "2026-09-09 11:24:00"
+}
