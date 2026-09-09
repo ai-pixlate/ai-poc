@@ -6,6 +6,11 @@
 variant
     role_ext       텍스트 + 좌표만 준다. 역할 분류를 확장하는 방식.
     vlm_relation   원본 이미지를 함께 준다. 객체-텍스트 관계를 보게 하는 방식.
+    vlm_opus       vlm_relation과 같은 조건에서 모델만 바꾼다. 벤더 대비용.
+
+모델 축을 따로 두는 이유 — 번역에서 확정한 `gemini-3.8-flash`를 그대로
+가져다 썼을 뿐, 라벨 판정 축에서 비교한 적이 없다. 이 과업은 호출량이
+이미지 1장당 1회로 적어 비싼 모델도 감당된다.
 
 입력
     ../block_role/results/llm_assist/blocks/{stem}.json   (채택 블록)
@@ -34,6 +39,7 @@ import base64
 import io as _io
 import json
 import os
+import re
 import sys
 import time
 from pathlib import Path
@@ -47,13 +53,25 @@ SRC = ROOT / "poc" / "block_role" / "results" / "llm_assist" / "blocks"
 RESULTS = HERE / "results"
 CACHE = HERE / "cache"
 
-# 번역·역할 분류에서 확정된 모델. 가격은 100만 토큰당 USD (프로모션가)
-MODEL = {
-    "model_id": "gemini-3.8-flash",
-    "env_key": "GOOGLE_API_KEY",
-    "base_url": "https://generativelanguage.googleapis.com/v1beta/openai/",
-    "price_in": 0.75,
-    "price_out": 3.75,
+# 가격은 100만 토큰당 USD.
+MODELS = {
+    # 번역·역할 분류에서 확정된 모델. 프로모션가(2026-12-31까지)
+    "gemini": {
+        "vendor": "google",
+        "model_id": "gemini-3.8-flash",
+        "env_key": "GOOGLE_API_KEY",
+        "base_url": "https://generativelanguage.googleapis.com/v1beta/openai/",
+        "price_in": 0.75,
+        "price_out": 3.75,
+    },
+    # 번역 결승에서 품질·안정성 1위였던 모델. 벤더 대비용
+    "claude": {
+        "vendor": "anthropic",
+        "model_id": "claude-opus-5",
+        "env_key": "ANTHROPIC_API_KEY",
+        "price_in": 5.00,
+        "price_out": 25.00,
+    },
 }
 
 # 이미지를 함께 보낼 때 긴 변을 이 크기로 줄인다. 토큰을 줄이면서
@@ -61,8 +79,9 @@ MODEL = {
 VLM_MAX_SIDE = 1024
 
 VARIANTS = {
-    "role_ext": {"image": False},
-    "vlm_relation": {"image": True},
+    "role_ext": {"image": False, "model": "gemini"},
+    "vlm_relation": {"image": True, "model": "gemini"},
+    "vlm_opus": {"image": True, "model": "claude"},
 }
 
 _COMMON = """너는 화장품 상세페이지의 텍스트 블록을 두 가지로 나눈다.
@@ -83,12 +102,13 @@ _COMMON = """너는 화장품 상세페이지의 텍스트 블록을 두 가지�
 
 입력의 모든 id가 정확히 한 번씩 나와야 한다."""
 
+# 이미지 동봉 여부로만 갈린다. 모델이 달라도 문안은 같게 둬야 모델 차이를 읽는다.
 SYSTEM = {
-    "role_ext": _COMMON + """
+    False: _COMMON + """
 
 블록의 텍스트와 좌표만 준다. 이미지는 주지 않는다.
 글자 내용, 크기, 서로의 위치 관계로 판단하라.""",
-    "vlm_relation": _COMMON + """
+    True: _COMMON + """
 
 원본 이미지를 함께 준다. 블록의 bbox가 이미지의 어느 자리인지 보고,
 그 자리에 제품 용기가 있는지 확인한 뒤 판단하라.""",
@@ -174,29 +194,58 @@ def payload(blocks: list[dict], size: tuple[int, int]) -> str:
     )
 
 
-def image_data_url(path: Path) -> str:
+def image_b64(path: Path) -> str:
     img = Image.open(path).convert("RGB")
     if max(img.size) > VLM_MAX_SIDE:
         r = VLM_MAX_SIDE / max(img.size)
         img = img.resize((round(img.width * r), round(img.height * r)), Image.LANCZOS)
     buf = _io.BytesIO()
     img.save(buf, format="JPEG", quality=85)
-    return "data:image/jpeg;base64," + base64.b64encode(buf.getvalue()).decode()
+    return base64.b64encode(buf.getvalue()).decode()
 
 
-def call(client, variant: str, prompt: str, img_path: Path | None):
-    content: list | str = prompt
+def _extract_json(text: str) -> dict:
+    m = re.search(r"\{.*\}", text, re.S)
+    if not m:
+        raise ValueError(f"JSON 없음: {text[:200]}")
+    return json.loads(m.group(0))
+
+
+def call(client, model: dict, prompt: str, img_path: Path | None):
+    system = SYSTEM[img_path is not None]
+
+    if model["vendor"] == "anthropic":
+        # Anthropic은 response_format이 없다. 프롬프트로 JSON을 요구하고 뽑아낸다.
+        content: list = [{"type": "text", "text": prompt}]
+        if img_path is not None:
+            content.append(
+                {"type": "image", "source": {"type": "base64", "media_type": "image/jpeg",
+                                             "data": image_b64(img_path)}}
+            )
+        # 이 SDK 버전은 temperature를 받지 않는다 — 다른 벤더와 조건이 하나 다르다.
+        # 결과 기록에 남길 것.
+        res = client.messages.create(
+            model=model["model_id"],
+            max_tokens=8000,
+            system=system,
+            messages=[{"role": "user", "content": content}],
+        )
+        text = next((b.text for b in res.content if b.type == "text"), "")
+        usage = {"in": res.usage.input_tokens, "out": res.usage.output_tokens}
+        return _extract_json(text), usage
+
+    content = prompt
     if img_path is not None:
         content = [
             {"type": "text", "text": prompt},
-            {"type": "image_url", "image_url": {"url": image_data_url(img_path)}},
+            {"type": "image_url", "image_url": {"url": "data:image/jpeg;base64," + image_b64(img_path)}},
         ]
     res = client.chat.completions.create(
-        model=MODEL["model_id"],
+        model=model["model_id"],
         temperature=0,
         response_format={"type": "json_object"},
         messages=[
-            {"role": "system", "content": SYSTEM[variant]},
+            {"role": "system", "content": system},
             {"role": "user", "content": content},
         ],
     )
@@ -230,8 +279,9 @@ def load_env() -> None:
 
 def run_variant(name: str, stems: list[str], dry: bool, no_cache: bool) -> None:
     spec = VARIANTS[name]
+    model = MODELS[spec["model"]]
     out_dir = RESULTS / name
-    cache_dir = CACHE / MODEL["model_id"] / name
+    cache_dir = CACHE / model["model_id"] / name
     if not dry:
         (out_dir / "blocks").mkdir(parents=True, exist_ok=True)
         (out_dir / "vis").mkdir(parents=True, exist_ok=True)
@@ -240,14 +290,19 @@ def run_variant(name: str, stems: list[str], dry: bool, no_cache: bool) -> None:
     client = None
     if not dry:
         load_env()
-        key = os.environ.get(MODEL["env_key"])
+        key = os.environ.get(model["env_key"])
         if not key:
-            raise SystemExit(f"{MODEL['env_key']} 없음 — .env 확인")
-        from openai import OpenAI
+            raise SystemExit(f"{model['env_key']} 없음 — .env 확인")
+        if model["vendor"] == "anthropic":
+            import anthropic
 
-        client = OpenAI(api_key=key, base_url=MODEL["base_url"])
+            client = anthropic.Anthropic(api_key=key)
+        else:
+            from openai import OpenAI
 
-    print(f"[{name}] 이미지 {'포함' if spec['image'] else '미포함'}")
+            client = OpenAI(api_key=key, base_url=model["base_url"])
+
+    print(f"[{name}] {model['model_id']} · 이미지 {'포함' if spec['image'] else '미포함'}")
     per_image, tok_in, tok_out, chars = [], 0, 0, 0
     t_all = time.perf_counter()
 
@@ -258,7 +313,7 @@ def run_variant(name: str, stems: list[str], dry: bool, no_cache: bool) -> None:
         with Image.open(img_path) as im:
             size = im.size
         prompt = payload(blocks, size)
-        chars += len(prompt) + len(SYSTEM[name])
+        chars += len(prompt) + len(SYSTEM[spec["image"]])
 
         if dry:
             extra = f"  이미지 {VLM_MAX_SIDE}px 동봉" if spec["image"] else ""
@@ -271,10 +326,10 @@ def run_variant(name: str, stems: list[str], dry: bool, no_cache: bool) -> None:
             plan, usage, sec, hit = c["plan"], c["usage"], 0.0, " (캐시)"
         else:
             t0 = time.perf_counter()
-            plan, usage = call(client, name, prompt, img_path if spec["image"] else None)
+            plan, usage = call(client, model, prompt, img_path if spec["image"] else None)
             sec, hit = time.perf_counter() - t0, ""
             cache_path.write_text(
-                json.dumps({"model": MODEL["model_id"], "variant": name, "plan": plan,
+                json.dumps({"model": model["model_id"], "variant": name, "plan": plan,
                             "usage": usage}, ensure_ascii=False, indent=1),
                 encoding="utf-8",
             )
@@ -300,10 +355,11 @@ def run_variant(name: str, stems: list[str], dry: bool, no_cache: bool) -> None:
         print(f"  → 텍스트 {chars:,}자. 호출 없음\n")
         return
 
-    cost = tok_in / 1e6 * MODEL["price_in"] + tok_out / 1e6 * MODEL["price_out"]
+    cost = tok_in / 1e6 * model["price_in"] + tok_out / 1e6 * model["price_out"]
     meta = {
         "variant": name,
-        "cfg": {"model": MODEL["model_id"], "temperature": 0,
+        "cfg": {"model": model["model_id"],
+                "temperature": 0 if model["vendor"] != "anthropic" else "미지정(SDK 미지원)",
                 "image": spec["image"], "image_max_side": VLM_MAX_SIDE if spec["image"] else None},
         "source": "poc/block_role/results/llm_assist",
         "images": len(per_image),
