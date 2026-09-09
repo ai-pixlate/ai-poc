@@ -62,68 +62,78 @@
 
 | 이미지 | variant | 블록 | 라벨 | 미탐 | 오탐 | 비고 | 시각화 |
 |---|---|---|---|---|---|---|---|
-| 1.jpg | `bg_texture` | 7 | 7 |  |  |  | `results/bg_texture/vis/1.jpg` |
-| 1.jpg | `mask_overlap` | 7 | 1 |  |  |  | `results/mask_overlap/vis/1.jpg` |
-| 1.jpg | `poly_skew` | 7 | 4 |  |  |  | `results/poly_skew/vis/1.jpg` |
-| 1.jpg | `role_ext` | 7 | 3 |  |  |  | `results/role_ext/vis/1.jpg` |
-| 1.jpg | `vlm_relation` | 7 | 3 |  |  |  | `results/vlm_relation/vis/1.jpg` |
-| 2.jpg | `bg_texture` | 7 | 6 |  |  |  | `results/bg_texture/vis/2.jpg` |
-| 2.jpg | `mask_overlap` | 7 | 3 |  |  |  | `results/mask_overlap/vis/2.jpg` |
-| 2.jpg | `poly_skew` | 7 | 3 |  |  |  | `results/poly_skew/vis/2.jpg` |
-| 2.jpg | `role_ext` | 7 | 3 |  |  |  | `results/role_ext/vis/2.jpg` |
-| 2.jpg | `vlm_relation` | 7 | 3 |  |  |  | `results/vlm_relation/vis/2.jpg` |
-| 3.jpg | `bg_texture` | 1 | 1 |  |  |  | `results/bg_texture/vis/3.jpg` |
-| 3.jpg | `mask_overlap` | 1 | 1 |  |  |  | `results/mask_overlap/vis/3.jpg` |
-| 3.jpg | `poly_skew` | 1 | 1 |  |  |  | `results/poly_skew/vis/3.jpg` |
-| 3.jpg | `role_ext` | 1 | 1 |  |  |  | `results/role_ext/vis/3.jpg` |
-| 3.jpg | `vlm_relation` | 1 | 1 |  |  |  | `results/vlm_relation/vis/3.jpg` |
-| 4.jpg | `bg_texture` | 3 | 3 |  |  |  | `results/bg_texture/vis/4.jpg` |
-| 4.jpg | `mask_overlap` | 3 | 2 |  |  |  | `results/mask_overlap/vis/4.jpg` |
-| 4.jpg | `poly_skew` | 3 | 1 |  |  |  | `results/poly_skew/vis/4.jpg` |
-| 4.jpg | `role_ext` | 3 | 0 |  |  |  | `results/role_ext/vis/4.jpg` |
-| 4.jpg | `vlm_relation` | 3 | 0 |  |  |  | `results/vlm_relation/vis/4.jpg` |
-| 5.jpg | `bg_texture` | 17 | 8 |  |  |  | `results/bg_texture/vis/5.jpg` |
-| 5.jpg | `mask_overlap` | 17 | 12 |  |  |  | `results/mask_overlap/vis/5.jpg` |
-| 5.jpg | `poly_skew` | 17 | 11 |  |  |  | `results/poly_skew/vis/5.jpg` |
-| 5.jpg | `role_ext` | 17 | 16 |  |  |  | `results/role_ext/vis/5.jpg` |
-| 5.jpg | `vlm_relation` | 17 | 16 |  |  |  | `results/vlm_relation/vis/5.jpg` |
-| 6.jpg | `bg_texture` | 9 | 8 |  |  |  | `results/bg_texture/vis/6.jpg` |
-| 6.jpg | `mask_overlap` | 9 | 7 |  |  |  | `results/mask_overlap/vis/6.jpg` |
-| 6.jpg | `poly_skew` | 9 | 4 |  |  |  | `results/poly_skew/vis/6.jpg` |
-| 6.jpg | `role_ext` | 9 | 4 |  |  |  | `results/role_ext/vis/6.jpg` |
-| 6.jpg | `vlm_relation` | 9 | 4 |  |  |  | `results/vlm_relation/vis/6.jpg` |
-| 7.jpg | `bg_texture` | 7 | 6 |  |  |  | `results/bg_texture/vis/7.jpg` |
-| 7.jpg | `mask_overlap` | 7 | 5 |  |  |  | `results/mask_overlap/vis/7.jpg` |
-| 7.jpg | `poly_skew` | 7 | 4 |  |  |  | `results/poly_skew/vis/7.jpg` |
-| 7.jpg | `role_ext` | 7 | 5 |  |  |  | `results/role_ext/vis/7.jpg` |
-| 7.jpg | `vlm_relation` | 7 | 5 |  |  |  | `results/vlm_relation/vis/7.jpg` |
-| 8.jpg | `bg_texture` | 8 | 1 |  |  |  | `results/bg_texture/vis/8.jpg` |
-| 8.jpg | `mask_overlap` | 8 | 0 |  |  |  | `results/mask_overlap/vis/8.jpg` |
-| 8.jpg | `poly_skew` | 8 | 0 |  |  |  | `results/poly_skew/vis/8.jpg` |
-| 8.jpg | `role_ext` | 8 | 0 |  |  |  | `results/role_ext/vis/8.jpg` |
-| 8.jpg | `vlm_relation` | 8 | 0 |  |  |  | `results/vlm_relation/vis/8.jpg` |
-| 9.jpg | `bg_texture` | 12 | 12 |  |  |  | `results/bg_texture/vis/9.jpg` |
-| 9.jpg | `mask_overlap` | 12 | 9 |  |  |  | `results/mask_overlap/vis/9.jpg` |
-| 9.jpg | `poly_skew` | 12 | 5 |  |  |  | `results/poly_skew/vis/9.jpg` |
-| 9.jpg | `role_ext` | 12 | 4 |  |  |  | `results/role_ext/vis/9.jpg` |
-| 9.jpg | `vlm_relation` | 12 | 4 |  |  |  | `results/vlm_relation/vis/9.jpg` |
-| 10.jpg | `bg_texture` | 10 | 10 |  |  |  | `results/bg_texture/vis/10.jpg` |
-| 10.jpg | `mask_overlap` | 10 | 9 |  |  |  | `results/mask_overlap/vis/10.jpg` |
-| 10.jpg | `poly_skew` | 10 | 2 |  |  |  | `results/poly_skew/vis/10.jpg` |
-| 10.jpg | `role_ext` | 10 | 2 |  |  |  | `results/role_ext/vis/10.jpg` |
-| 10.jpg | `vlm_relation` | 10 | 2 |  |  |  | `results/vlm_relation/vis/10.jpg` |
-| 11.jpg | `bg_texture` | 23 | 22 |  |  |  | `results/bg_texture/vis/11.jpg` |
-| 11.jpg | `mask_overlap` | 23 | 20 |  |  |  | `results/mask_overlap/vis/11.jpg` |
-| 11.jpg | `poly_skew` | 23 | 17 |  |  |  | `results/poly_skew/vis/11.jpg` |
-| 11.jpg | `role_ext` | 23 | 13 |  |  |  | `results/role_ext/vis/11.jpg` |
-| 11.jpg | `vlm_relation` | 23 | 20 |  |  |  | `results/vlm_relation/vis/11.jpg` |
-| 12.jpg | `bg_texture` | 6 | 6 |  |  |  | `results/bg_texture/vis/12.jpg` |
-| 12.jpg | `mask_overlap` | 6 | 3 |  |  |  | `results/mask_overlap/vis/12.jpg` |
-| 12.jpg | `poly_skew` | 6 | 3 |  |  |  | `results/poly_skew/vis/12.jpg` |
-| 12.jpg | `role_ext` | 6 | 2 |  |  |  | `results/role_ext/vis/12.jpg` |
-| 12.jpg | `vlm_relation` | 6 | 2 |  |  |  | `results/vlm_relation/vis/12.jpg` |
+| 1.jpg | `bg_texture` | 7 | 7 | 0 | 4 |  | `results/bg_texture/vis/1.jpg` |
+| 1.jpg | `mask_overlap` | 7 | 1 | 2 | 0 |  | `results/mask_overlap/vis/1.jpg` |
+| 1.jpg | `poly_skew` | 7 | 4 | 0 | 1 |  | `results/poly_skew/vis/1.jpg` |
+| 1.jpg | `role_ext` | 7 | 3 | 0 | 0 |  | `results/role_ext/vis/1.jpg` |
+| 1.jpg | `vlm_relation` | 7 | 3 | 0 | 0 |  | `results/vlm_relation/vis/1.jpg` |
+| 2.jpg | `bg_texture` | 7 | 6 | 0 | 3 |  | `results/bg_texture/vis/2.jpg` |
+| 2.jpg | `mask_overlap` | 7 | 3 | 0 | 0 |  | `results/mask_overlap/vis/2.jpg` |
+| 2.jpg | `poly_skew` | 7 | 3 | 0 | 0 |  | `results/poly_skew/vis/2.jpg` |
+| 2.jpg | `role_ext` | 7 | 3 | 0 | 0 |  | `results/role_ext/vis/2.jpg` |
+| 2.jpg | `vlm_relation` | 7 | 3 | 0 | 0 |  | `results/vlm_relation/vis/2.jpg` |
+| 3.jpg | `bg_texture` | 1 | 1 | 0 | 0 | `vlm_relation` 기준 자동 산출 | `results/bg_texture/vis/3.jpg` |
+| 3.jpg | `mask_overlap` | 1 | 1 | 0 | 0 | `vlm_relation` 기준 자동 산출 | `results/mask_overlap/vis/3.jpg` |
+| 3.jpg | `poly_skew` | 1 | 1 | 0 | 0 | `vlm_relation` 기준 자동 산출 | `results/poly_skew/vis/3.jpg` |
+| 3.jpg | `role_ext` | 1 | 1 | 0 | 0 | `vlm_relation` 기준 자동 산출 | `results/role_ext/vis/3.jpg` |
+| 3.jpg | `vlm_relation` | 1 | 1 | 0 | 0 |  | `results/vlm_relation/vis/3.jpg` |
+| 4.jpg | `bg_texture` | 3 | 3 | 0 | 3 |  | `results/bg_texture/vis/4.jpg` |
+| 4.jpg | `mask_overlap` | 3 | 2 | 0 | 2 |  | `results/mask_overlap/vis/4.jpg` |
+| 4.jpg | `poly_skew` | 3 | 1 | 0 | 1 |  | `results/poly_skew/vis/4.jpg` |
+| 4.jpg | `role_ext` | 3 | 0 | 0 | 0 |  | `results/role_ext/vis/4.jpg` |
+| 4.jpg | `vlm_relation` | 3 | 0 | 0 | 0 |  | `results/vlm_relation/vis/4.jpg` |
+| 5.jpg | `bg_texture` | 17 | 8 | 8 | 0 |  | `results/bg_texture/vis/5.jpg` |
+| 5.jpg | `mask_overlap` | 17 | 12 | 4 | 0 |  | `results/mask_overlap/vis/5.jpg` |
+| 5.jpg | `poly_skew` | 17 | 11 | 5 | 0 |  | `results/poly_skew/vis/5.jpg` |
+| 5.jpg | `role_ext` | 17 | 16 | 0 | 0 |  | `results/role_ext/vis/5.jpg` |
+| 5.jpg | `vlm_relation` | 17 | 16 | 0 | 0 |  | `results/vlm_relation/vis/5.jpg` |
+| 6.jpg | `bg_texture` | 9 | 8 | 0 | 4 |  | `results/bg_texture/vis/6.jpg` |
+| 6.jpg | `mask_overlap` | 9 | 7 | 0 | 3 | `vlm_relation` 기준 자동 산출 | `results/mask_overlap/vis/6.jpg` |
+| 6.jpg | `poly_skew` | 9 | 4 | 1 | 1 | `vlm_relation` 기준 자동 산출 | `results/poly_skew/vis/6.jpg` |
+| 6.jpg | `role_ext` | 9 | 4 | 0 | 0 | `vlm_relation` 기준 자동 산출 | `results/role_ext/vis/6.jpg` |
+| 6.jpg | `vlm_relation` | 9 | 4 | 0 | 0 |  | `results/vlm_relation/vis/6.jpg` |
+| 7.jpg | `bg_texture` | 7 | 6 | 0 | 1 | `vlm_relation` 기준 자동 산출 | `results/bg_texture/vis/7.jpg` |
+| 7.jpg | `mask_overlap` | 7 | 5 | 0 | 0 | `vlm_relation` 기준 자동 산출 | `results/mask_overlap/vis/7.jpg` |
+| 7.jpg | `poly_skew` | 7 | 4 | 1 | 0 | `vlm_relation` 기준 자동 산출 | `results/poly_skew/vis/7.jpg` |
+| 7.jpg | `role_ext` | 7 | 5 | 0 | 0 | `vlm_relation` 기준 자동 산출 | `results/role_ext/vis/7.jpg` |
+| 7.jpg | `vlm_relation` | 7 | 5 | 0 | 0 |  | `results/vlm_relation/vis/7.jpg` |
+| 8.jpg | `bg_texture` | 8 | 1 | 0 | 1 | `vlm_relation` 기준 자동 산출 | `results/bg_texture/vis/8.jpg` |
+| 8.jpg | `mask_overlap` | 8 | 0 | 0 | 0 | `vlm_relation` 기준 자동 산출 | `results/mask_overlap/vis/8.jpg` |
+| 8.jpg | `poly_skew` | 8 | 0 | 0 | 0 | `vlm_relation` 기준 자동 산출 | `results/poly_skew/vis/8.jpg` |
+| 8.jpg | `role_ext` | 8 | 0 | 0 | 0 | `vlm_relation` 기준 자동 산출 | `results/role_ext/vis/8.jpg` |
+| 8.jpg | `vlm_relation` | 8 | 0 | 0 | 0 |  | `results/vlm_relation/vis/8.jpg` |
+| 9.jpg | `bg_texture` | 12 | 12 | 0 | 8 | `vlm_relation` 기준 자동 산출 | `results/bg_texture/vis/9.jpg` |
+| 9.jpg | `mask_overlap` | 12 | 9 | 0 | 5 | `vlm_relation` 기준 자동 산출 | `results/mask_overlap/vis/9.jpg` |
+| 9.jpg | `poly_skew` | 12 | 5 | 0 | 1 | `vlm_relation` 기준 자동 산출 | `results/poly_skew/vis/9.jpg` |
+| 9.jpg | `role_ext` | 12 | 4 | 0 | 0 | `vlm_relation` 기준 자동 산출 | `results/role_ext/vis/9.jpg` |
+| 9.jpg | `vlm_relation` | 12 | 4 | 0 | 0 |  | `results/vlm_relation/vis/9.jpg` |
+| 10.jpg | `bg_texture` | 10 | 10 | 0 | 8 | `vlm_relation` 기준 자동 산출 | `results/bg_texture/vis/10.jpg` |
+| 10.jpg | `mask_overlap` | 10 | 9 | 0 | 7 | `vlm_relation` 기준 자동 산출 | `results/mask_overlap/vis/10.jpg` |
+| 10.jpg | `poly_skew` | 10 | 2 | 0 | 0 | `vlm_relation` 기준 자동 산출 | `results/poly_skew/vis/10.jpg` |
+| 10.jpg | `role_ext` | 10 | 2 | 0 | 0 | `vlm_relation` 기준 자동 산출 | `results/role_ext/vis/10.jpg` |
+| 10.jpg | `vlm_relation` | 10 | 2 | 0 | 0 |  | `results/vlm_relation/vis/10.jpg` |
+| 11.jpg | `bg_texture` | 23 | 22 | 1 | 3 | `vlm_relation` 기준 자동 산출 | `results/bg_texture/vis/11.jpg` |
+| 11.jpg | `mask_overlap` | 23 | 20 | 0 | 0 | `vlm_relation` 기준 자동 산출 | `results/mask_overlap/vis/11.jpg` |
+| 11.jpg | `poly_skew` | 23 | 17 | 5 | 2 | `vlm_relation` 기준 자동 산출 | `results/poly_skew/vis/11.jpg` |
+| 11.jpg | `role_ext` | 23 | 13 | 7 | 0 | `vlm_relation` 기준 자동 산출 | `results/role_ext/vis/11.jpg` |
+| 11.jpg | `vlm_relation` | 23 | 20 | 0 | 0 |  | `results/vlm_relation/vis/11.jpg` |
+| 12.jpg | `bg_texture` | 6 | 6 | 0 | 4 | `vlm_relation` 기준 자동 산출 | `results/bg_texture/vis/12.jpg` |
+| 12.jpg | `mask_overlap` | 6 | 3 | 0 | 1 | `vlm_relation` 기준 자동 산출 | `results/mask_overlap/vis/12.jpg` |
+| 12.jpg | `poly_skew` | 6 | 3 | 0 | 1 | `vlm_relation` 기준 자동 산출 | `results/poly_skew/vis/12.jpg` |
+| 12.jpg | `role_ext` | 6 | 2 | 0 | 0 | `vlm_relation` 기준 자동 산출 | `results/role_ext/vis/12.jpg` |
+| 12.jpg | `vlm_relation` | 6 | 2 | 0 | 0 |  | `results/vlm_relation/vis/12.jpg` |
 
 ## 5. 집계
 
-_판정 전_ — 채워진 칸 없음.
+채워진 행 60 / 60. 빈 행은 계산에서 뺌.
+
+| variant | 판정 이미지 | 미탐 | 오탐 | 라벨 판정 | 오탐률 |
+|---|---|---|---|---|---|
+| `bg_texture` | 12 | **9** | 39 | 90 | 43% |
+| `mask_overlap` | 12 | **6** | 18 | 72 | 25% |
+| `poly_skew` | 12 | **12** | 7 | 55 | 13% |
+| `role_ext` | 12 | **7** | 0 | 53 | 0% |
+| `vlm_relation` | 12 | **0** | 0 | 60 | 0% |
+
+**미탐이 0인 variant만 채택 후보임.** 오탐률은 검수 부담의 크기임.
 
