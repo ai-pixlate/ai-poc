@@ -4,9 +4,15 @@
 전부 로컬 계산, 비용 0.
 
 variant — 조판이 무엇까지 허용하는가
-    nowrap           한 줄 가정. 번역문 폭이 박스 폭을 넘으면 초과.
-    wrap_allowed     줄바꿈 허용. 줄을 접은 뒤 총 높이가 박스 높이를 넘으면 초과.
-    wrap_and_shrink  줄바꿈 + 폰트 축소(100·95·90·85·80%). 다 해도 안 들어가면 초과.
+    nowrap            한 줄 가정. 번역문 폭이 박스 폭을 넘으면 초과.
+    wrap_allowed      줄바꿈 허용. 줄을 접은 뒤 총 높이가 박스 높이를 넘으면 초과.
+    wrap_and_shrink   줄바꿈 + 폰트 축소(100·95·90·85·80%). 다 해도 안 들어가면 초과.
+    wrap_grow_15      줄바꿈 + **박스 높이 1.5배까지 확장**. 폰트는 그대로.
+    wrap_grow_20      줄바꿈 + 박스 높이 2배까지 확장.
+    shrink_grow_15    폰트 축소 80%까지 + 높이 1.5배까지. 둘 다 쓰는 조건.
+
+높이 확장은 아래 요소를 밀어내는 것이라 **세로로 이어붙는 상세페이지에서만**
+가능하다. 배지·버튼·제품 위에 얹힌 문구는 밀 자리가 없다 — role별 분해를 볼 것.
 
 **판정 대상은 `wrap_and_shrink`의 잔여 초과율**이다. 개발계획서 §4.3이 묻는
 값은 흡수 전 초과율이 아니라 조정 상한으로도 흡수되지 않는 비율이다.
@@ -55,11 +61,17 @@ SHRINK_STEPS = (1.0, 0.95, 0.90, 0.85, 0.80)
 # 필요 축소율 탐색 범위. 0.30까지 줄여도 안 들어가면 조판으로 흡수 불가로 본다.
 NEED_STEPS = tuple(round(1.0 - 0.05 * i, 2) for i in range(15))   # 1.00 → 0.30
 
+# grow = 박스 높이를 몇 배까지 늘려도 되는가. 1.0이면 확장 금지.
 VARIANTS = {
-    "nowrap": {"wrap": False, "shrink": (1.0,)},
-    "wrap_allowed": {"wrap": True, "shrink": (1.0,)},
-    "wrap_and_shrink": {"wrap": True, "shrink": SHRINK_STEPS},
+    "nowrap": {"wrap": False, "shrink": (1.0,), "grow": 1.0},
+    "wrap_allowed": {"wrap": True, "shrink": (1.0,), "grow": 1.0},
+    "wrap_and_shrink": {"wrap": True, "shrink": SHRINK_STEPS, "grow": 1.0},
+    "wrap_grow_15": {"wrap": True, "shrink": (1.0,), "grow": 1.5},
+    "wrap_grow_20": {"wrap": True, "shrink": (1.0,), "grow": 2.0},
+    "shrink_grow_15": {"wrap": True, "shrink": SHRINK_STEPS, "grow": 1.5},
 }
+# 필요 높이 배수 탐색 구간 — 누적 흡수율 계산에 쓴다.
+GROW_STEPS = (1.0, 1.25, 1.5, 2.0, 3.0, 5.0)
 
 
 def load_font(px: int) -> ImageFont.FreeTypeFont:
@@ -92,16 +104,23 @@ def wrap_lines(text: str, font: ImageFont.FreeTypeFont, max_w: float) -> list[st
     return lines
 
 
-def fits(text: str, box_w: int, box_h: int, em: int, scale: float, wrap: bool) -> bool:
-    """이 배율로 박스에 들어가는가."""
+def needed_height(text: str, box_w: int, em: int, scale: float) -> float | None:
+    """줄바꿈했을 때 필요한 총 높이. 단어 하나가 박스보다 넓으면 None."""
     px = max(1, round(em * scale))
-    f = load_font(px)
-    if not wrap:
-        return f.getlength(text) <= box_w
-    lines = wrap_lines(text, f, box_w)
+    lines = wrap_lines(text, load_font(px), box_w)
     if lines is None:
-        return False
-    return len(lines) * px * LINE_GAP <= box_h + 1
+        return None
+    return len(lines) * px * LINE_GAP
+
+
+def fits(text: str, box_w: int, box_h: int, em: int, scale: float,
+         wrap: bool, grow: float = 1.0) -> bool:
+    """이 배율로 박스에 들어가는가. grow는 허용하는 높이 확장 배수."""
+    px = max(1, round(em * scale))
+    if not wrap:
+        return load_font(px).getlength(text) <= box_w
+    need = needed_height(text, box_w, em, scale)
+    return need is not None and need <= box_h * grow + 1
 
 
 def source_lines(seg: dict, n_lines: dict[str, int]) -> int:
@@ -122,16 +141,23 @@ def measure(seg: dict, cfg: dict, src_lines: int) -> dict:
 
     fitted = None
     for scale in cfg["shrink"]:
-        if fits(seg["target"], box_w, box_h, em, scale, wrap=cfg["wrap"]):
+        if fits(seg["target"], box_w, box_h, em, scale, wrap=cfg["wrap"],
+                grow=cfg.get("grow", 1.0)):
             fitted = scale
             break
 
-    # 얼마나 줄이면 들어가는가 — 조정 상한을 정하는 데 쓰는 값
+    # 얼마나 줄이면 들어가는가 — 폰트 축소만으로 흡수할 때의 조정 상한
     need = None
     for scale in NEED_STEPS:
         if fits(seg["target"], box_w, box_h, em, scale, wrap=True):
             need = scale
             break
+
+    # 폰트를 그대로 두고 줄바꿈만 할 때 필요한 높이 배수
+    h100 = needed_height(seg["target"], box_w, em, 1.0)
+    grow100 = round(h100 / max(1, box_h), 2) if h100 is not None else None
+    h80 = needed_height(seg["target"], box_w, em, 0.8)
+    grow80 = round(h80 / max(1, box_h), 2) if h80 is not None else None
 
     return {
         "id": seg["id"],
@@ -146,6 +172,8 @@ def measure(seg: dict, cfg: dict, src_lines: int) -> dict:
         "ratio": round(ratio, 2),
         "fit_scale": fitted,      # None이면 이 variant 조건에서 초과
         "need_scale": need,       # 줄바꿈 허용 시 들어가는 최소 배율. None이면 0.30에도 불가
+        "need_grow": grow100,     # 폰트 100%로 줄바꿈할 때 필요한 높이 배수
+        "need_grow_at_80": grow80,  # 폰트 80%로 줄였을 때 필요한 높이 배수
         "overflow": fitted is None,
     }
 
@@ -193,12 +221,21 @@ def run_variant(name: str, inputs: list[str]) -> None:
         for th in (1.0, 0.95, 0.9, 0.85, 0.8, 0.7, 0.6, 0.5):
             ok = sum(1 for n in needs if n is not None and n >= th)
             cum[f"{int(th * 100)}%"] = round(ok / max(1, len(rows)), 3)
+        grows = [r["need_grow"] for r in rows]
+        grows80 = [r["need_grow_at_80"] for r in rows]
+        cum_g = {f"{g}배": round(sum(1 for x in grows if x is not None and x <= g) / max(1, len(rows)), 3)
+                 for g in GROW_STEPS}
+        cum_g80 = {f"{g}배": round(sum(1 for x in grows80 if x is not None and x <= g) / max(1, len(rows)), 3)
+                   for g in GROW_STEPS}
         meta["inputs"][inp] = {
             "segments": len(rows), "overflow": over,
             "overflow_rate": round(over / max(1, len(rows)), 3),
             "fit_by_scale": by_scale,
             "absorb_cum_by_min_scale": cum,
             "unfittable_even_at_30pct": sum(1 for n in needs if n is None),
+            "absorb_cum_by_grow": cum_g,
+            "absorb_cum_by_grow_at_80": cum_g80,
+            "grow_median": sorted(x for x in grows if x is not None)[len([x for x in grows if x is not None]) // 2],
             "ratio_median": round(sorted(r["ratio"] for r in rows)[len(rows) // 2], 2),
             "ratio_max": max(r["ratio"] for r in rows),
         }

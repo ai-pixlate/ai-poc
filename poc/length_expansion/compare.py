@@ -37,8 +37,13 @@ THRESHOLDS = (1.0, 0.95, 0.9, 0.85, 0.8, 0.7, 0.6, 0.5)
 EM_SENSITIVITY = (1.0, 1.15, 1.35)
 
 
+ORDER = ("nowrap", "wrap_allowed", "wrap_and_shrink",
+         "wrap_grow_15", "wrap_grow_20", "shrink_grow_15")
+GROWS = ("1.0배", "1.25배", "1.5배", "2.0배", "3.0배", "5.0배")
+
+
 def variants() -> list[str]:
-    return [n for n in ("nowrap", "wrap_allowed", "wrap_and_shrink") if (RESULTS / n).exists()]
+    return [n for n in ORDER if (RESULTS / n).exists()]
 
 
 def load(variant: str, inp: str) -> list[dict]:
@@ -94,7 +99,10 @@ def main() -> None:
     L.append("| variant | 조판이 허용하는 것 | " + " | ".join(f"`{i}`" for i in inputs) + " |")
     L.append("|---|---|" + "---|" * len(inputs))
     desc = {"nowrap": "없음 (한 줄 고정)", "wrap_allowed": "줄바꿈",
-            "wrap_and_shrink": "줄바꿈 + 폰트 축소 80%까지"}
+            "wrap_and_shrink": "줄바꿈 + 폰트 축소 80%까지",
+            "wrap_grow_15": "줄바꿈 + 박스 높이 1.5배까지",
+            "wrap_grow_20": "줄바꿈 + 박스 높이 2배까지",
+            "shrink_grow_15": "축소 80% + 높이 1.5배"}
     for n in names:
         cells = []
         for i in inputs:
@@ -128,13 +136,29 @@ def main() -> None:
     L.append("폭 배율 = 번역문 한 줄 폭 ÷ (박스 폭 × 원문 줄 수). 박스가 담을 수 있는 총 길이 대비임.")
     L.append("")
 
+    # 3-2. 필요 높이 배수
+    L.append("## 4. 필요 높이 배수 — 줄바꿈으로 흡수하려면 박스를 얼마나 키워야 하는가")
+    L.append("")
+    L.append("폰트를 그대로 두고 줄만 접었을 때 필요한 높이를 원래 박스 높이로 나눈 값."
+             " 높이 확장은 **아래 요소를 밀어내는 것**이라 세로로 이어붙는 구간에서만 가능함.")
+    L.append("")
+    L.append("| 입력 | 폰트 | " + " | ".join(f"≤{g}" for g in GROWS) + " | 중앙 |")
+    L.append("|---|---|" + "---|" * (len(GROWS) + 1))
+    for i in inputs:
+        v = metas["wrap_grow_20"]["inputs"][i]
+        for key, tag in (("absorb_cum_by_grow", "100%"), ("absorb_cum_by_grow_at_80", "80%")):
+            cells = [f"{v[key][g]:.0%}" for g in GROWS]
+            med = v["grow_median"] if tag == "100%" else "—"
+            L.append(f"| `{i}` | {tag} | " + " | ".join(cells) + f" | {med} |")
+    L.append("")
+
     # 4. em 가정 민감도
-    L.append("## 4. em 가정 민감도")
+    L.append("## 5. em·줄간격 가정 민감도")
     L.append("")
     L.append("em 크기 가정을 바꿔 다시 계산함. **결론이 가정에 의존하는지 보는 것.**")
     L.append("")
-    L.append("| em 배수 | 입력 | 100% 내 | ≥90% | ≥80% | ≥50% |")
-    L.append("|---|---|---|---|---|---|")
+    L.append("| em 배수 | 입력 | 축소로 흡수 ≥80% | ≥50% | 높이 ≤2배 | ≤3배 | 높이 중앙 |")
+    L.append("|---|---|---|---|---|---|---|")
     lines_map = R.block_line_counts()
     keep = R.EM_RATIO
     for em in EM_SENSITIVITY:
@@ -147,10 +171,13 @@ def main() -> None:
                 for s in segs
             ]
             need = [r["need_scale"] for r in rows]
+            grow = [r["need_grow"] for r in rows if r["need_grow"] is not None]
             f = lambda t: sum(1 for x in need if x is not None and x >= t) / len(rows)
+            g = lambda t: sum(1 for x in grow if x <= t) / len(rows)
+            med = sorted(grow)[len(grow) // 2] if grow else "—"
             mark = " ←현행" if em == keep else ""
-            L.append(f"| {em}{mark} | `{i}` | {f(1.0):.0%} | {f(0.9):.0%} | {f(0.8):.0%} | "
-                     f"{f(0.5):.0%} |")
+            L.append(f"| {em}{mark} | `{i}` | {f(0.8):.0%} | {f(0.5):.0%} | {g(2.0):.0%} | "
+                     f"{g(3.0):.0%} | {med} |")
     R.EM_RATIO = keep
     L.append("")
 
@@ -158,7 +185,7 @@ def main() -> None:
     rows = load("wrap_and_shrink", "block")
     roles = sorted({r["role"] for r in rows if r["role"]})
     if roles:
-        L.append("## 5. role별 분해 (`block` 입력)")
+        L.append("## 6. role별 분해 (`block` 입력)")
         L.append("")
         L.append("| role | 세그먼트 | 초과 | 폭 배율 중앙 |")
         L.append("|---|---|---|---|")
@@ -170,7 +197,7 @@ def main() -> None:
         L.append("")
 
     # 6. 초과가 큰 사례
-    L.append("## 6. 폭 배율 상위 10건 (`block`)")
+    L.append("## 7. 폭 배율 상위 10건 (`block`)")
     L.append("")
     L.append("| 배율 | 박스 | 원문 | 번역문 |")
     L.append("|---|---|---|---|")
