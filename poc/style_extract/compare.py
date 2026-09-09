@@ -31,7 +31,7 @@ FONT_VARIANT = "font_match"       # 판정 대상. stroke_ratio는 이 안에 �
 FONT_GRADE_COLS = ["굵기", "계열", "비고"]
 
 GRADE_COLS = ["색", "크기", "정렬", "비고"]
-ALIGN_ORDER = ["left", "center", "right", "단일행", "불명"]
+ALIGN_ORDER = ["left", "center", "right", "단일행", "무관", "불명"]
 # 대비가 이 값 미만이면 글자색과 배경색이 사실상 같은 색으로 나온 것이다.
 CONTRAST_FLOOR = 1.5
 

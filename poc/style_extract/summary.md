@@ -8,8 +8,9 @@
 
 | variant | 색 추출 방식 | 이미지 | 영역 | 소요 |
 |---|---|---|---|---|
-| `contrast_split` | 밝기 Otsu 이진화. 적은 쪽을 글자로 | 12 | 280 | 0.52s |
-| `dominant_color` | bbox 화소를 2색 군집(k-means). 적은 쪽을 글자로 | 12 | 280 | 0.71s |
+| `contrast_split` | 밝기 Otsu 이진화. 적은 쪽을 글자로 | 12 | 280 | 0.47s |
+| `dominant_color` | bbox 화소를 2색 군집(k-means). 적은 쪽을 글자로 | 12 | 280 | 0.77s |
+| `otsu_border` |  | 12 | 280 | 0.49s |
 
 크기는 bbox 높이(글자 획 높이), em 환산 × **1.35**. 정렬 허용 오차는 블록 폭의 **12%**. 두 variant가 같음 — **변인은 색 추출 방식뿐임.**
 
@@ -21,6 +22,7 @@
 |---|---|---|---|
 | `contrast_split` | 2.65 | 18 / 280 | 6% |
 | `dominant_color` | 2.63 | 18 / 280 | 6% |
+| `otsu_border` | 2.65 | 18 / 280 | 6% |
 
 **`contrast_split` ↔ `dominant_color` 글자색 차이** — 채널 최대차 중앙 **1**, 평균 2.3. 눈에 보일 만한 차이(16 초과)는 **5/280건**뿐임.
 
@@ -30,10 +32,10 @@
 
 블록 안 행들의 좌·중앙·우 좌표 분산으로 판정함. **`불명`은 어느 축도 고르지 않은 것.**
 
-| 구분 | left | center | right | 단일행 | 불명 | 합 |
-|---|---|---|---|---|---|---|
-| 라벨 아님 (조판 대상) | 4 | 43 | 4 | 13 | 46 | 110 |
-| 제품 라벨 | 38 | 9 | 6 | 27 | 90 | 170 |
+| 구분 | left | center | right | 단일행 | 무관 | 불명 | 합 |
+|---|---|---|---|---|---|---|---|
+| 라벨 아님 (조판 대상) | 3 | 18 | 2 | 44 | 43 | 0 | 110 |
+| 제품 라벨 | 53 | 13 | 4 | 29 | 2 | 69 | 170 |
 
 **라벨은 하류에서 제외되므로 `라벨 아님` 행만 실사용에 해당함.**
 
@@ -47,43 +49,58 @@
 
 | 이미지 | variant | 영역 | 저대비 | 색 | 크기 | 정렬 | 비고 | 시각화 |
 |---|---|---|---|---|---|---|---|---|
-| 1.jpg | `contrast_split` | 10 | 0 | A | A | C | 정렬 불명 7/10 · Claude 육안 판정 | `results/contrast_split/vis_target/1.jpg` |
-| 1.jpg | `dominant_color` | 10 | 0 | A | A | C | 정렬 불명 7/10 · Claude 육안 판정 | `results/dominant_color/vis_target/1.jpg` |
-| 2.jpg | `contrast_split` | 10 | 0 | A | A | C | 중앙 문단을 `우`로 오판 2건 · Claude 육안 판정 | `results/contrast_split/vis_target/2.jpg` |
-| 2.jpg | `dominant_color` | 10 | 0 | A | A | C | 중앙 문단을 `우`로 오판 2건 · Claude 육안 판정 | `results/dominant_color/vis_target/2.jpg` |
+| 1.jpg | `contrast_split` | 10 | 0 | A | A | A | Claude 육안 판정 | `results/contrast_split/vis_target/1.jpg` |
+| 1.jpg | `dominant_color` | 10 | 0 | A | A | A | Claude 육안 판정 | `results/dominant_color/vis_target/1.jpg` |
+| 1.jpg | `otsu_border` | 10 | 0 | A | A | A | Claude 육안 판정 | `results/otsu_border/vis_target/1.jpg` |
+| 2.jpg | `contrast_split` | 10 | 0 | A | A | C | 중앙 문단을 `우`로 오판 2건 — 원인은 상류 블록 분할(line2가 두 블록으로 갈림) · Claude 육안 판정 | `results/contrast_split/vis_target/2.jpg` |
+| 2.jpg | `dominant_color` | 10 | 0 | A | A | C | 중앙 문단을 `우`로 오판 2건 — 원인은 상류 블록 분할(line2가 두 블록으로 갈림) · Claude 육안 판정 | `results/dominant_color/vis_target/2.jpg` |
+| 2.jpg | `otsu_border` | 10 | 0 | A | A | C | 중앙 문단을 `우`로 오판 2건 — 원인은 상류 블록 분할(line2가 두 블록으로 갈림) · Claude 육안 판정 | `results/otsu_border/vis_target/2.jpg` |
 | 3.jpg | `contrast_split` | 0 | 0 | — | — | — | 조판 대상 0 · Claude 육안 판정 | `results/contrast_split/vis_target/3.jpg` |
 | 3.jpg | `dominant_color` | 0 | 0 | — | — | — | 조판 대상 0 · Claude 육안 판정 | `results/dominant_color/vis_target/3.jpg` |
-| 4.jpg | `contrast_split` | 11 | 0 | A | A | C | 정렬 전부 불명 11/11 · Claude 육안 판정 | `results/contrast_split/vis_target/4.jpg` |
-| 4.jpg | `dominant_color` | 11 | 0 | A | A | C | 정렬 전부 불명 11/11 · Claude 육안 판정 | `results/dominant_color/vis_target/4.jpg` |
-| 5.jpg | `contrast_split` | 2 | 0 | A | A | C | 대상 2건, 둘 다 불명 · Claude 육안 판정 | `results/contrast_split/vis_target/5.jpg` |
-| 5.jpg | `dominant_color` | 2 | 0 | A | A | C | 대상 2건, 둘 다 불명 · Claude 육안 판정 | `results/dominant_color/vis_target/5.jpg` |
-| 6.jpg | `contrast_split` | 12 | 0 | B | A | B | 색 오류 1건(`ONLY` 검정→초록 테두리) · 불명 6/12 · Claude 육안 판정 | `results/contrast_split/vis_target/6.jpg` |
-| 6.jpg | `dominant_color` | 12 | 0 | B | A | B | 색 오류 1건(`ONLY` 검정→초록 테두리) · 불명 6/12 · Claude 육안 판정 | `results/dominant_color/vis_target/6.jpg` |
-| 7.jpg | `contrast_split` | 4 | 0 | A | A | C | 정렬 불명 3/4 · Claude 육안 판정 | `results/contrast_split/vis_target/7.jpg` |
-| 7.jpg | `dominant_color` | 4 | 0 | A | A | C | 정렬 불명 3/4 · Claude 육안 판정 | `results/dominant_color/vis_target/7.jpg` |
+| 3.jpg | `otsu_border` | 0 | 0 | — | — | — | 조판 대상 0 · Claude 육안 판정 | `results/otsu_border/vis_target/3.jpg` |
+| 4.jpg | `contrast_split` | 11 | 0 | A | A | A | Claude 육안 판정 | `results/contrast_split/vis_target/4.jpg` |
+| 4.jpg | `dominant_color` | 11 | 0 | A | A | A | Claude 육안 판정 | `results/dominant_color/vis_target/4.jpg` |
+| 4.jpg | `otsu_border` | 11 | 0 | A | A | A | Claude 육안 판정 | `results/otsu_border/vis_target/4.jpg` |
+| 5.jpg | `contrast_split` | 2 | 0 | A | A | A | Claude 육안 판정 | `results/contrast_split/vis_target/5.jpg` |
+| 5.jpg | `dominant_color` | 2 | 0 | A | A | A | Claude 육안 판정 | `results/dominant_color/vis_target/5.jpg` |
+| 5.jpg | `otsu_border` | 2 | 0 | A | A | A | Claude 육안 판정 | `results/otsu_border/vis_target/5.jpg` |
+| 6.jpg | `contrast_split` | 12 | 0 | B | A | A | `ONLY` 검정→초록 테두리 · Claude 육안 판정 | `results/contrast_split/vis_target/6.jpg` |
+| 6.jpg | `dominant_color` | 12 | 0 | B | A | A | `ONLY` 검정→초록 테두리 · Claude 육안 판정 | `results/dominant_color/vis_target/6.jpg` |
+| 6.jpg | `otsu_border` | 12 | 0 | B | A | A | `ONLY` 검정→초록 테두리 · Claude 육안 판정 | `results/otsu_border/vis_target/6.jpg` |
+| 7.jpg | `contrast_split` | 4 | 0 | A | A | A | Claude 육안 판정 | `results/contrast_split/vis_target/7.jpg` |
+| 7.jpg | `dominant_color` | 4 | 0 | A | A | A | Claude 육안 판정 | `results/dominant_color/vis_target/7.jpg` |
+| 7.jpg | `otsu_border` | 4 | 0 | A | A | A | Claude 육안 판정 | `results/otsu_border/vis_target/7.jpg` |
 | 8.jpg | `contrast_split` | 14 | 2 | A | A | A | Claude 육안 판정 | `results/contrast_split/vis_target/8.jpg` |
 | 8.jpg | `dominant_color` | 14 | 2 | A | A | A | Claude 육안 판정 | `results/dominant_color/vis_target/8.jpg` |
-| 9.jpg | `contrast_split` | 15 | 0 | C | A | C | **반전 3건**(`역대최대`·`더블X더블`·`1+1`) + `ONLY` 오류 · 정렬 오판 2건 · Claude 육안 판정 | `results/contrast_split/vis_target/9.jpg` |
-| 9.jpg | `dominant_color` | 15 | 0 | C | A | C | **반전 3건**(`역대최대`·`더블X더블`·`1+1`) + `ONLY` 오류 · 정렬 오판 2건 · Claude 육안 판정 | `results/dominant_color/vis_target/9.jpg` |
-| 10.jpg | `contrast_split` | 15 | 0 | B | A | A | 색 오류 2건(`50ml` 흰→노랑, `ONLY` 검정→초록) · Claude 육안 판정 | `results/contrast_split/vis_target/10.jpg` |
-| 10.jpg | `dominant_color` | 15 | 0 | B | A | A | 색 오류 2건(`50ml` 흰→노랑, `ONLY` 검정→초록) · Claude 육안 판정 | `results/dominant_color/vis_target/10.jpg` |
-| 11.jpg | `contrast_split` | 8 | 0 | C | A | C | **반전 2건**(`8`·`올리브영`) · 불명 6/8 · Claude 육안 판정 | `results/contrast_split/vis_target/11.jpg` |
-| 11.jpg | `dominant_color` | 8 | 0 | C | A | C | **반전 2건**(`8`·`올리브영`) · 불명 6/8 · Claude 육안 판정 | `results/dominant_color/vis_target/11.jpg` |
-| 12.jpg | `contrast_split` | 9 | 0 | B | A | C | **반전 1건**(`콜라겐` 흰→분홍) · 불명 6/9 · Claude 육안 판정 | `results/contrast_split/vis_target/12.jpg` |
-| 12.jpg | `dominant_color` | 9 | 0 | B | A | C | **반전 1건**(`콜라겐` 흰→분홍) · 불명 6/9 · Claude 육안 판정 | `results/dominant_color/vis_target/12.jpg` |
+| 8.jpg | `otsu_border` | 14 | 2 | A | A | A | Claude 육안 판정 | `results/otsu_border/vis_target/8.jpg` |
+| 9.jpg | `contrast_split` | 15 | 0 | C | A | A | 반전 3건 + `ONLY` 오류 · Claude 육안 판정 | `results/contrast_split/vis_target/9.jpg` |
+| 9.jpg | `dominant_color` | 15 | 0 | C | A | A | 반전 3건 + `ONLY` 오류 · Claude 육안 판정 | `results/dominant_color/vis_target/9.jpg` |
+| 9.jpg | `otsu_border` | 15 | 0 | C | A | A | 반전 2건(`1+1`·`+1+1`) + `ONLY` 오류. 기존 반전 2건은 해소 · Claude 육안 판정 | `results/otsu_border/vis_target/9.jpg` |
+| 10.jpg | `contrast_split` | 15 | 0 | B | A | A | `50ml`·`ONLY` 오류 · Claude 육안 판정 | `results/contrast_split/vis_target/10.jpg` |
+| 10.jpg | `dominant_color` | 15 | 0 | B | A | A | `50ml`·`ONLY` 오류 · Claude 육안 판정 | `results/dominant_color/vis_target/10.jpg` |
+| 10.jpg | `otsu_border` | 15 | 0 | B | A | A | `50ml`·`ONLY` 오류 · Claude 육안 판정 | `results/otsu_border/vis_target/10.jpg` |
+| 11.jpg | `contrast_split` | 8 | 0 | C | A | A | 반전 2건 · Claude 육안 판정 | `results/contrast_split/vis_target/11.jpg` |
+| 11.jpg | `dominant_color` | 8 | 0 | C | A | A | 반전 2건 · Claude 육안 판정 | `results/dominant_color/vis_target/11.jpg` |
+| 11.jpg | `otsu_border` | 8 | 0 | A | A | A | 반전 해소 · Claude 육안 판정 | `results/otsu_border/vis_target/11.jpg` |
+| 12.jpg | `contrast_split` | 9 | 0 | B | A | A | 반전 1건 · Claude 육안 판정 | `results/contrast_split/vis_target/12.jpg` |
+| 12.jpg | `dominant_color` | 9 | 0 | B | A | A | 반전 1건 · Claude 육안 판정 | `results/dominant_color/vis_target/12.jpg` |
+| 12.jpg | `otsu_border` | 9 | 0 | A | A | A | 반전 해소 · Claude 육안 판정 | `results/otsu_border/vis_target/12.jpg` |
 
 ## 5. 집계
 
-채워진 행 24 / 24. 빈 행은 계산에서 뺌.
+채워진 행 36 / 36. 빈 행은 계산에서 뺌.
 
 | variant | 축 | A | B | C | A+B |
 |---|---|---|---|---|---|
 | `contrast_split` | 색 | 6 | 3 | 2 | **9/11 (82%)** |
 | `contrast_split` | 크기 | 11 | 0 | 0 | **11/11 (100%)** |
-| `contrast_split` | 정렬 | 2 | 1 | 8 | **3/11 (27%)** |
+| `contrast_split` | 정렬 | 10 | 0 | 1 | **10/11 (91%)** |
 | `dominant_color` | 색 | 6 | 3 | 2 | **9/11 (82%)** |
 | `dominant_color` | 크기 | 11 | 0 | 0 | **11/11 (100%)** |
-| `dominant_color` | 정렬 | 2 | 1 | 8 | **3/11 (27%)** |
+| `dominant_color` | 정렬 | 10 | 0 | 1 | **10/11 (91%)** |
+| `otsu_border` | 색 | 8 | 2 | 1 | **10/11 (91%)** |
+| `otsu_border` | 크기 | 11 | 0 | 0 | **11/11 (100%)** |
+| `otsu_border` | 정렬 | 10 | 0 | 1 | **10/11 (91%)** |
 
 ## 6. 굵기·폰트 계열 (추가 축)
 

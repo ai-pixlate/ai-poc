@@ -6,9 +6,11 @@
 variant — 글자색을 어떻게 배경에서 갈라내는가
     dominant_color  bbox 안 화소를 2색으로 군집(k-means). 적은 쪽을 글자로 본다.
     contrast_split  밝기 히스토그램을 Otsu로 자른다. 적은 쪽을 글자로 본다.
+    otsu_border     Otsu로 가르되 **테두리에 많이 닿는 쪽을 배경**으로 본다.
 
-두 방식 모두 **글자는 배경보다 화소가 적다**는 가정에 선다. 굵은 대형 글자나
-글자가 박스를 가득 채우는 경우 이 가정이 깨진다 — 판정에서 볼 지점.
+앞 두 방식은 **글자는 배경보다 화소가 적다**는 가정에 선다. 굵은 대형 글자가
+박스를 가득 채우면 이 가정이 깨져 **글자색과 배경색이 뒤집힌다** — 판정에서
+반전 6건이 나왔다. `otsu_border`는 그 가정을 버리고 테두리 접촉으로 가른다.
 
 크기·정렬은 두 variant가 같다. 변인은 색 추출 방식뿐이다.
     크기  bbox 높이 = 글자 획 높이. em 환산은 × 1.35 (길이 팽창률 과업과 같은 가정)
@@ -57,8 +59,9 @@ RESULTS = HERE / "results"
 
 EM_RATIO = 1.35        # bbox 높이 → em. 길이 팽창률 과업과 같은 가정
 ALIGN_TOL = 0.12       # 정렬 판정 허용 오차 (블록 폭 대비)
+ALIGN_MARGIN = 0.03    # 1등 축이 2등보다 이만큼은 고와야 채택한다
 
-VARIANTS = {"dominant_color": {}, "contrast_split": {}}
+VARIANTS = {"dominant_color": {}, "contrast_split": {}, "otsu_border": {}}
 
 
 # ---------------------------------------------------------------- 색 추출
@@ -111,18 +114,76 @@ def split_otsu(crop: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
     return fg.mean(axis=0), bg.mean(axis=0)
 
 
-SPLIT = {"dominant_color": split_kmeans, "contrast_split": split_otsu}
+def split_otsu_border(crop: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
+    """Otsu로 가른 뒤 **테두리에 많이 닿는 쪽을 배경**으로 본다.
+
+    bbox는 글자를 감싸는 상자라 배경이 테두리를 두르고 글자는 안쪽에 있다.
+    화소 수로 가르면 굵은 대형 글자에서 뒤집히지만 이 규칙은 뒤집히지 않는다.
+    """
+    gray = cv2.cvtColor(crop, cv2.COLOR_BGR2GRAY)
+    _, mask = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+    m = mask.astype(bool)
+    if m.sum() == 0 or (~m).sum() == 0:
+        mean = crop.reshape(-1, 3).mean(axis=0)
+        return mean, mean
+
+    border = np.zeros(m.shape, bool)
+    border[0, :] = border[-1, :] = True
+    border[:, 0] = border[:, -1] = True
+    n_border = border.sum()
+    # 테두리 화소 중 각 쪽이 차지하는 비율
+    share_true = (m & border).sum() / n_border
+    share_false = ((~m) & border).sum() / n_border
+    bg_is_true = share_true >= share_false
+
+    px = crop.reshape(-1, 3)
+    sel = m.reshape(-1)
+    bg = px[sel] if bg_is_true else px[~sel]
+    fg = px[~sel] if bg_is_true else px[sel]
+    if len(fg) == 0 or len(bg) == 0:
+        mean = px.mean(axis=0)
+        return mean, mean
+    return fg.mean(axis=0), bg.mean(axis=0)
+
+
+SPLIT = {"dominant_color": split_kmeans, "contrast_split": split_otsu,
+         "otsu_border": split_otsu_border}
 
 
 # ---------------------------------------------------------------- 정렬
 
+def group_lines(boxes: list[list[int]]) -> list[list[int]]:
+    """같은 줄의 영역들을 하나로 합친다.
+
+    ⚠️ 이걸 안 하면 **한 줄에 나란히 있는 영역들끼리 정렬을 비교**하게 된다.
+    같은 줄이면 좌·중앙·우가 다 다르므로 어느 축도 고르지 않아 `불명`이 된다.
+    판정에서 불명이 42%로 나온 원인이 이것이었다.
+    """
+    rows: list[list[list[int]]] = []
+    for b in sorted(boxes, key=lambda x: x[1]):
+        for row in rows:
+            r = row[0]
+            top, bot = max(r[1], b[1]), min(r[3], b[3])
+            if (bot - top) / max(1, min(r[3] - r[1], b[3] - b[1])) >= 0.5:
+                row.append(b)
+                break
+        else:
+            rows.append([b])
+    return [
+        [min(x[0] for x in row), min(x[1] for x in row),
+         max(x[2] for x in row), max(x[3] for x in row)]
+        for row in rows
+    ]
+
+
 def block_align(boxes: list[list[int]]) -> str:
-    """블록 안 행들의 좌·중앙·우 중 어느 축이 가장 고른가."""
-    if len(boxes) < 2:
+    """블록 안 **줄들**의 좌·중앙·우 중 어느 축이 가장 고른가."""
+    lines = group_lines(boxes)
+    if len(lines) < 2:
         return "단일행"
-    lefts = [b[0] for b in boxes]
-    rights = [b[2] for b in boxes]
-    centers = [(b[0] + b[2]) / 2 for b in boxes]
+    lefts = [b[0] for b in lines]
+    rights = [b[2] for b in lines]
+    centers = [(b[0] + b[2]) / 2 for b in lines]
     width = max(rights) - min(lefts)
     if width <= 0:
         return "단일행"
@@ -131,8 +192,18 @@ def block_align(boxes: list[list[int]]) -> str:
         "center": (max(centers) - min(centers)) / width,
         "right": (max(rights) - min(rights)) / width,
     }
-    best = min(spread, key=spread.get)
-    return best if spread[best] <= ALIGN_TOL else "불명"
+    order = sorted(spread, key=spread.get)
+    best, second = order[0], order[1]
+    # 세 축이 모두 고르면 줄 폭이 거의 같다는 뜻이다.
+    # 이때는 어느 정렬로 그려도 결과가 같으므로 판정할 필요가 없다.
+    if all(v <= ALIGN_TOL for v in spread.values()):
+        return "무관"
+    if spread[best] > ALIGN_TOL:
+        return "불명"
+    # 1등과 2등이 붙어 있으면 어느 축인지 단정할 수 없다
+    if spread[second] - spread[best] < ALIGN_MARGIN:
+        return "불명"
+    return best
 
 
 # ---------------------------------------------------------------- 시각화
@@ -258,7 +329,7 @@ def run_variant(name: str, stems: list[str]) -> None:
 
     meta = {
         "variant": name,
-        "cfg": {"em_ratio": EM_RATIO, "align_tol": ALIGN_TOL},
+        "cfg": {"em_ratio": EM_RATIO, "align_tol": ALIGN_TOL, "align_margin": ALIGN_MARGIN},
         "images": len(stems),
         "total_regions": sum(p["regions"] for p in per_image),
         "align_dist": aligns,
