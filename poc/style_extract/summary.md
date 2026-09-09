@@ -100,22 +100,38 @@ _판정 전_ — 채워진 칸 없음.
 
 > 계열 점수차(고딕 최고점 − 명조 최고점) 중앙 **0.109**, 0.05 미만이라 사실상 판별 불가인 건이 **14/70**임.
 
+### 판정 결과 — 굵기 **불가** / 계열 **미검증**
+
+**굵기 — 방법 수준에서 실패.** 굵기를 아는 표본으로 추정식 3안을 대조했는데 bold와 regular가 역전됨.
+
+| 표본 | 육안 | top20 평균 | top5 평균 | 최대 |
+|---|---|---|---|---|
+| `6.jpg` 더블 | bold | 0.089 | 0.102 | 0.118 |
+| `8.jpg` BIODANCE'S | regular | 0.1 | 0.106 | 0.165 |
+| `8.jpg` 無 | bold | 0.084 | 0.101 | 0.126 |
+| `8.jpg` 테스트 완료 | regular | 0.076 | 0.098 | 0.098 |
+| `9.jpg` 역대최대 | bold | 0.216 | 0.306 | 0.394 |
+
+`더블`(bold)이 `BIODANCE'S`(regular)보다 낮게 나옴. **어떤 추정식·임계로도 갈리지 않음** — 임계 조정으로 풀 문제가 아님. 획 두께를 bbox 높이로 나누는 방식 자체가 한글 글꼴에서 변별력이 없음.
+
+**계열 — 전부 고딕이라 변별 기회가 없었음.** 70건 중 69건 고딕, 1건 명조(`7.jpg` `1억장*`, 계열차 0.019로 사실상 오판). 표본에 명조 문구가 없어 **맞았다기보다 틀릴 기회가 없었음.**
+
 ### 판정표 — 굵기·계열
 
 **채울 칸은 `굵기`·`계열` 2개.** 이미지 단위 A/B/C. `vis/`의 띠에 `번호 크기 획비율 굵기 계열/굵기 IoU 텍스트` 순으로 찍혀 있음.
 
 | 이미지 | variant | 대상 | IoU 중앙 | 굵기 | 계열 | 비고 | 시각화 |
 |---|---|---|---|---|---|---|---|
-| 1.jpg | `font_match` | 10 | 0.483 |  |  |  | `results_font/font_match/vis/1.jpg` |
-| 2.jpg | `font_match` | 10 | 0.229 |  |  |  | `results_font/font_match/vis/2.jpg` |
-| 3.jpg | `font_match` | 0 | — |  |  |  | `results_font/font_match/vis/3.jpg` |
-| 4.jpg | `font_match` | 11 | 0.434 |  |  |  | `results_font/font_match/vis/4.jpg` |
-| 5.jpg | `font_match` | 2 | — |  |  |  | `results_font/font_match/vis/5.jpg` |
-| 6.jpg | `font_match` | 12 | 0.614 |  |  |  | `results_font/font_match/vis/6.jpg` |
-| 7.jpg | `font_match` | 4 | 0.325 |  |  |  | `results_font/font_match/vis/7.jpg` |
-| 8.jpg | `font_match` | 12 | 0.422 |  |  |  | `results_font/font_match/vis/8.jpg` |
-| 9.jpg | `font_match` | 15 | 0.437 |  |  |  | `results_font/font_match/vis/9.jpg` |
-| 10.jpg | `font_match` | 15 | 0.279 |  |  |  | `results_font/font_match/vis/10.jpg` |
-| 11.jpg | `font_match` | 8 | 0.495 |  |  |  | `results_font/font_match/vis/11.jpg` |
-| 12.jpg | `font_match` | 9 | 0.359 |  |  |  | `results_font/font_match/vis/12.jpg` |
+| 1.jpg | `font_match` | 10 | 0.483 | C | A | Claude 육안·대조 판정 | `results_font/font_match/vis/1.jpg` |
+| 2.jpg | `font_match` | 10 | 0.229 | C | A | Claude 육안·대조 판정 | `results_font/font_match/vis/2.jpg` |
+| 3.jpg | `font_match` | 0 | — | — | — | 조판 대상 0 · Claude 육안·대조 판정 | `results_font/font_match/vis/3.jpg` |
+| 4.jpg | `font_match` | 11 | 0.434 | C | A | Claude 육안·대조 판정 | `results_font/font_match/vis/4.jpg` |
+| 5.jpg | `font_match` | 2 | — | C | A | Claude 육안·대조 판정 | `results_font/font_match/vis/5.jpg` |
+| 6.jpg | `font_match` | 12 | 0.614 | C | A | Claude 육안·대조 판정 | `results_font/font_match/vis/6.jpg` |
+| 7.jpg | `font_match` | 4 | 0.325 | C | B | 계열 오판 1건(`1억장*`→명조, 계열차 0.019) · Claude 육안·대조 판정 | `results_font/font_match/vis/7.jpg` |
+| 8.jpg | `font_match` | 12 | 0.422 | C | A | Claude 육안·대조 판정 | `results_font/font_match/vis/8.jpg` |
+| 9.jpg | `font_match` | 15 | 0.437 | C | A | Claude 육안·대조 판정 | `results_font/font_match/vis/9.jpg` |
+| 10.jpg | `font_match` | 15 | 0.279 | C | A | Claude 육안·대조 판정 | `results_font/font_match/vis/10.jpg` |
+| 11.jpg | `font_match` | 8 | 0.495 | C | A | Claude 육안·대조 판정 | `results_font/font_match/vis/11.jpg` |
+| 12.jpg | `font_match` | 9 | 0.359 | C | A | Claude 육안·대조 판정 | `results_font/font_match/vis/12.jpg` |
 
