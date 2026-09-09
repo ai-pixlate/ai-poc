@@ -62,7 +62,8 @@ def load_block_docs() -> list[dict]:
             if b["is_product_label"] or not HANGUL.search(b["text"]):
                 continue
             segs.append({"id": f"{path.stem}-{i:02d}", "text": flat,
-                         "bbox": b["bbox"], "role": b.get("role")})
+                         "bbox": b["bbox"], "role": b.get("role"),
+                         "src_lines": b["text"].count("\n") + 1})
         if segs:
             docs.append({"image": f"{path.stem}.jpg", "segments": segs, "page_text": context})
     return docs
@@ -92,7 +93,15 @@ def load_env() -> None:
             os.environ.setdefault(k.strip(), v.strip())
 
 
-def run_input(name: str, dry: bool, no_cache: bool) -> None:
+# 글자 수 상한 = 박스가 담을 수 있는 총 가로 길이 ÷ 영문 평균 글자 폭.
+# 영문 평균 글자 폭은 em의 약 0.5배로 본다(Arial 기준 근사).
+def max_chars(seg: dict, src_lines: int) -> int:
+    x1, y1, x2, y2 = seg["bbox"]
+    em = (y2 - y1) / max(1, src_lines) * 1.35
+    return max(4, round((x2 - x1) * src_lines / (0.5 * em)))
+
+
+def run_input(name: str, dry: bool, no_cache: bool, pvariant: str = "default") -> None:
     docs = LOADERS[name]()
     n_seg = sum(len(d["segments"]) for d in docs)
     print(f"[{name}] 문서 {len(docs)} · 세그먼트 {n_seg}")
@@ -107,13 +116,18 @@ def run_input(name: str, dry: bool, no_cache: bool) -> None:
 
         client = OpenAI(api_key=key, base_url=MODEL["base_url"])
         OUT.mkdir(parents=True, exist_ok=True)
-        (CACHE / MODEL["model_id"] / name).mkdir(parents=True, exist_ok=True)
+        (CACHE / MODEL["model_id"]).mkdir(parents=True, exist_ok=True)
 
     chars, tok_in, tok_out, rows = 0, 0, 0, []
     t_all = time.perf_counter()
     for doc in docs:
-        segs = [{"id": s["id"], "text": s["text"]} for s in doc["segments"]]
-        system, user = P.build(segs, doc["page_text"])
+        segs = []
+        for s in doc["segments"]:
+            item = {"id": s["id"], "text": s["text"]}
+            if pvariant == "compress":
+                item["max_chars"] = max_chars(s, s.get("src_lines", 1))
+            segs.append(item)
+        system, user = P.build(segs, doc["page_text"], pvariant)
         chars += len(system) + len(user)
 
         if dry:
@@ -121,7 +135,10 @@ def run_input(name: str, dry: bool, no_cache: bool) -> None:
             continue
 
         stem = Path(doc["image"]).stem
-        cache_path = CACHE / MODEL["model_id"] / name / f"{stem}.json"
+        cache_dir = CACHE / MODEL["model_id"] / (name if pvariant == "default"
+                                                 else f"{name}_{pvariant}")
+        cache_dir.mkdir(parents=True, exist_ok=True)
+        cache_path = cache_dir / f"{stem}.json"
         if cache_path.exists() and not no_cache:
             c = json.loads(cache_path.read_text(encoding="utf-8"))
             payload, usage, hit = c["payload"], c["usage"], " (캐시)"
@@ -157,23 +174,26 @@ def run_input(name: str, dry: bool, no_cache: bool) -> None:
         print(f"  → 총 {chars:,}자. 호출 없음\n")
         return
 
+    out_name = name if pvariant == "default" else f"{name}_{pvariant}"
     cost = tok_in / 1e6 * MODEL["price_in"] + tok_out / 1e6 * MODEL["price_out"]
-    (OUT / f"{name}.json").write_text(
-        json.dumps({"input": name, "model": MODEL["model_id"], "segments": rows},
+    (OUT / f"{out_name}.json").write_text(
+        json.dumps({"input": out_name, "prompt": pvariant, "model": MODEL["model_id"],
+                    "segments": rows},
                    ensure_ascii=False, indent=1),
         encoding="utf-8",
     )
-    (OUT / f"{name}.meta.json").write_text(
-        json.dumps({"input": name, "model": MODEL["model_id"], "documents": len(docs),
+    (OUT / f"{out_name}.meta.json").write_text(
+        json.dumps({"input": out_name, "prompt": pvariant,
+                    "model": MODEL["model_id"], "documents": len(docs),
                     "segments": len(rows), "tokens": {"in": tok_in, "out": tok_out},
                     "cost_usd": round(cost, 4),
                     "total_sec": round(time.perf_counter() - t_all, 2),
-                    "prompt_has_length_rule": True,
+                    "prompt_rule_4": pvariant,
                     "run_at": time.strftime("%Y-%m-%d %H:%M:%S")},
                    ensure_ascii=False, indent=1),
         encoding="utf-8",
     )
-    print(f"[{name}] 완료 — 세그먼트 {len(rows)}, in {tok_in} out {tok_out}, ${cost:.4f}\n")
+    print(f"[{out_name}] 완료 — 세그먼트 {len(rows)}, in {tok_in} out {tok_out}, ${cost:.4f}\n")
 
 
 def main() -> None:
@@ -182,13 +202,14 @@ def main() -> None:
     ap.add_argument("--input", required=True, help="block, region, all")
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--no-cache", action="store_true")
+    ap.add_argument("--prompt", default="default", help="default 또는 compress")
     args = ap.parse_args()
 
     names = list(LOADERS) if args.input == "all" else [args.input]
     for n in names:
         if n not in LOADERS:
             raise SystemExit(f"모르는 입력: {n}. 가능: {', '.join(LOADERS)}, all")
-        run_input(n, args.dry_run, args.no_cache)
+        run_input(n, args.dry_run, args.no_cache, args.prompt)
 
 
 if __name__ == "__main__":

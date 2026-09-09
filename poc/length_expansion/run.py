@@ -203,7 +203,7 @@ def run_variant(name: str, inputs: list[str]) -> None:
     for inp in inputs:
         src = json.loads((TRANS / f"{inp}.json").read_text(encoding="utf-8"))
         rows = [
-            measure(s, cfg, source_lines(s, lines_map) if inp == "block" else 1)
+            measure(s, cfg, source_lines(s, lines_map) if inp.startswith("block") else 1)
             for s in src["segments"]
         ]
         over = sum(1 for r in rows if r["overflow"])

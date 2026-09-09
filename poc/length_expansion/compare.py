@@ -31,6 +31,7 @@ OUT = HERE / "summary.md"
 
 INPUT_DESC = {
     "block": "채택 파이프라인 — `vlm_relation` 블록 중 라벨 아님 + 한글 포함. bbox는 블록 박스",
+    "block_compress": "`block`과 같은 입력·모델. **프롬프트 규칙 4만 글자 수 상한으로 교체**",
     "region": "인식 영역 단위 — 라벨 섞임. 단위 차이를 보려고 함께 잼",
 }
 THRESHOLDS = (1.0, 0.95, 0.9, 0.85, 0.8, 0.7, 0.6, 0.5)
@@ -78,7 +79,7 @@ def main() -> None:
     L.append(f"| 대상 언어 | 영어 (ko → en) |")
     L.append(f"| 번역 모델 | `{tmeta[inputs[0]]['model']}` · `temperature=0` |")
     L.append("| 번역 프롬프트 | `prompt.py` — C 과업 `v6_principle` 사본. "
-             "**규칙 4에 길이 제약 지시 포함** |")
+             "**규칙 4가 이 과업의 변인** (`default` / `compress`) |")
     L.append("| 규제 표 | **테스트용 더미 15항목** — 대체표현 길이가 결과에 섞임 |")
     L.append(f"| 폰트 | `{a['font']}` · 자간 {a['letter_spacing']} |")
     L.append(f"| em 크기 | 줄 높이 × **{a['em_ratio']}** (OCR bbox는 글자 획 높이라 em보다 작음) |")
@@ -86,11 +87,11 @@ def main() -> None:
     L.append("")
     L.append("**이 가정이 바뀌면 수치가 통째로 움직임.** 4장에 민감도를 실었음.")
     L.append("")
-    L.append("| 입력 | 설명 | 세그먼트 | 번역 비용 |")
-    L.append("|---|---|---|---|")
+    L.append("| 입력 | 설명 | 규칙 4 | 세그먼트 | 번역 비용 |")
+    L.append("|---|---|---|---|---|")
     for i in inputs:
-        L.append(f"| `{i}` | {INPUT_DESC.get(i, '')} | {tmeta[i]['segments']} | "
-                 f"${tmeta[i]['cost_usd']} |")
+        L.append(f"| `{i}` | {INPUT_DESC.get(i, '')} | `{tmeta[i].get('prompt', 'default')}` | "
+                 f"{tmeta[i]['segments']} | ${tmeta[i]['cost_usd']} |")
     L.append("")
 
     # 2. variant별 초과율

@@ -3,8 +3,11 @@
 `poc/C_translate/prompts.py`의 채택 문안(`v6_principle`)과 규제 표를
 **복사한 것**이다. 과업 간 코드는 공유하지 않는다(CLAUDE.md).
 
-⚠️ **규칙 4에 길이 제약 지시가 들어 있다.** 초과율은 이 지시의 유무에
-크게 흔들리므로, 이 파일 전문이 곧 측정 조건이다. 결과 문서에 그대로 남긴다.
+⚠️ **규칙 4가 길이 제약 지시다.** 초과율은 이 지시에 크게 흔들리므로
+이 파일 전문이 곧 측정 조건이다. 결과 문서에 그대로 남긴다.
+
+    default   C 과업 원문 그대로 — "길이를 원문과 비슷하게 유지한다"
+    compress  세그먼트별 **글자 수 상한**을 주고 줄이는 순서까지 지시
 
 ⚠️ 규제 표는 **테스트용 더미**다. 실제 규제 자료가 아니다.
     대체표현이 원표현보다 길거나 짧으면 초과율이 함께 움직인다.
@@ -47,6 +50,26 @@ RULE_2 = (
     "       그 사람이 하지 않은 말이 된다."
 )
 
+# 규칙 4 — 이 과업의 변인. 나머지 문안은 두 variant가 동일하다.
+RULE_4_DEFAULT = (
+    "4. 상세페이지 문구이므로 길이를 원문과 비슷하게 유지한다. "
+    "이미지 위에 얹을 문구라 길어지면 배치가 깨진다."
+)
+
+# `default`로 폭 배율 중앙 2.2배가 나왔다. 지시를 **세그먼트별 글자 수 상한**으로
+# 바꿔 프롬프트로 어디까지 눌리는지 본다.
+RULE_4_COMPRESS = (
+    "4. **각 세그먼트에 `max_chars`가 주어진다. 번역문은 그 글자 수를 넘지 않아야 한다.**\n"
+    "   이미지 위에 얹을 문구라 넘치면 배치가 깨진다. 넘칠 것 같으면 이 순서로 줄여라.\n"
+    "   (1) 관사·전치사·수식어를 뺀다\n"
+    "   (2) 짧은 동의어로 바꾼다\n"
+    "   (3) 통용되는 축약형을 쓴다 (예: Limited Ed., 30ml)\n"
+    "   **의미를 바꾸거나 성분·수치·인증명을 빼는 것은 금지한다.**\n"
+    "   그렇게 해야만 하는 경우에만 상한을 넘겨도 된다."
+)
+
+RULE_4 = {"default": RULE_4_DEFAULT, "compress": RULE_4_COMPRESS}
+
 TRANSLATE_SYSTEM = """당신은 한국 화장품 상세페이지를 {target_lang}(으)로 현지화하는 번역가다.
 
 원문은 상세페이지 이미지에서 OCR로 추출한 텍스트다. 다음을 지켜라.
@@ -54,7 +77,7 @@ TRANSLATE_SYSTEM = """당신은 한국 화장품 상세페이지를 {target_lang
 1. 뷰티 도메인 용어를 정확히 옮긴다. 성분명·인증명은 해당 시장에서 통용되는 표기를 쓴다.
 {rule_2}
 3. 브랜드명·제품명은 번역하지 않고 원표기를 유지한다.
-4. 상세페이지 문구이므로 길이를 원문과 비슷하게 유지한다. 이미지 위에 얹을 문구라 길어지면 배치가 깨진다.
+{rule_4}
 5. OCR 오탈자로 보이는 부분은 문맥으로 추정해 옮기되, 추정한 항목은 `note`에 남긴다.
 
 {regulation_block}
@@ -79,11 +102,18 @@ def regulation_block() -> str:
     return "\n".join(lines)
 
 
-def build(segments: list[dict], page_context: list[str]) -> tuple[str, str]:
-    """세그먼트 목록 → (system, user). segments는 {id, text} 형식."""
+def build(segments: list[dict], page_context: list[str],
+          variant: str = "default") -> tuple[str, str]:
+    """세그먼트 목록 → (system, user).
+
+    segments는 {id, text} 형식. `compress`에서는 {id, text, max_chars}를 준다.
+    """
+    if variant not in RULE_4:
+        raise SystemExit(f"모르는 프롬프트 variant: {variant}. 가능: {', '.join(RULE_4)}")
     return (
         TRANSLATE_SYSTEM.format(
-            target_lang=TARGET_LANG, rule_2=RULE_2, regulation_block=regulation_block()
+            target_lang=TARGET_LANG, rule_2=RULE_2, rule_4=RULE_4[variant],
+            regulation_block=regulation_block()
         ),
         TRANSLATE_USER.format(
             page_context=" / ".join(page_context),
