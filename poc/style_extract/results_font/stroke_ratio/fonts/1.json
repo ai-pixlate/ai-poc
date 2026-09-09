@@ -1,0 +1,146 @@
+{
+ "image": "1.jpg",
+ "variant": "stroke_ratio",
+ "regions": [
+  {
+   "no": 1,
+   "region": 0,
+   "bbox": [
+    249,
+    17,
+    354,
+    97
+   ],
+   "text": "My",
+   "est_font_px": 80,
+   "stroke_ratio": 0.132,
+   "weight_est": "regular"
+  },
+  {
+   "no": 2,
+   "region": 1,
+   "bbox": [
+    347,
+    11,
+    493,
+    93
+   ],
+   "text": "First",
+   "est_font_px": 82,
+   "stroke_ratio": 0.127,
+   "weight_est": "regular"
+  },
+  {
+   "no": 3,
+   "region": 2,
+   "bbox": [
+    480,
+    10,
+    755,
+    108
+   ],
+   "text": "Collagen",
+   "est_font_px": 98,
+   "stroke_ratio": 0.106,
+   "weight_est": "regular"
+  },
+  {
+   "no": 4,
+   "region": 3,
+   "bbox": [
+    801,
+    168,
+    939,
+    245
+   ],
+   "text": "1+1",
+   "est_font_px": 77,
+   "stroke_ratio": 0.198,
+   "weight_est": "bold"
+  },
+  {
+   "no": 5,
+   "region": 4,
+   "bbox": [
+    91,
+    603,
+    237,
+    649
+   ],
+   "text": "키캡키링",
+   "est_font_px": 46,
+   "stroke_ratio": 0.098,
+   "weight_est": "regular"
+  },
+  {
+   "no": 6,
+   "region": 5,
+   "bbox": [
+    106,
+    651,
+    223,
+    699
+   ],
+   "text": "선착순!",
+   "est_font_px": 48,
+   "stroke_ratio": 0.095,
+   "weight_est": "regular"
+  },
+  {
+   "no": 10,
+   "region": 9,
+   "bbox": [
+    28,
+    895,
+    490,
+    982
+   ],
+   "text": "윈이 PICK!1등",
+   "est_font_px": 87,
+   "stroke_ratio": 0.155,
+   "weight_est": "bold"
+  },
+  {
+   "no": 11,
+   "region": 10,
+   "bbox": [
+    487,
+    899,
+    687,
+    978
+   ],
+   "text": "화잘먹",
+   "est_font_px": 79,
+   "stroke_ratio": 0.166,
+   "weight_est": "bold"
+  },
+  {
+   "no": 12,
+   "region": 11,
+   "bbox": [
+    692,
+    901,
+    842,
+    977
+   ],
+   "text": "모공",
+   "est_font_px": 76,
+   "stroke_ratio": 0.169,
+   "weight_est": "bold"
+  },
+  {
+   "no": 13,
+   "region": 12,
+   "bbox": [
+    826,
+    902,
+    965,
+    976
+   ],
+   "text": "세럼",
+   "est_font_px": 74,
+   "stroke_ratio": 0.176,
+   "weight_est": "bold"
+  }
+ ]
+}

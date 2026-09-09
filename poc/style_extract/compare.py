@@ -23,7 +23,12 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 RESULTS = HERE / "results"
+RESULTS_FONT = HERE / "results_font"
 OUT = HERE / "summary.md"
+
+# 굵기·계열은 계획서상 범위 밖(12월)이었으나 되는지만 보려고 붙인 축이다.
+FONT_VARIANT = "font_match"       # 판정 대상. stroke_ratio는 이 안에 포함됨
+FONT_GRADE_COLS = ["굵기", "계열", "비고"]
 
 GRADE_COLS = ["색", "크기", "정렬", "비고"]
 ALIGN_ORDER = ["left", "center", "right", "단일행", "불명"]
@@ -66,6 +71,100 @@ def read_existing() -> dict[tuple[str, str], list[str]]:
     return got
 
 
+def read_font_table() -> dict[str, list[str]]:
+    """굵기·계열 판정표에서 채워진 행을 회수한다. 행 폭이 색 판정표와 다르다."""
+    if not OUT.exists():
+        return {}
+    got: dict[str, list[str]] = {}
+    width = 2 + 2 + len(FONT_GRADE_COLS) + 1
+    for line in OUT.read_text(encoding="utf-8").splitlines():
+        if not line.startswith("|"):
+            continue
+        cells = [c.strip() for c in line.strip().strip("|").split("|")]
+        if len(cells) != width or not cells[0].lower().endswith(".jpg"):
+            continue
+        if cells[1] != f"`{FONT_VARIANT}`":
+            continue
+        vals = cells[4 : 4 + len(FONT_GRADE_COLS)]
+        if any(vals):
+            got[cells[0]] = vals
+    return got
+
+
+def font_section(images: list[str], L: list[str]) -> None:
+    """굵기·계열 — 실행됐을 때만 붙인다."""
+    meta_path = RESULTS_FONT / FONT_VARIANT / "meta.json"
+    if not meta_path.exists():
+        return
+    meta = json.loads(meta_path.read_text(encoding="utf-8"))
+    rows = {}
+    for img in images:
+        f = RESULTS_FONT / FONT_VARIANT / "fonts" / f"{Path(img).stem}.json"
+        rows[img] = json.loads(f.read_text(encoding="utf-8"))["regions"] if f.exists() else []
+    allrows = [r for img in images for r in rows[img]]
+    matched = [r for r in allrows if r.get("font_score") is not None]
+    filled = read_font_table()
+
+    L.append("## 6. 굵기·폰트 계열 (추가 축)")
+    L.append("")
+    L.append("계획서에는 **범위 밖(12월)**으로 적힌 항목임. 되는지만 보려고 붙였음."
+             " 대상은 **조판 대상 영역 중 높이 18px 이상**만.")
+    L.append("")
+    L.append("| 측정 | 방법 |")
+    L.append("|---|---|")
+    L.append("| 굵기 | 글자 획 두께 ÷ 글자 높이. 거리 변환 상위 20% 평균 × 2. "
+             f"**{meta['cfg']['bold_at']} 이상이면 bold** |")
+    L.append(f"| 계열 | 설치 폰트 **{meta['candidates']}종**으로 같은 글자를 렌더해 겹침(IoU) 비교 |")
+    L.append("")
+    L.append(f"- 대상 **{meta['total_regions']}영역** · 폰트 대조 성공 **{len(matched)}건** "
+             "(한글 2자 이상만 대조함)")
+    wd = meta["weight_dist"]
+    L.append(f"- 획 두께 기준 굵기 — regular {wd.get('regular', 0)} / bold {wd.get('bold', 0)}")
+    L.append("- 계열 판정 — " + " / ".join(f"{k} {v}" for k, v in meta["family_dist"].items()))
+    L.append("")
+
+    if matched:
+        L.append("**글자 수별 대조 신뢰도** — IoU 중앙값. 길수록 무너짐.")
+        L.append("")
+        L.append("| 글자 수 | 건수 | IoU 중앙 |")
+        L.append("|---|---|---|")
+        for lo, hi, tag in ((2, 3, "2~3자"), (4, 6, "4~6자"), (7, 12, "7~12자"),
+                            (13, 999, "13자 이상")):
+            sub = sorted(r["font_score"] for r in matched
+                         if lo <= len(r["text"].strip()) <= hi)
+            if sub:
+                L.append(f"| {tag} | {len(sub)} | {sub[len(sub) // 2]:.3f} |")
+        L.append("")
+        agree = sum(1 for r in matched if r.get("font_weight") == r.get("weight_est"))
+        L.append(f"> ⚠️ **굵기 신호 두 개가 어긋남.** 획 두께는 regular 우세인데 폰트 대조는 "
+                 f"bold를 고름 — 일치 {agree}/{len(matched)} ({agree / len(matched):.0%}). "
+                 "겹침 비교가 획이 두꺼운 후보에 유리해 생기는 편향으로 보임. "
+                 "**굵기는 획 두께 쪽을 볼 것.**")
+        L.append("")
+        gaps = sorted(r["family_gap"] for r in matched)
+        flat = sum(1 for g in gaps if g < 0.05)
+        L.append(f"> 계열 점수차(고딕 최고점 − 명조 최고점) 중앙 **{gaps[len(gaps) // 2]:.3f}**, "
+                 f"0.05 미만이라 사실상 판별 불가인 건이 **{flat}/{len(gaps)}**임.")
+        L.append("")
+
+    L.append("### 판정표 — 굵기·계열")
+    L.append("")
+    L.append("**채울 칸은 `굵기`·`계열` 2개.** 이미지 단위 A/B/C."
+             " `vis/`의 띠에 `번호 크기 획비율 굵기 계열/굵기 IoU 텍스트` 순으로 찍혀 있음.")
+    L.append("")
+    L.append("| 이미지 | variant | 대상 | IoU 중앙 | " + " | ".join(FONT_GRADE_COLS)
+             + " | 시각화 |")
+    L.append("|---|---|---|---|" + "---|" * len(FONT_GRADE_COLS) + "---|")
+    for img in images:
+        rs = rows[img]
+        ms = sorted(r["font_score"] for r in rs if r.get("font_score") is not None)
+        med = f"{ms[len(ms) // 2]:.3f}" if ms else "—"
+        vals = filled.get(img, [""] * len(FONT_GRADE_COLS))
+        L.append(f"| {img} | `{FONT_VARIANT}` | {len(rs)} | {med} | " + " | ".join(vals)
+                 + f" | `results_font/{FONT_VARIANT}/vis/{Path(img).stem}.jpg` |")
+    L.append("")
+
+
 def main() -> None:
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
@@ -82,7 +181,7 @@ def main() -> None:
     L.append("")
     L.append("> 이 파일은 `compare.py`가 생성함. **색·크기·정렬 3칸이 사람이 채우는 전부임.**")
     L.append("> 입력은 텍스트 인식 `baseline` 영역 + `vlm_relation` 블록(정렬·역할·라벨).")
-    L.append("> **굵기 추정·폰트 패밀리 식별은 범위 밖(12월).**")
+    L.append("> 굵기·폰트 계열은 계획서상 범위 밖이나 **되는지만 시험함** — 6장.")
     L.append("")
 
     # 1. 실행 조건
@@ -193,6 +292,8 @@ def main() -> None:
                 L.append(f"| `{n}` | {axis} | {g.count('A')} | {g.count('B')} | "
                          f"{g.count('C')} | **{ab}/{len(g)} ({ab / len(g):.0%})** |")
     L.append("")
+
+    font_section(images, L)
 
     OUT.write_text("\n".join(L) + "\n", encoding="utf-8")
     print(f"작성: {OUT}  (variant {len(names)}종, 이미지 {len(images)}장)")

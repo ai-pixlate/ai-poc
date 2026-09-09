@@ -1,0 +1,133 @@
+{
+ "image": "11.jpg",
+ "variant": "font_match",
+ "regions": [
+  {
+   "no": 1,
+   "region": 0,
+   "bbox": [
+    801,
+    64,
+    940,
+    118
+   ],
+   "text": "Slow",
+   "est_font_px": 54,
+   "stroke_ratio": 0.151,
+   "weight_est": "bold"
+  },
+  {
+   "no": 3,
+   "region": 2,
+   "bbox": [
+    794,
+    137,
+    946,
+    201
+   ],
+   "text": "Aging",
+   "est_font_px": 64,
+   "stroke_ratio": 0.084,
+   "weight_est": "regular"
+  },
+  {
+   "no": 41,
+   "region": 40,
+   "bbox": [
+    12,
+    797,
+    185,
+    1000
+   ],
+   "text": "8",
+   "est_font_px": 203,
+   "stroke_ratio": 0.309,
+   "weight_est": "bold"
+  },
+  {
+   "no": 42,
+   "region": 41,
+   "bbox": [
+    224,
+    802,
+    343,
+    994
+   ],
+   "text": "5",
+   "est_font_px": 192,
+   "stroke_ratio": 0.218,
+   "weight_est": "bold"
+  },
+  {
+   "no": 43,
+   "region": 42,
+   "bbox": [
+    149,
+    851,
+    250,
+    957
+   ],
+   "text": "+",
+   "est_font_px": 106,
+   "stroke_ratio": 0.163,
+   "weight_est": "bold"
+  },
+  {
+   "no": 44,
+   "region": 43,
+   "bbox": [
+    644,
+    897,
+    800,
+    982
+   ],
+   "text": "단독",
+   "est_font_px": 85,
+   "stroke_ratio": 0.154,
+   "weight_est": "bold",
+   "font_best": "malgunbd.ttf",
+   "font_family": "고딕",
+   "font_weight": "bold",
+   "font_score": 0.509,
+   "family_gap": 0.168
+  },
+  {
+   "no": 45,
+   "region": 44,
+   "bbox": [
+    808,
+    896,
+    964,
+    982
+   ],
+   "text": "기획",
+   "est_font_px": 86,
+   "stroke_ratio": 0.156,
+   "weight_est": "bold",
+   "font_best": "Hancom Gothic Bold.ttf",
+   "font_family": "고딕",
+   "font_weight": "bold",
+   "font_score": 0.495,
+   "family_gap": 0.149
+  },
+  {
+   "no": 46,
+   "region": 45,
+   "bbox": [
+    345,
+    900,
+    632,
+    979
+   ],
+   "text": "올리브영",
+   "est_font_px": 79,
+   "stroke_ratio": 0.187,
+   "weight_est": "bold",
+   "font_best": "Hancom Gothic Bold.ttf",
+   "font_family": "고딕",
+   "font_weight": "bold",
+   "font_score": 0.188,
+   "family_gap": 0.006
+  }
+ ]
+}

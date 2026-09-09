@@ -1,0 +1,216 @@
+{
+ "image": "10.jpg",
+ "variant": "stroke_ratio",
+ "regions": [
+  {
+   "no": 1,
+   "region": 0,
+   "bbox": [
+    813,
+    73,
+    922,
+    125
+   ],
+   "text": "50ml",
+   "est_font_px": 52,
+   "stroke_ratio": 0.117,
+   "weight_est": "regular"
+  },
+  {
+   "no": 2,
+   "region": 1,
+   "bbox": [
+    797,
+    126,
+    933,
+    171
+   ],
+   "text": "추가 증정",
+   "est_font_px": 45,
+   "stroke_ratio": 0.102,
+   "weight_est": "regular"
+  },
+  {
+   "no": 3,
+   "region": 2,
+   "bbox": [
+    810,
+    252,
+    923,
+    288
+   ],
+   "text": "ONLY",
+   "est_font_px": 36,
+   "stroke_ratio": 0.186,
+   "weight_est": "bold"
+  },
+  {
+   "no": 5,
+   "region": 4,
+   "bbox": [
+    825,
+    293,
+    909,
+    319
+   ],
+   "text": "올리브영",
+   "est_font_px": 26,
+   "stroke_ratio": 0.149,
+   "weight_est": "bold"
+  },
+  {
+   "no": 6,
+   "region": 5,
+   "bbox": [
+    825,
+    319,
+    910,
+    347
+   ],
+   "text": "단독기획",
+   "est_font_px": 28,
+   "stroke_ratio": 0.14,
+   "weight_est": "bold"
+  },
+  {
+   "no": 8,
+   "region": 7,
+   "bbox": [
+    830,
+    422,
+    901,
+    445
+   ],
+   "text": "피부자극",
+   "est_font_px": 23,
+   "stroke_ratio": 0.167,
+   "weight_est": "bold"
+  },
+  {
+   "no": 9,
+   "region": 8,
+   "bbox": [
+    808,
+    449,
+    921,
+    501
+   ],
+   "text": "0.00",
+   "est_font_px": 52,
+   "stroke_ratio": 0.13,
+   "weight_est": "regular"
+  },
+  {
+   "no": 10,
+   "region": 9,
+   "bbox": [
+    786,
+    565,
+    931,
+    610
+   ],
+   "text": "리뷰이벤트",
+   "est_font_px": 45,
+   "stroke_ratio": 0.101,
+   "weight_est": "regular"
+  },
+  {
+   "no": 11,
+   "region": 10,
+   "bbox": [
+    781,
+    640,
+    940,
+    683
+   ],
+   "text": "3,000원",
+   "est_font_px": 43,
+   "stroke_ratio": 0.151,
+   "weight_est": "bold"
+  },
+  {
+   "no": 12,
+   "region": 11,
+   "bbox": [
+    42,
+    674,
+    583,
+    782
+   ],
+   "text": "성한빈PICK",
+   "est_font_px": 108,
+   "stroke_ratio": 0.128,
+   "weight_est": "regular"
+  },
+  {
+   "no": 13,
+   "region": 12,
+   "bbox": [
+    774,
+    696,
+    946,
+    720
+   ],
+   "text": "OLIVE YOUNG",
+   "est_font_px": 24,
+   "stroke_ratio": 0.171,
+   "weight_est": "bold"
+  },
+  {
+   "no": 14,
+   "region": 13,
+   "bbox": [
+    42,
+    785,
+    227,
+    915
+   ],
+   "text": "1등",
+   "est_font_px": 130,
+   "stroke_ratio": 0.112,
+   "weight_est": "regular"
+  },
+  {
+   "no": 15,
+   "region": 14,
+   "bbox": [
+    241,
+    779,
+    699,
+    917
+   ],
+   "text": "팩클렌저",
+   "est_font_px": 138,
+   "stroke_ratio": 0.107,
+   "weight_est": "regular"
+  },
+  {
+   "no": 16,
+   "region": 15,
+   "bbox": [
+    39,
+    923,
+    666,
+    948
+   ],
+   "text": "*2026.01.30 09시 기준 올리브영 온라인몰 클렌징 부문 판매 랭킹 1위",
+   "est_font_px": 25,
+   "stroke_ratio": 0.084,
+   "weight_est": "regular"
+  },
+  {
+   "no": 17,
+   "region": 16,
+   "bbox": [
+    39,
+    959,
+    732,
+    982
+   ],
+   "text": "*2026.06.29 08시,09시 기준 올리브영 온라인몰 클렌징 부문 판매 랭킹 1위",
+   "est_font_px": 23,
+   "stroke_ratio": 0.092,
+   "weight_est": "regular"
+  }
+ ]
+}

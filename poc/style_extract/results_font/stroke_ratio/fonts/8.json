@@ -1,0 +1,174 @@
+{
+ "image": "8.jpg",
+ "variant": "stroke_ratio",
+ "regions": [
+  {
+   "no": 1,
+   "region": 0,
+   "bbox": [
+    926,
+    52,
+    1116,
+    98
+   ],
+   "text": "Biodance",
+   "est_font_px": 46,
+   "stroke_ratio": 0.134,
+   "weight_est": "regular"
+  },
+  {
+   "no": 2,
+   "region": 1,
+   "bbox": [
+    280,
+    341,
+    917,
+    399
+   ],
+   "text": "BIODANCE'S SAFETY",
+   "est_font_px": 58,
+   "stroke_ratio": 0.1,
+   "weight_est": "regular"
+  },
+  {
+   "no": 3,
+   "region": 2,
+   "bbox": [
+    268,
+    494,
+    927,
+    547
+   ],
+   "text": "바이오던스만의 균형있는피부를위한고집",
+   "est_font_px": 53,
+   "stroke_ratio": 0.078,
+   "weight_est": "regular"
+  },
+  {
+   "no": 4,
+   "region": 3,
+   "bbox": [
+    541,
+    678,
+    658,
+    769
+   ],
+   "text": "25",
+   "est_font_px": 91,
+   "stroke_ratio": 0.065,
+   "weight_est": "regular"
+  },
+  {
+   "no": 5,
+   "region": 4,
+   "bbox": [
+    250,
+    713,
+    320,
+    780
+   ],
+   "text": "",
+   "est_font_px": 67,
+   "stroke_ratio": 0.084,
+   "weight_est": "regular"
+  },
+  {
+   "no": 6,
+   "region": 5,
+   "bbox": [
+    544,
+    763,
+    655,
+    806
+   ],
+   "text": "FREE",
+   "est_font_px": 43,
+   "stroke_ratio": 0.138,
+   "weight_est": "regular"
+  },
+  {
+   "no": 7,
+   "region": 6,
+   "bbox": [
+    129,
+    931,
+    370,
+    978
+   ],
+   "text": "19가지의심성분",
+   "est_font_px": 47,
+   "stroke_ratio": 0.084,
+   "weight_est": "regular"
+  },
+  {
+   "no": 8,
+   "region": 7,
+   "bbox": [
+    455,
+    936,
+    746,
+    974
+   ],
+   "text": "식약처 고시알레르기",
+   "est_font_px": 38,
+   "stroke_ratio": 0.102,
+   "weight_est": "regular"
+  },
+  {
+   "no": 9,
+   "region": 8,
+   "bbox": [
+    859,
+    926,
+    1035,
+    978
+   ],
+   "text": "피부저자극",
+   "est_font_px": 52,
+   "stroke_ratio": 0.078,
+   "weight_est": "regular"
+  },
+  {
+   "no": 10,
+   "region": 9,
+   "bbox": [
+    191,
+    984,
+    310,
+    1028
+   ],
+   "text": "무첨가*",
+   "est_font_px": 44,
+   "stroke_ratio": 0.092,
+   "weight_est": "regular"
+  },
+  {
+   "no": 11,
+   "region": 10,
+   "bbox": [
+    462,
+    984,
+    738,
+    1028
+   ],
+   "text": "유발25가지무첨가",
+   "est_font_px": 44,
+   "stroke_ratio": 0.093,
+   "weight_est": "regular"
+  },
+  {
+   "no": 12,
+   "region": 11,
+   "bbox": [
+    863,
+    984,
+    1030,
+    1023
+   ],
+   "text": "테스트완료",
+   "est_font_px": 39,
+   "stroke_ratio": 0.076,
+   "weight_est": "regular"
+  }
+ ]
+}

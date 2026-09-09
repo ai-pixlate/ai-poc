@@ -1,0 +1,82 @@
+{
+ "image": "7.jpg",
+ "variant": "font_match",
+ "regions": [
+  {
+   "no": 31,
+   "region": 30,
+   "bbox": [
+    207,
+    359,
+    361,
+    426
+   ],
+   "text": "1억장*",
+   "est_font_px": 67,
+   "stroke_ratio": 0.095,
+   "weight_est": "regular",
+   "font_best": "HANBatangB.ttf",
+   "font_family": "명조",
+   "font_weight": "bold",
+   "font_score": 0.326,
+   "family_gap": 0.019
+  },
+  {
+   "no": 32,
+   "region": 31,
+   "bbox": [
+    354,
+    352,
+    997,
+    432
+   ],
+   "text": "콜라겐 팩 노하우를 그대로!",
+   "est_font_px": 80,
+   "stroke_ratio": 0.075,
+   "weight_est": "regular",
+   "font_best": "Hancom Gothic Bold.ttf",
+   "font_family": "고딕",
+   "font_weight": "bold",
+   "font_score": 0.325,
+   "family_gap": 0.123
+  },
+  {
+   "no": 33,
+   "region": 32,
+   "bbox": [
+    113,
+    473,
+    1091,
+    546
+   ],
+   "text": "[본품]포어 퍼펙팅콜라겐펩타이드세럼30m +30ml",
+   "est_font_px": 73,
+   "stroke_ratio": 0.054,
+   "weight_est": "regular",
+   "font_best": "malgunbd.ttf",
+   "font_family": "고딕",
+   "font_weight": "bold",
+   "font_score": 0.196,
+   "family_gap": 0.051
+  },
+  {
+   "no": 34,
+   "region": 33,
+   "bbox": [
+    256,
+    616,
+    939,
+    640
+   ],
+   "text": "*2021.04-2025.08 바이오던스 바이오 콜라겐 리얼 딥 마스크 생산 실적 기준",
+   "est_font_px": 24,
+   "stroke_ratio": 0.092,
+   "weight_est": "regular",
+   "font_best": "HANDotumB.ttf",
+   "font_family": "고딕",
+   "font_weight": "bold",
+   "font_score": 0.19,
+   "family_gap": 0.042
+  }
+ ]
+}

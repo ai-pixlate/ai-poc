@@ -1,0 +1,174 @@
+{
+ "image": "6.jpg",
+ "variant": "stroke_ratio",
+ "regions": [
+  {
+   "no": 1,
+   "region": 0,
+   "bbox": [
+    346,
+    78,
+    852,
+    131
+   ],
+   "text": "Biodance | OLIVE YOUNG",
+   "est_font_px": 53,
+   "stroke_ratio": 0.111,
+   "weight_est": "regular"
+  },
+  {
+   "no": 2,
+   "region": 1,
+   "bbox": [
+    318,
+    186,
+    699,
+    464
+   ],
+   "text": "1+1",
+   "est_font_px": 278,
+   "stroke_ratio": 0.117,
+   "weight_est": "regular"
+  },
+  {
+   "no": 3,
+   "region": 2,
+   "bbox": [
+    673,
+    210,
+    860,
+    326
+   ],
+   "text": "더블",
+   "est_font_px": 116,
+   "stroke_ratio": 0.089,
+   "weight_est": "regular"
+  },
+  {
+   "no": 4,
+   "region": 3,
+   "bbox": [
+    669,
+    324,
+    857,
+    438
+   ],
+   "text": "기획",
+   "est_font_px": 114,
+   "stroke_ratio": 0.096,
+   "weight_est": "regular"
+  },
+  {
+   "no": 5,
+   "region": 4,
+   "bbox": [
+    421,
+    502,
+    534,
+    572
+   ],
+   "text": "단독",
+   "est_font_px": 70,
+   "stroke_ratio": 0.086,
+   "weight_est": "regular"
+  },
+  {
+   "no": 6,
+   "region": 5,
+   "bbox": [
+    534,
+    499,
+    650,
+    571
+   ],
+   "text": "한정",
+   "est_font_px": 72,
+   "stroke_ratio": 0.085,
+   "weight_est": "regular"
+  },
+  {
+   "no": 7,
+   "region": 6,
+   "bbox": [
+    651,
+    502,
+    761,
+    568
+   ],
+   "text": "기획",
+   "est_font_px": 66,
+   "stroke_ratio": 0.096,
+   "weight_est": "regular"
+  },
+  {
+   "no": 8,
+   "region": 7,
+   "bbox": [
+    937,
+    680,
+    1078,
+    723
+   ],
+   "text": "ONLY",
+   "est_font_px": 43,
+   "stroke_ratio": 0.189,
+   "weight_est": "bold"
+  },
+  {
+   "no": 9,
+   "region": 8,
+   "bbox": [
+    954,
+    729,
+    1062,
+    764
+   ],
+   "text": "올리브영",
+   "est_font_px": 35,
+   "stroke_ratio": 0.119,
+   "weight_est": "regular"
+  },
+  {
+   "no": 10,
+   "region": 9,
+   "bbox": [
+    954,
+    761,
+    1063,
+    798
+   ],
+   "text": "단독기획",
+   "est_font_px": 37,
+   "stroke_ratio": 0.111,
+   "weight_est": "regular"
+  },
+  {
+   "no": 11,
+   "region": 10,
+   "bbox": [
+    953,
+    892,
+    1060,
+    959
+   ],
+   "text": "용량",
+   "est_font_px": 67,
+   "stroke_ratio": 0.093,
+   "weight_est": "regular"
+  },
+  {
+   "no": 12,
+   "region": 11,
+   "bbox": [
+    960,
+    955,
+    1051,
+    1014
+   ],
+   "text": "UP",
+   "est_font_px": 59,
+   "stroke_ratio": 0.145,
+   "weight_est": "bold"
+  }
+ ]
+}

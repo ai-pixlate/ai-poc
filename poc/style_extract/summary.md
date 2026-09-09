@@ -2,7 +2,7 @@
 
 > 이 파일은 `compare.py`가 생성함. **색·크기·정렬 3칸이 사람이 채우는 전부임.**
 > 입력은 텍스트 인식 `baseline` 영역 + `vlm_relation` 블록(정렬·역할·라벨).
-> **굵기 추정·폰트 패밀리 식별은 범위 밖(12월).**
+> 굵기·폰트 계열은 계획서상 범위 밖이나 **되는지만 시험함** — 6장.
 
 ## 1. 실행 조건
 
@@ -73,4 +73,49 @@
 ## 5. 집계
 
 _판정 전_ — 채워진 칸 없음.
+
+## 6. 굵기·폰트 계열 (추가 축)
+
+계획서에는 **범위 밖(12월)**으로 적힌 항목임. 되는지만 보려고 붙였음. 대상은 **조판 대상 영역 중 높이 18px 이상**만.
+
+| 측정 | 방법 |
+|---|---|
+| 굵기 | 글자 획 두께 ÷ 글자 높이. 거리 변환 상위 20% 평균 × 2. **0.14 이상이면 bold** |
+| 계열 | 설치 폰트 **14종**으로 같은 글자를 렌더해 겹침(IoU) 비교 |
+
+- 대상 **108영역** · 폰트 대조 성공 **70건** (한글 2자 이상만 대조함)
+- 획 두께 기준 굵기 — regular 70 / bold 38
+- 계열 판정 — 고딕 69 / 명조 1
+
+**글자 수별 대조 신뢰도** — IoU 중앙값. 길수록 무너짐.
+
+| 글자 수 | 건수 | IoU 중앙 |
+|---|---|---|
+| 2~3자 | 24 | 0.509 |
+| 4~6자 | 23 | 0.326 |
+| 7~12자 | 11 | 0.295 |
+| 13자 이상 | 12 | 0.206 |
+
+> ⚠️ **굵기 신호 두 개가 어긋남.** 획 두께는 regular 우세인데 폰트 대조는 bold를 고름 — 일치 19/70 (27%). 겹침 비교가 획이 두꺼운 후보에 유리해 생기는 편향으로 보임. **굵기는 획 두께 쪽을 볼 것.**
+
+> 계열 점수차(고딕 최고점 − 명조 최고점) 중앙 **0.109**, 0.05 미만이라 사실상 판별 불가인 건이 **14/70**임.
+
+### 판정표 — 굵기·계열
+
+**채울 칸은 `굵기`·`계열` 2개.** 이미지 단위 A/B/C. `vis/`의 띠에 `번호 크기 획비율 굵기 계열/굵기 IoU 텍스트` 순으로 찍혀 있음.
+
+| 이미지 | variant | 대상 | IoU 중앙 | 굵기 | 계열 | 비고 | 시각화 |
+|---|---|---|---|---|---|---|---|
+| 1.jpg | `font_match` | 10 | 0.483 |  |  |  | `results_font/font_match/vis/1.jpg` |
+| 2.jpg | `font_match` | 10 | 0.229 |  |  |  | `results_font/font_match/vis/2.jpg` |
+| 3.jpg | `font_match` | 0 | — |  |  |  | `results_font/font_match/vis/3.jpg` |
+| 4.jpg | `font_match` | 11 | 0.434 |  |  |  | `results_font/font_match/vis/4.jpg` |
+| 5.jpg | `font_match` | 2 | — |  |  |  | `results_font/font_match/vis/5.jpg` |
+| 6.jpg | `font_match` | 12 | 0.614 |  |  |  | `results_font/font_match/vis/6.jpg` |
+| 7.jpg | `font_match` | 4 | 0.325 |  |  |  | `results_font/font_match/vis/7.jpg` |
+| 8.jpg | `font_match` | 12 | 0.422 |  |  |  | `results_font/font_match/vis/8.jpg` |
+| 9.jpg | `font_match` | 15 | 0.437 |  |  |  | `results_font/font_match/vis/9.jpg` |
+| 10.jpg | `font_match` | 15 | 0.279 |  |  |  | `results_font/font_match/vis/10.jpg` |
+| 11.jpg | `font_match` | 8 | 0.495 |  |  |  | `results_font/font_match/vis/11.jpg` |
+| 12.jpg | `font_match` | 9 | 0.359 |  |  |  | `results_font/font_match/vis/12.jpg` |
 
