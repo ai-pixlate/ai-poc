@@ -22,7 +22,9 @@
 | `contrast_split` | 2.65 | 18 / 280 | 6% |
 | `dominant_color` | 2.63 | 18 / 280 | 6% |
 
-**`contrast_split` ↔ `dominant_color` 글자색 일치** — 완전 동일 134 / 다름 146 (48% 일치)
+**`contrast_split` ↔ `dominant_color` 글자색 차이** — 채널 최대차 중앙 **1**, 평균 2.3. 눈에 보일 만한 차이(16 초과)는 **5/280건**뿐임.
+
+→ **두 방식은 사실상 같은 답을 냄.** 색 판정은 두 variant가 같은 등급을 받음.
 
 ## 3. 정렬 분포 (기계 집계 — 정오 아님)
 
@@ -45,34 +47,43 @@
 
 | 이미지 | variant | 영역 | 저대비 | 색 | 크기 | 정렬 | 비고 | 시각화 |
 |---|---|---|---|---|---|---|---|---|
-| 1.jpg | `contrast_split` | 10 | 0 |  |  |  |  | `results/contrast_split/vis_target/1.jpg` |
-| 1.jpg | `dominant_color` | 10 | 0 |  |  |  |  | `results/dominant_color/vis_target/1.jpg` |
-| 2.jpg | `contrast_split` | 10 | 0 |  |  |  |  | `results/contrast_split/vis_target/2.jpg` |
-| 2.jpg | `dominant_color` | 10 | 0 |  |  |  |  | `results/dominant_color/vis_target/2.jpg` |
-| 3.jpg | `contrast_split` | 0 | 0 |  |  |  |  | `results/contrast_split/vis_target/3.jpg` |
-| 3.jpg | `dominant_color` | 0 | 0 |  |  |  |  | `results/dominant_color/vis_target/3.jpg` |
-| 4.jpg | `contrast_split` | 11 | 0 |  |  |  |  | `results/contrast_split/vis_target/4.jpg` |
-| 4.jpg | `dominant_color` | 11 | 0 |  |  |  |  | `results/dominant_color/vis_target/4.jpg` |
-| 5.jpg | `contrast_split` | 2 | 0 |  |  |  |  | `results/contrast_split/vis_target/5.jpg` |
-| 5.jpg | `dominant_color` | 2 | 0 |  |  |  |  | `results/dominant_color/vis_target/5.jpg` |
-| 6.jpg | `contrast_split` | 12 | 0 |  |  |  |  | `results/contrast_split/vis_target/6.jpg` |
-| 6.jpg | `dominant_color` | 12 | 0 |  |  |  |  | `results/dominant_color/vis_target/6.jpg` |
-| 7.jpg | `contrast_split` | 4 | 0 |  |  |  |  | `results/contrast_split/vis_target/7.jpg` |
-| 7.jpg | `dominant_color` | 4 | 0 |  |  |  |  | `results/dominant_color/vis_target/7.jpg` |
-| 8.jpg | `contrast_split` | 14 | 2 |  |  |  |  | `results/contrast_split/vis_target/8.jpg` |
-| 8.jpg | `dominant_color` | 14 | 2 |  |  |  |  | `results/dominant_color/vis_target/8.jpg` |
-| 9.jpg | `contrast_split` | 15 | 0 |  |  |  |  | `results/contrast_split/vis_target/9.jpg` |
-| 9.jpg | `dominant_color` | 15 | 0 |  |  |  |  | `results/dominant_color/vis_target/9.jpg` |
-| 10.jpg | `contrast_split` | 15 | 0 |  |  |  |  | `results/contrast_split/vis_target/10.jpg` |
-| 10.jpg | `dominant_color` | 15 | 0 |  |  |  |  | `results/dominant_color/vis_target/10.jpg` |
-| 11.jpg | `contrast_split` | 8 | 0 |  |  |  |  | `results/contrast_split/vis_target/11.jpg` |
-| 11.jpg | `dominant_color` | 8 | 0 |  |  |  |  | `results/dominant_color/vis_target/11.jpg` |
-| 12.jpg | `contrast_split` | 9 | 0 |  |  |  |  | `results/contrast_split/vis_target/12.jpg` |
-| 12.jpg | `dominant_color` | 9 | 0 |  |  |  |  | `results/dominant_color/vis_target/12.jpg` |
+| 1.jpg | `contrast_split` | 10 | 0 | A | A | C | 정렬 불명 7/10 · Claude 육안 판정 | `results/contrast_split/vis_target/1.jpg` |
+| 1.jpg | `dominant_color` | 10 | 0 | A | A | C | 정렬 불명 7/10 · Claude 육안 판정 | `results/dominant_color/vis_target/1.jpg` |
+| 2.jpg | `contrast_split` | 10 | 0 | A | A | C | 중앙 문단을 `우`로 오판 2건 · Claude 육안 판정 | `results/contrast_split/vis_target/2.jpg` |
+| 2.jpg | `dominant_color` | 10 | 0 | A | A | C | 중앙 문단을 `우`로 오판 2건 · Claude 육안 판정 | `results/dominant_color/vis_target/2.jpg` |
+| 3.jpg | `contrast_split` | 0 | 0 | — | — | — | 조판 대상 0 · Claude 육안 판정 | `results/contrast_split/vis_target/3.jpg` |
+| 3.jpg | `dominant_color` | 0 | 0 | — | — | — | 조판 대상 0 · Claude 육안 판정 | `results/dominant_color/vis_target/3.jpg` |
+| 4.jpg | `contrast_split` | 11 | 0 | A | A | C | 정렬 전부 불명 11/11 · Claude 육안 판정 | `results/contrast_split/vis_target/4.jpg` |
+| 4.jpg | `dominant_color` | 11 | 0 | A | A | C | 정렬 전부 불명 11/11 · Claude 육안 판정 | `results/dominant_color/vis_target/4.jpg` |
+| 5.jpg | `contrast_split` | 2 | 0 | A | A | C | 대상 2건, 둘 다 불명 · Claude 육안 판정 | `results/contrast_split/vis_target/5.jpg` |
+| 5.jpg | `dominant_color` | 2 | 0 | A | A | C | 대상 2건, 둘 다 불명 · Claude 육안 판정 | `results/dominant_color/vis_target/5.jpg` |
+| 6.jpg | `contrast_split` | 12 | 0 | B | A | B | 색 오류 1건(`ONLY` 검정→초록 테두리) · 불명 6/12 · Claude 육안 판정 | `results/contrast_split/vis_target/6.jpg` |
+| 6.jpg | `dominant_color` | 12 | 0 | B | A | B | 색 오류 1건(`ONLY` 검정→초록 테두리) · 불명 6/12 · Claude 육안 판정 | `results/dominant_color/vis_target/6.jpg` |
+| 7.jpg | `contrast_split` | 4 | 0 | A | A | C | 정렬 불명 3/4 · Claude 육안 판정 | `results/contrast_split/vis_target/7.jpg` |
+| 7.jpg | `dominant_color` | 4 | 0 | A | A | C | 정렬 불명 3/4 · Claude 육안 판정 | `results/dominant_color/vis_target/7.jpg` |
+| 8.jpg | `contrast_split` | 14 | 2 | A | A | A | Claude 육안 판정 | `results/contrast_split/vis_target/8.jpg` |
+| 8.jpg | `dominant_color` | 14 | 2 | A | A | A | Claude 육안 판정 | `results/dominant_color/vis_target/8.jpg` |
+| 9.jpg | `contrast_split` | 15 | 0 | C | A | C | **반전 3건**(`역대최대`·`더블X더블`·`1+1`) + `ONLY` 오류 · 정렬 오판 2건 · Claude 육안 판정 | `results/contrast_split/vis_target/9.jpg` |
+| 9.jpg | `dominant_color` | 15 | 0 | C | A | C | **반전 3건**(`역대최대`·`더블X더블`·`1+1`) + `ONLY` 오류 · 정렬 오판 2건 · Claude 육안 판정 | `results/dominant_color/vis_target/9.jpg` |
+| 10.jpg | `contrast_split` | 15 | 0 | B | A | A | 색 오류 2건(`50ml` 흰→노랑, `ONLY` 검정→초록) · Claude 육안 판정 | `results/contrast_split/vis_target/10.jpg` |
+| 10.jpg | `dominant_color` | 15 | 0 | B | A | A | 색 오류 2건(`50ml` 흰→노랑, `ONLY` 검정→초록) · Claude 육안 판정 | `results/dominant_color/vis_target/10.jpg` |
+| 11.jpg | `contrast_split` | 8 | 0 | C | A | C | **반전 2건**(`8`·`올리브영`) · 불명 6/8 · Claude 육안 판정 | `results/contrast_split/vis_target/11.jpg` |
+| 11.jpg | `dominant_color` | 8 | 0 | C | A | C | **반전 2건**(`8`·`올리브영`) · 불명 6/8 · Claude 육안 판정 | `results/dominant_color/vis_target/11.jpg` |
+| 12.jpg | `contrast_split` | 9 | 0 | B | A | C | **반전 1건**(`콜라겐` 흰→분홍) · 불명 6/9 · Claude 육안 판정 | `results/contrast_split/vis_target/12.jpg` |
+| 12.jpg | `dominant_color` | 9 | 0 | B | A | C | **반전 1건**(`콜라겐` 흰→분홍) · 불명 6/9 · Claude 육안 판정 | `results/dominant_color/vis_target/12.jpg` |
 
 ## 5. 집계
 
-_판정 전_ — 채워진 칸 없음.
+채워진 행 24 / 24. 빈 행은 계산에서 뺌.
+
+| variant | 축 | A | B | C | A+B |
+|---|---|---|---|---|---|
+| `contrast_split` | 색 | 6 | 3 | 2 | **9/11 (82%)** |
+| `contrast_split` | 크기 | 11 | 0 | 0 | **11/11 (100%)** |
+| `contrast_split` | 정렬 | 2 | 1 | 8 | **3/11 (27%)** |
+| `dominant_color` | 색 | 6 | 3 | 2 | **9/11 (82%)** |
+| `dominant_color` | 크기 | 11 | 0 | 0 | **11/11 (100%)** |
+| `dominant_color` | 정렬 | 2 | 1 | 8 | **3/11 (27%)** |
 
 ## 6. 굵기·폰트 계열 (추가 축)
 

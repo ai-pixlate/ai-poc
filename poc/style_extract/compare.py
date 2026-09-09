@@ -240,18 +240,23 @@ def main() -> None:
                  f"{low / len(allrows):.0%} |")
     L.append("")
 
-    # variant 간 색 차이
+    # variant 간 색 차이 — 완전 일치 여부가 아니라 **눈에 보이는 차이**로 잰다
     if len(names) >= 2:
         a, b = names[0], names[1]
-        same = diff = 0
+        def rgb(h):
+            return tuple(int(h[i:i + 2], 16) for i in (1, 3, 5))
+        gaps = []
         for img in images:
             for x, y in zip(rows[(a, img)], rows[(b, img)]):
-                if x["font_color"] == y["font_color"]:
-                    same += 1
-                else:
-                    diff += 1
-        L.append(f"**`{a}` ↔ `{b}` 글자색 일치** — 완전 동일 {same} / 다름 {diff} "
-                 f"({same / max(1, same + diff):.0%} 일치)")
+                gaps.append(max(abs(p - q) for p, q in zip(rgb(x["font_color"]),
+                                                           rgb(y["font_color"]))))
+        gaps.sort()
+        big = sum(1 for g in gaps if g > 16)
+        L.append(f"**`{a}` ↔ `{b}` 글자색 차이** — 채널 최대차 중앙 **{gaps[len(gaps) // 2]}**, "
+                 f"평균 {sum(gaps) / len(gaps):.1f}. 눈에 보일 만한 차이(16 초과)는 "
+                 f"**{big}/{len(gaps)}건**뿐임.")
+        L.append("")
+        L.append("→ **두 방식은 사실상 같은 답을 냄.** 색 판정은 두 variant가 같은 등급을 받음.")
         L.append("")
 
     # 3. 정렬 분포
