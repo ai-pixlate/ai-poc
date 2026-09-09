@@ -27,6 +27,11 @@ OUT = HERE / "summary.md"
 
 COUNT_COLS = ["미탐", "오탐", "비고"]
 
+# 판정에서 뺀 variant. 실행 결과는 1·2장에 근거로 남기되 판정표·합의도에서는 뺀다.
+EXCLUDED: dict[str, str] = {
+    "vlm_opus": "`vlm_relation`과 110블록 전부 동일 판정 — 판정 불필요 (2026-09-09)",
+}
+
 
 def variants() -> list[str]:
     if not RESULTS.exists():
@@ -78,6 +83,7 @@ def main() -> None:
     filled = read_table()
 
     blocks = {(n, img): load_blocks(n, img) for n in names for img in images}
+    judged = [n for n in names if n not in EXCLUDED]   # 판정 대상 variant
 
     L: list[str] = []
     L.append("# 제품 라벨 판정 — 실행 결과")
@@ -102,6 +108,13 @@ def main() -> None:
             f"{rate:.0%} | {m['total_sec']}s | {cost} |"
         )
     L.append("")
+    if EXCLUDED:
+        L.append("**판정 제외** — 실행 결과는 1·2장에 남기되 판정표에서는 뺌.")
+        L.append("")
+        for n, why in EXCLUDED.items():
+            if n in names:
+                L.append(f"- `{n}` — {why}")
+        L.append("")
 
     # 2. 이미지별 라벨 판정 수
     L.append("## 2. 이미지별 라벨 판정 수 (기계 집계 — 정오 아님)")
@@ -117,7 +130,7 @@ def main() -> None:
     L.append("")
 
     # 3. 합의도 — 어느 블록을 먼저 볼지 고르는 용도
-    if len(names) >= 2:
+    if len(judged) >= 2:
         L.append("## 3. 합의도")
         L.append("")
         L.append("블록마다 몇 개 variant가 `라벨`로 봤는지 센다. **갈리는 블록이 판정 대상임.**")
@@ -127,9 +140,9 @@ def main() -> None:
         tot = [0, 0, 0]
         for img in images:
             n_all = n_none = n_split = 0
-            for i in range(len(blocks[(names[0], img)])):
-                votes = sum(1 for n in names if blocks[(n, img)][i]["is_product_label"])
-                if votes == len(names):
+            for i in range(len(blocks[(judged[0], img)])):
+                votes = sum(1 for n in judged if blocks[(n, img)][i]["is_product_label"])
+                if votes == len(judged):
                     n_all += 1
                 elif votes == 0:
                     n_none += 1
@@ -154,7 +167,7 @@ def main() -> None:
     L.append("|---|---|---|---|" + "---|" * len(COUNT_COLS) + "---|")
     for img in images:
         stem = Path(img).stem
-        for n in names:
+        for n in judged:
             nb = len(blocks[(n, img)])
             nl = sum(1 for b in blocks[(n, img)] if b["is_product_label"])
             vals = filled.get((img, n), [""] * len(COUNT_COLS))
@@ -170,11 +183,11 @@ def main() -> None:
     if not filled:
         L.append("_판정 전_ — 채워진 칸 없음.")
     else:
-        L.append(f"채워진 행 {len(filled)} / {len(images) * len(names)}. 빈 행은 계산에서 뺌.")
+        L.append(f"채워진 행 {len(filled)} / {len(images) * len(judged)}. 빈 행은 계산에서 뺌.")
         L.append("")
         L.append("| variant | 판정 이미지 | 미탐 | 오탐 | 라벨 판정 | 오탐률 |")
         L.append("|---|---|---|---|---|---|")
-        for n in names:
+        for n in judged:
             rows = [(img, v) for (img, var), v in filled.items() if var == n]
             miss = fp = lab = 0
             ok = 0
@@ -197,7 +210,8 @@ def main() -> None:
     L.append("")
 
     OUT.write_text("\n".join(L) + "\n", encoding="utf-8")
-    print(f"작성: {OUT}  (variant {len(names)}종, 이미지 {len(images)}장)")
+    print(f"작성: {OUT}  (variant {len(names)}종 중 판정 {len(judged)}종, "
+          f"이미지 {len(images)}장)")
 
 
 if __name__ == "__main__":

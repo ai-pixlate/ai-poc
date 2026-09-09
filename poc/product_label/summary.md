@@ -15,6 +15,10 @@
 | `vlm_opus` | `model=claude-opus-5` `temperature=미지정(SDK 미지원)` `image=True` `image_max_side=1024` | 110 | 60 | 55% | 53.29s | $0.2128 |
 | `vlm_relation` | `model=gemini-3.8-flash` `temperature=0` `image=True` `image_max_side=1024` | 110 | 60 | 55% | 41.85s | $0.027 |
 
+**판정 제외** — 실행 결과는 1·2장에 남기되 판정표에서는 뺌.
+
+- `vlm_opus` — `vlm_relation`과 110블록 전부 동일 판정 — 판정 불필요 (2026-09-09)
+
 ## 2. 이미지별 라벨 판정 수 (기계 집계 — 정오 아님)
 
 | 이미지 | 블록 | `bg_texture` | `mask_overlap` | `poly_skew` | `role_ext` | `vlm_opus` | `vlm_relation` |
@@ -67,73 +71,61 @@
 | 1.jpg | `mask_overlap` | 7 | 1 |  |  |  | `results/mask_overlap/vis/1.jpg` |
 | 1.jpg | `poly_skew` | 7 | 4 |  |  |  | `results/poly_skew/vis/1.jpg` |
 | 1.jpg | `role_ext` | 7 | 3 |  |  |  | `results/role_ext/vis/1.jpg` |
-| 1.jpg | `vlm_opus` | 7 | 3 |  |  |  | `results/vlm_opus/vis/1.jpg` |
 | 1.jpg | `vlm_relation` | 7 | 3 |  |  |  | `results/vlm_relation/vis/1.jpg` |
 | 2.jpg | `bg_texture` | 7 | 6 |  |  |  | `results/bg_texture/vis/2.jpg` |
 | 2.jpg | `mask_overlap` | 7 | 3 |  |  |  | `results/mask_overlap/vis/2.jpg` |
 | 2.jpg | `poly_skew` | 7 | 3 |  |  |  | `results/poly_skew/vis/2.jpg` |
 | 2.jpg | `role_ext` | 7 | 3 |  |  |  | `results/role_ext/vis/2.jpg` |
-| 2.jpg | `vlm_opus` | 7 | 3 |  |  |  | `results/vlm_opus/vis/2.jpg` |
 | 2.jpg | `vlm_relation` | 7 | 3 |  |  |  | `results/vlm_relation/vis/2.jpg` |
 | 3.jpg | `bg_texture` | 1 | 1 |  |  |  | `results/bg_texture/vis/3.jpg` |
 | 3.jpg | `mask_overlap` | 1 | 1 |  |  |  | `results/mask_overlap/vis/3.jpg` |
 | 3.jpg | `poly_skew` | 1 | 1 |  |  |  | `results/poly_skew/vis/3.jpg` |
 | 3.jpg | `role_ext` | 1 | 1 |  |  |  | `results/role_ext/vis/3.jpg` |
-| 3.jpg | `vlm_opus` | 1 | 1 |  |  |  | `results/vlm_opus/vis/3.jpg` |
 | 3.jpg | `vlm_relation` | 1 | 1 |  |  |  | `results/vlm_relation/vis/3.jpg` |
 | 4.jpg | `bg_texture` | 3 | 3 |  |  |  | `results/bg_texture/vis/4.jpg` |
 | 4.jpg | `mask_overlap` | 3 | 2 |  |  |  | `results/mask_overlap/vis/4.jpg` |
 | 4.jpg | `poly_skew` | 3 | 1 |  |  |  | `results/poly_skew/vis/4.jpg` |
 | 4.jpg | `role_ext` | 3 | 0 |  |  |  | `results/role_ext/vis/4.jpg` |
-| 4.jpg | `vlm_opus` | 3 | 0 |  |  |  | `results/vlm_opus/vis/4.jpg` |
 | 4.jpg | `vlm_relation` | 3 | 0 |  |  |  | `results/vlm_relation/vis/4.jpg` |
 | 5.jpg | `bg_texture` | 17 | 8 |  |  |  | `results/bg_texture/vis/5.jpg` |
 | 5.jpg | `mask_overlap` | 17 | 12 |  |  |  | `results/mask_overlap/vis/5.jpg` |
 | 5.jpg | `poly_skew` | 17 | 11 |  |  |  | `results/poly_skew/vis/5.jpg` |
 | 5.jpg | `role_ext` | 17 | 16 |  |  |  | `results/role_ext/vis/5.jpg` |
-| 5.jpg | `vlm_opus` | 17 | 16 |  |  |  | `results/vlm_opus/vis/5.jpg` |
 | 5.jpg | `vlm_relation` | 17 | 16 |  |  |  | `results/vlm_relation/vis/5.jpg` |
 | 6.jpg | `bg_texture` | 9 | 8 |  |  |  | `results/bg_texture/vis/6.jpg` |
 | 6.jpg | `mask_overlap` | 9 | 7 |  |  |  | `results/mask_overlap/vis/6.jpg` |
 | 6.jpg | `poly_skew` | 9 | 4 |  |  |  | `results/poly_skew/vis/6.jpg` |
 | 6.jpg | `role_ext` | 9 | 4 |  |  |  | `results/role_ext/vis/6.jpg` |
-| 6.jpg | `vlm_opus` | 9 | 4 |  |  |  | `results/vlm_opus/vis/6.jpg` |
 | 6.jpg | `vlm_relation` | 9 | 4 |  |  |  | `results/vlm_relation/vis/6.jpg` |
 | 7.jpg | `bg_texture` | 7 | 6 |  |  |  | `results/bg_texture/vis/7.jpg` |
 | 7.jpg | `mask_overlap` | 7 | 5 |  |  |  | `results/mask_overlap/vis/7.jpg` |
 | 7.jpg | `poly_skew` | 7 | 4 |  |  |  | `results/poly_skew/vis/7.jpg` |
 | 7.jpg | `role_ext` | 7 | 5 |  |  |  | `results/role_ext/vis/7.jpg` |
-| 7.jpg | `vlm_opus` | 7 | 5 |  |  |  | `results/vlm_opus/vis/7.jpg` |
 | 7.jpg | `vlm_relation` | 7 | 5 |  |  |  | `results/vlm_relation/vis/7.jpg` |
 | 8.jpg | `bg_texture` | 8 | 1 |  |  |  | `results/bg_texture/vis/8.jpg` |
 | 8.jpg | `mask_overlap` | 8 | 0 |  |  |  | `results/mask_overlap/vis/8.jpg` |
 | 8.jpg | `poly_skew` | 8 | 0 |  |  |  | `results/poly_skew/vis/8.jpg` |
 | 8.jpg | `role_ext` | 8 | 0 |  |  |  | `results/role_ext/vis/8.jpg` |
-| 8.jpg | `vlm_opus` | 8 | 0 |  |  |  | `results/vlm_opus/vis/8.jpg` |
 | 8.jpg | `vlm_relation` | 8 | 0 |  |  |  | `results/vlm_relation/vis/8.jpg` |
 | 9.jpg | `bg_texture` | 12 | 12 |  |  |  | `results/bg_texture/vis/9.jpg` |
 | 9.jpg | `mask_overlap` | 12 | 9 |  |  |  | `results/mask_overlap/vis/9.jpg` |
 | 9.jpg | `poly_skew` | 12 | 5 |  |  |  | `results/poly_skew/vis/9.jpg` |
 | 9.jpg | `role_ext` | 12 | 4 |  |  |  | `results/role_ext/vis/9.jpg` |
-| 9.jpg | `vlm_opus` | 12 | 4 |  |  |  | `results/vlm_opus/vis/9.jpg` |
 | 9.jpg | `vlm_relation` | 12 | 4 |  |  |  | `results/vlm_relation/vis/9.jpg` |
 | 10.jpg | `bg_texture` | 10 | 10 |  |  |  | `results/bg_texture/vis/10.jpg` |
 | 10.jpg | `mask_overlap` | 10 | 9 |  |  |  | `results/mask_overlap/vis/10.jpg` |
 | 10.jpg | `poly_skew` | 10 | 2 |  |  |  | `results/poly_skew/vis/10.jpg` |
 | 10.jpg | `role_ext` | 10 | 2 |  |  |  | `results/role_ext/vis/10.jpg` |
-| 10.jpg | `vlm_opus` | 10 | 2 |  |  |  | `results/vlm_opus/vis/10.jpg` |
 | 10.jpg | `vlm_relation` | 10 | 2 |  |  |  | `results/vlm_relation/vis/10.jpg` |
 | 11.jpg | `bg_texture` | 23 | 22 |  |  |  | `results/bg_texture/vis/11.jpg` |
 | 11.jpg | `mask_overlap` | 23 | 20 |  |  |  | `results/mask_overlap/vis/11.jpg` |
 | 11.jpg | `poly_skew` | 23 | 17 |  |  |  | `results/poly_skew/vis/11.jpg` |
 | 11.jpg | `role_ext` | 23 | 13 |  |  |  | `results/role_ext/vis/11.jpg` |
-| 11.jpg | `vlm_opus` | 23 | 20 |  |  |  | `results/vlm_opus/vis/11.jpg` |
 | 11.jpg | `vlm_relation` | 23 | 20 |  |  |  | `results/vlm_relation/vis/11.jpg` |
 | 12.jpg | `bg_texture` | 6 | 6 |  |  |  | `results/bg_texture/vis/12.jpg` |
 | 12.jpg | `mask_overlap` | 6 | 3 |  |  |  | `results/mask_overlap/vis/12.jpg` |
 | 12.jpg | `poly_skew` | 6 | 3 |  |  |  | `results/poly_skew/vis/12.jpg` |
 | 12.jpg | `role_ext` | 6 | 2 |  |  |  | `results/role_ext/vis/12.jpg` |
-| 12.jpg | `vlm_opus` | 6 | 2 |  |  |  | `results/vlm_opus/vis/12.jpg` |
 | 12.jpg | `vlm_relation` | 6 | 2 |  |  |  | `results/vlm_relation/vis/12.jpg` |
 
 ## 5. 집계
