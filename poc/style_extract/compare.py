@@ -156,19 +156,21 @@ def main() -> None:
     L.append("")
     L.append("**채울 칸은 `색`·`크기`·`정렬` 3개.** 이미지 단위 A/B/C. `영역`·`저대비`는 코드가 채움.")
     L.append("")
-    L.append("`vis/`는 원본 오른쪽에 **추출한 글자색·배경색 스와치**를 영역 번호 순으로 붙인 것."
-             " 원본 글자와 스와치를 나란히 놓고 대조하면 됨.")
+    L.append("**시각화는 `vis_target/` — 제품 라벨을 뺀 조판 대상만 그림.** 원본 오른쪽에"
+             " 추출한 글자색·배경색 스와치를 붙였음. 번호는 전체 뷰(`vis/`)와 같음.")
+    L.append("")
+    L.append("`영역`·`저대비`도 **조판 대상 기준**임. 라벨 포함 전체는 2장에 있음.")
     L.append("")
     L.append("| 이미지 | variant | 영역 | 저대비 | " + " | ".join(GRADE_COLS) + " | 시각화 |")
     L.append("|---|---|---|---|" + "---|" * len(GRADE_COLS) + "---|")
     for img in images:
         stem = Path(img).stem
         for n in names:
-            rs = rows[(n, img)]
+            rs = [r for r in rows[(n, img)] if not r["is_product_label"]]
             low = sum(1 for r in rs if r["contrast"] < CONTRAST_FLOOR)
             vals = filled.get((img, n), [""] * len(GRADE_COLS))
             L.append(f"| {img} | `{n}` | {len(rs)} | {low} | " + " | ".join(vals)
-                     + f" | `results/{n}/vis/{stem}.jpg` |")
+                     + f" | `results/{n}/vis_target/{stem}.jpg` |")
     L.append("")
 
     # 5. 집계

@@ -24,7 +24,9 @@ variant — 글자색을 어떻게 배경에서 갈라내는가
 
 출력
     results/{variant}/styles/{stem}.json   영역별 색·크기 + 블록별 정렬
-    results/{variant}/vis/{stem}.jpg       추출색 스와치를 원본 옆에 붙인 대조 이미지
+    results/{variant}/vis/{stem}.jpg        전체 영역
+    results/{variant}/vis_target/{stem}.jpg **조판 대상만** — 제품 라벨 제외.
+                                            번호는 전체 뷰와 같게 유지한다
     results/{variant}/meta.json            집계
 
 판정
@@ -157,16 +159,16 @@ def visualize(img_path: Path, rows: list[dict], out_path: Path) -> None:
     draw = ImageDraw.Draw(canvas)
     font = _font(size)
 
-    for i, r in enumerate(rows, 1):
+    for r in rows:
         x1, y1, x2, y2 = r["bbox"]
         draw.rectangle([x1, y1, x2, y2], outline=(120, 120, 120), width=1)
-        draw.text((x1, max(0, y1 - size - 2)), str(i), fill=(90, 90, 90), font=font)
+        draw.text((x1, max(0, y1 - size - 2)), str(r["no"]), fill=(90, 90, 90), font=font)
 
     # 오른쪽 띠 — 영역 번호 / 글자색 / 배경색 / 크기 / 정렬
-    for i, r in enumerate(rows, 1):
-        top = 4 + (i - 1) * row_h
+    for i, r in enumerate(rows):
+        top = 4 + i * row_h
         x = img.width + 6
-        draw.text((x, top), f"{i:>3}", fill=(60, 60, 60), font=font)
+        draw.text((x, top), f"{r['no']:>3}", fill=(60, 60, 60), font=font)
         draw.rectangle([x + 34, top, x + 34 + row_h - 6, top + row_h - 6],
                        fill=r["font_color"], outline=(180, 180, 180))
         draw.rectangle([x + 34 + row_h, top, x + 34 + 2 * row_h - 6, top + row_h - 6],
@@ -188,6 +190,7 @@ def run_variant(name: str, stems: list[str]) -> None:
     out_dir = RESULTS / name
     (out_dir / "styles").mkdir(parents=True, exist_ok=True)
     (out_dir / "vis").mkdir(parents=True, exist_ok=True)
+    (out_dir / "vis_target").mkdir(parents=True, exist_ok=True)
 
     print(f"[{name}]")
     per_image, aligns = [], {}
@@ -239,11 +242,19 @@ def run_variant(name: str, stems: list[str]) -> None:
                        ensure_ascii=False, indent=1),
             encoding="utf-8",
         )
+        for i, r in enumerate(rows, 1):
+            r["no"] = i
         visualize(img_path, rows, out_dir / "vis" / f"{stem}.jpg")
+        # 조판 대상만 — 제품 라벨은 하류에서 통째로 빠지므로 판정에서도 뺀다
+        target = [r for r in rows if not r["is_product_label"]]
+        visualize(img_path, target, out_dir / "vis_target" / f"{stem}.jpg")
         med = sorted(r["contrast"] for r in rows)[len(rows) // 2] if rows else 0
+        low = sum(1 for r in target if r["contrast"] < 1.5)
         per_image.append({"image": img_path.name, "regions": len(rows),
+                          "target_regions": len(target), "target_low_contrast": low,
                           "contrast_median": med})
-        print(f"  {img_path.name:<10} 영역 {len(rows):>3}  대비 중앙 {med}")
+        print(f"  {img_path.name:<10} 영역 {len(rows):>3}  조판 대상 {len(target):>3}  "
+              f"대비 중앙 {med}")
 
     meta = {
         "variant": name,

@@ -8,8 +8,8 @@
 
 | variant | 색 추출 방식 | 이미지 | 영역 | 소요 |
 |---|---|---|---|---|
-| `contrast_split` | 밝기 Otsu 이진화. 적은 쪽을 글자로 | 12 | 280 | 0.35s |
-| `dominant_color` | bbox 화소를 2색 군집(k-means). 적은 쪽을 글자로 | 12 | 280 | 0.62s |
+| `contrast_split` | 밝기 Otsu 이진화. 적은 쪽을 글자로 | 12 | 280 | 0.52s |
+| `dominant_color` | bbox 화소를 2색 군집(k-means). 적은 쪽을 글자로 | 12 | 280 | 0.71s |
 
 크기는 bbox 높이(글자 획 높이), em 환산 × **1.35**. 정렬 허용 오차는 블록 폭의 **12%**. 두 variant가 같음 — **변인은 색 추출 방식뿐임.**
 
@@ -39,34 +39,36 @@
 
 **채울 칸은 `색`·`크기`·`정렬` 3개.** 이미지 단위 A/B/C. `영역`·`저대비`는 코드가 채움.
 
-`vis/`는 원본 오른쪽에 **추출한 글자색·배경색 스와치**를 영역 번호 순으로 붙인 것. 원본 글자와 스와치를 나란히 놓고 대조하면 됨.
+**시각화는 `vis_target/` — 제품 라벨을 뺀 조판 대상만 그림.** 원본 오른쪽에 추출한 글자색·배경색 스와치를 붙였음. 번호는 전체 뷰(`vis/`)와 같음.
+
+`영역`·`저대비`도 **조판 대상 기준**임. 라벨 포함 전체는 2장에 있음.
 
 | 이미지 | variant | 영역 | 저대비 | 색 | 크기 | 정렬 | 비고 | 시각화 |
 |---|---|---|---|---|---|---|---|---|
-| 1.jpg | `contrast_split` | 13 | 2 |  |  |  |  | `results/contrast_split/vis/1.jpg` |
-| 1.jpg | `dominant_color` | 13 | 2 |  |  |  |  | `results/dominant_color/vis/1.jpg` |
-| 2.jpg | `contrast_split` | 18 | 4 |  |  |  |  | `results/contrast_split/vis/2.jpg` |
-| 2.jpg | `dominant_color` | 18 | 4 |  |  |  |  | `results/dominant_color/vis/2.jpg` |
-| 3.jpg | `contrast_split` | 5 | 1 |  |  |  |  | `results/contrast_split/vis/3.jpg` |
-| 3.jpg | `dominant_color` | 5 | 1 |  |  |  |  | `results/dominant_color/vis/3.jpg` |
-| 4.jpg | `contrast_split` | 11 | 0 |  |  |  |  | `results/contrast_split/vis/4.jpg` |
-| 4.jpg | `dominant_color` | 11 | 0 |  |  |  |  | `results/dominant_color/vis/4.jpg` |
-| 5.jpg | `contrast_split` | 38 | 9 |  |  |  |  | `results/contrast_split/vis/5.jpg` |
-| 5.jpg | `dominant_color` | 38 | 9 |  |  |  |  | `results/dominant_color/vis/5.jpg` |
-| 6.jpg | `contrast_split` | 28 | 0 |  |  |  |  | `results/contrast_split/vis/6.jpg` |
-| 6.jpg | `dominant_color` | 28 | 0 |  |  |  |  | `results/dominant_color/vis/6.jpg` |
-| 7.jpg | `contrast_split` | 34 | 0 |  |  |  |  | `results/contrast_split/vis/7.jpg` |
-| 7.jpg | `dominant_color` | 34 | 0 |  |  |  |  | `results/dominant_color/vis/7.jpg` |
-| 8.jpg | `contrast_split` | 14 | 2 |  |  |  |  | `results/contrast_split/vis/8.jpg` |
-| 8.jpg | `dominant_color` | 14 | 2 |  |  |  |  | `results/dominant_color/vis/8.jpg` |
-| 9.jpg | `contrast_split` | 39 | 0 |  |  |  |  | `results/contrast_split/vis/9.jpg` |
-| 9.jpg | `dominant_color` | 39 | 0 |  |  |  |  | `results/dominant_color/vis/9.jpg` |
-| 10.jpg | `contrast_split` | 17 | 0 |  |  |  |  | `results/contrast_split/vis/10.jpg` |
-| 10.jpg | `dominant_color` | 17 | 0 |  |  |  |  | `results/dominant_color/vis/10.jpg` |
-| 11.jpg | `contrast_split` | 46 | 0 |  |  |  |  | `results/contrast_split/vis/11.jpg` |
-| 11.jpg | `dominant_color` | 46 | 0 |  |  |  |  | `results/dominant_color/vis/11.jpg` |
-| 12.jpg | `contrast_split` | 17 | 0 |  |  |  |  | `results/contrast_split/vis/12.jpg` |
-| 12.jpg | `dominant_color` | 17 | 0 |  |  |  |  | `results/dominant_color/vis/12.jpg` |
+| 1.jpg | `contrast_split` | 10 | 0 |  |  |  |  | `results/contrast_split/vis_target/1.jpg` |
+| 1.jpg | `dominant_color` | 10 | 0 |  |  |  |  | `results/dominant_color/vis_target/1.jpg` |
+| 2.jpg | `contrast_split` | 10 | 0 |  |  |  |  | `results/contrast_split/vis_target/2.jpg` |
+| 2.jpg | `dominant_color` | 10 | 0 |  |  |  |  | `results/dominant_color/vis_target/2.jpg` |
+| 3.jpg | `contrast_split` | 0 | 0 |  |  |  |  | `results/contrast_split/vis_target/3.jpg` |
+| 3.jpg | `dominant_color` | 0 | 0 |  |  |  |  | `results/dominant_color/vis_target/3.jpg` |
+| 4.jpg | `contrast_split` | 11 | 0 |  |  |  |  | `results/contrast_split/vis_target/4.jpg` |
+| 4.jpg | `dominant_color` | 11 | 0 |  |  |  |  | `results/dominant_color/vis_target/4.jpg` |
+| 5.jpg | `contrast_split` | 2 | 0 |  |  |  |  | `results/contrast_split/vis_target/5.jpg` |
+| 5.jpg | `dominant_color` | 2 | 0 |  |  |  |  | `results/dominant_color/vis_target/5.jpg` |
+| 6.jpg | `contrast_split` | 12 | 0 |  |  |  |  | `results/contrast_split/vis_target/6.jpg` |
+| 6.jpg | `dominant_color` | 12 | 0 |  |  |  |  | `results/dominant_color/vis_target/6.jpg` |
+| 7.jpg | `contrast_split` | 4 | 0 |  |  |  |  | `results/contrast_split/vis_target/7.jpg` |
+| 7.jpg | `dominant_color` | 4 | 0 |  |  |  |  | `results/dominant_color/vis_target/7.jpg` |
+| 8.jpg | `contrast_split` | 14 | 2 |  |  |  |  | `results/contrast_split/vis_target/8.jpg` |
+| 8.jpg | `dominant_color` | 14 | 2 |  |  |  |  | `results/dominant_color/vis_target/8.jpg` |
+| 9.jpg | `contrast_split` | 15 | 0 |  |  |  |  | `results/contrast_split/vis_target/9.jpg` |
+| 9.jpg | `dominant_color` | 15 | 0 |  |  |  |  | `results/dominant_color/vis_target/9.jpg` |
+| 10.jpg | `contrast_split` | 15 | 0 |  |  |  |  | `results/contrast_split/vis_target/10.jpg` |
+| 10.jpg | `dominant_color` | 15 | 0 |  |  |  |  | `results/dominant_color/vis_target/10.jpg` |
+| 11.jpg | `contrast_split` | 8 | 0 |  |  |  |  | `results/contrast_split/vis_target/11.jpg` |
+| 11.jpg | `dominant_color` | 8 | 0 |  |  |  |  | `results/dominant_color/vis_target/11.jpg` |
+| 12.jpg | `contrast_split` | 9 | 0 |  |  |  |  | `results/contrast_split/vis_target/12.jpg` |
+| 12.jpg | `dominant_color` | 9 | 0 |  |  |  |  | `results/dominant_color/vis_target/12.jpg` |
 
 ## 5. 집계
 
