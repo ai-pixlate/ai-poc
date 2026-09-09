@@ -9,6 +9,8 @@
 
 # 실행 산출물 — 용량이 크고 재생성 가능
 poc/*/results/
+poc/*/results_*/
+poc/*/translations/
 poc/*/cache/
 poc/C_translate/scores/
 
