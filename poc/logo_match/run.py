@@ -9,9 +9,11 @@
 템플릿을 잘라낸 **원래 자리는 무조건 맞는다.** 그 자리는 평가에서 뺀다(`is_source`).
 
 variant
-    template_gray  다중 스케일 밝기 정규화 상관(NCC). 색이 같으면 가장 정확하다
-    template_edge  윤곽선(Canny)끼리 매칭. 흰 로고/검은 로고처럼 색이 뒤집혀도 잡는다
-    feature_orb    ORB 특징점 + 호모그래피. 기울어지거나 크기가 크게 다를 때 강하다
+    template_gray     다중 스케일 밝기 정규화 상관(NCC). 색이 같으면 가장 정확하다
+    template_edge     윤곽선(Canny)끼리 매칭. 흰 로고/검은 로고처럼 색이 뒤집혀도 잡는다
+    feature_orb       ORB 특징점 + 호모그래피. 기울어지거나 크기가 크게 다를 때 강하다
+    template_gray_lo  template_gray와 같고 임계만 0.80 → 0.60
+    template_edge_lo  template_edge와 같고 임계만 0.45 → 0.30
 
 판정
     **오탐이 놓침보다 나쁘다.** 놓침은 "확인 필요"로 드러나지만, 오탐은 멀쩡한
@@ -53,6 +55,10 @@ RESULTS = HERE / "results"
 LOGOS = [
     ("b.clinicx", "images_A000000213548/A000000213548_002.jpg", (385, 170, 615, 230)),
     ("goodal", "images_A000000219554/A000000219554_002.jpg", (530, 33868, 760, 33965)),
+    # goodal의 두 번째 로고 형태(세리프체). 1차 실행에서 219554_001 하단 페이지 로고를
+    # 타원 템플릿으로 못 잡았다. **튜브 인쇄분에서 잘라** 그 페이지 로고를 처음 보는
+    # 대상으로 남긴다 — 페이지 로고에서 자르면 원래 자리라 평가에서 빠진다.
+    ("goodal_serif", "images_A000000219554/A000000219554_002.jpg", (615, 5280, 727, 5325)),
 ]
 
 SCALES = tuple(round(0.4 + 0.1 * i, 2) for i in range(17))   # 0.4 ~ 2.0
@@ -61,6 +67,10 @@ VARIANTS: dict[str, dict] = {
     "template_gray": {"method": "gray", "thresh": 0.80},
     "template_edge": {"method": "edge", "thresh": 0.45},
     "feature_orb": {"method": "orb", "min_inliers": 12},
+    # 임계를 낮춘 쌍 — 1차에서 0.60~0.63 미달 후보가 전부 실제 로고였다.
+    # 낮추면 오탐이 실제로 늘어나는지 본다.
+    "template_gray_lo": {"method": "gray", "thresh": 0.60},
+    "template_edge_lo": {"method": "edge", "thresh": 0.30},
 }
 
 NMS_IOU = 0.3      # 겹치는 후보는 점수 높은 것 하나만

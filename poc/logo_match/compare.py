@@ -27,8 +27,9 @@ RESULTS = HERE / "results"
 OUT = HERE / "summary.md"
 
 # 로고 → 그 로고의 브랜드 페이지 폴더
-HOME = {"b.clinicx": "images_A000000213548", "goodal": "images_A000000219554"}
-ORDER = ("template_gray", "template_edge", "feature_orb")
+HOME = {"b.clinicx": "images_A000000213548", "goodal": "images_A000000219554",
+        "goodal_serif": "images_A000000219554"}
+ORDER = ("template_gray", "template_gray_lo", "template_edge", "template_edge_lo", "feature_orb")
 COUNT_COLS = ["찾음", "놓침", "오탐", "비고"]
 
 
@@ -77,7 +78,8 @@ def main() -> None:
     L += ["## 1. 실행 조건", "",
           "| variant | 방식 | 임계 | 소요 |", "|---|---|---|---|"]
     how = {"template_gray": "다중 스케일 밝기 매칭(NCC)", "template_edge": "윤곽선끼리 매칭",
-           "feature_orb": "ORB 특징점 + 호모그래피"}
+           "feature_orb": "ORB 특징점 + 호모그래피",
+           "template_gray_lo": "밝기 매칭 · **임계만 낮춤**", "template_edge_lo": "윤곽선 매칭 · **임계만 낮춤**"}
     for v in names:
         cfg = metas[v]["cfg"]
         thr = cfg.get("thresh", cfg.get("min_inliers"))
