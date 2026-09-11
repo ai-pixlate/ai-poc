@@ -40,118 +40,124 @@
 
 | 이미지 | 로고 | variant | 통과 | 찾음 | 놓침 | 오탐 | 비고 | 시각화 |
 |---|---|---|---|---|---|---|---|---|
-| A000000213548_001.jpg | `b.clinicx` | `template_gray` | 0 |  |  |  |  | `results/template_gray/vis/A000000213548_001.jpg` |
-| A000000213548_001.jpg | `b.clinicx` | `template_gray_lo` | 0 |  |  |  |  | `results/template_gray_lo/vis/A000000213548_001.jpg` |
-| A000000213548_001.jpg | `b.clinicx` | `template_edge` | 0 |  |  |  |  | `results/template_edge/vis/A000000213548_001.jpg` |
-| A000000213548_001.jpg | `b.clinicx` | `template_edge_lo` | 0 |  |  |  |  | `results/template_edge_lo/vis/A000000213548_001.jpg` |
-| A000000213548_001.jpg | `b.clinicx` | `feature_orb` | 0 |  |  |  |  | `results/feature_orb/vis/A000000213548_001.jpg` |
-| A000000213548_002.jpg | `b.clinicx` | `template_gray` | 1 |  |  |  |  | `results/template_gray/vis/A000000213548_002.jpg` |
-| A000000213548_002.jpg | `b.clinicx` | `template_gray_lo` | 1 |  |  |  |  | `results/template_gray_lo/vis/A000000213548_002.jpg` |
-| A000000213548_002.jpg | `b.clinicx` | `template_edge` | 1 |  |  |  |  | `results/template_edge/vis/A000000213548_002.jpg` |
-| A000000213548_002.jpg | `b.clinicx` | `template_edge_lo` | 1 |  |  |  |  | `results/template_edge_lo/vis/A000000213548_002.jpg` |
-| A000000213548_002.jpg | `b.clinicx` | `feature_orb` | 0 |  |  |  |  | `results/feature_orb/vis/A000000213548_002.jpg` |
-| A000000213548_003.jpg | `b.clinicx` | `template_gray` | 0 |  |  |  |  | `results/template_gray/vis/A000000213548_003.jpg` |
-| A000000213548_003.jpg | `b.clinicx` | `template_gray_lo` | 0 |  |  |  |  | `results/template_gray_lo/vis/A000000213548_003.jpg` |
-| A000000213548_003.jpg | `b.clinicx` | `template_edge` | 0 |  |  |  |  | `results/template_edge/vis/A000000213548_003.jpg` |
-| A000000213548_003.jpg | `b.clinicx` | `template_edge_lo` | 0 |  |  |  |  | `results/template_edge_lo/vis/A000000213548_003.jpg` |
-| A000000213548_003.jpg | `b.clinicx` | `feature_orb` | 0 |  |  |  |  | `results/feature_orb/vis/A000000213548_003.jpg` |
-| A000000213548_004.jpg | `b.clinicx` | `template_gray` | 0 |  |  |  |  | `results/template_gray/vis/A000000213548_004.jpg` |
-| A000000213548_004.jpg | `b.clinicx` | `template_gray_lo` | 0 |  |  |  |  | `results/template_gray_lo/vis/A000000213548_004.jpg` |
-| A000000213548_004.jpg | `b.clinicx` | `template_edge` | 0 |  |  |  |  | `results/template_edge/vis/A000000213548_004.jpg` |
-| A000000213548_004.jpg | `b.clinicx` | `template_edge_lo` | 0 |  |  |  |  | `results/template_edge_lo/vis/A000000213548_004.jpg` |
-| A000000213548_004.jpg | `b.clinicx` | `feature_orb` | 0 |  |  |  |  | `results/feature_orb/vis/A000000213548_004.jpg` |
-| A000000213548_005.jpg | `b.clinicx` | `template_gray` | 0 |  |  |  |  | `results/template_gray/vis/A000000213548_005.jpg` |
-| A000000213548_005.jpg | `b.clinicx` | `template_gray_lo` | 0 |  |  |  |  | `results/template_gray_lo/vis/A000000213548_005.jpg` |
-| A000000213548_005.jpg | `b.clinicx` | `template_edge` | 0 |  |  |  |  | `results/template_edge/vis/A000000213548_005.jpg` |
-| A000000213548_005.jpg | `b.clinicx` | `template_edge_lo` | 0 |  |  |  |  | `results/template_edge_lo/vis/A000000213548_005.jpg` |
-| A000000213548_005.jpg | `b.clinicx` | `feature_orb` | 0 |  |  |  |  | `results/feature_orb/vis/A000000213548_005.jpg` |
-| A000000213548_006.jpg | `b.clinicx` | `template_gray` | 0 |  |  |  |  | `results/template_gray/vis/A000000213548_006.jpg` |
-| A000000213548_006.jpg | `b.clinicx` | `template_gray_lo` | 0 |  |  |  |  | `results/template_gray_lo/vis/A000000213548_006.jpg` |
-| A000000213548_006.jpg | `b.clinicx` | `template_edge` | 0 |  |  |  |  | `results/template_edge/vis/A000000213548_006.jpg` |
-| A000000213548_006.jpg | `b.clinicx` | `template_edge_lo` | 0 |  |  |  |  | `results/template_edge_lo/vis/A000000213548_006.jpg` |
-| A000000213548_006.jpg | `b.clinicx` | `feature_orb` | 0 |  |  |  |  | `results/feature_orb/vis/A000000213548_006.jpg` |
-| A000000213548_007.jpg | `b.clinicx` | `template_gray` | 0 |  |  |  |  | `results/template_gray/vis/A000000213548_007.jpg` |
-| A000000213548_007.jpg | `b.clinicx` | `template_gray_lo` | 0 |  |  |  |  | `results/template_gray_lo/vis/A000000213548_007.jpg` |
-| A000000213548_007.jpg | `b.clinicx` | `template_edge` | 0 |  |  |  |  | `results/template_edge/vis/A000000213548_007.jpg` |
-| A000000213548_007.jpg | `b.clinicx` | `template_edge_lo` | 0 |  |  |  |  | `results/template_edge_lo/vis/A000000213548_007.jpg` |
-| A000000213548_007.jpg | `b.clinicx` | `feature_orb` | 0 |  |  |  |  | `results/feature_orb/vis/A000000213548_007.jpg` |
-| A000000213548_008.jpg | `b.clinicx` | `template_gray` | 0 |  |  |  |  | `results/template_gray/vis/A000000213548_008.jpg` |
-| A000000213548_008.jpg | `b.clinicx` | `template_gray_lo` | 0 |  |  |  |  | `results/template_gray_lo/vis/A000000213548_008.jpg` |
-| A000000213548_008.jpg | `b.clinicx` | `template_edge` | 0 |  |  |  |  | `results/template_edge/vis/A000000213548_008.jpg` |
-| A000000213548_008.jpg | `b.clinicx` | `template_edge_lo` | 0 |  |  |  |  | `results/template_edge_lo/vis/A000000213548_008.jpg` |
-| A000000213548_008.jpg | `b.clinicx` | `feature_orb` | 0 |  |  |  |  | `results/feature_orb/vis/A000000213548_008.jpg` |
-| A000000213548_009.jpg | `b.clinicx` | `template_gray` | 0 |  |  |  |  | `results/template_gray/vis/A000000213548_009.jpg` |
-| A000000213548_009.jpg | `b.clinicx` | `template_gray_lo` | 0 |  |  |  |  | `results/template_gray_lo/vis/A000000213548_009.jpg` |
-| A000000213548_009.jpg | `b.clinicx` | `template_edge` | 0 |  |  |  |  | `results/template_edge/vis/A000000213548_009.jpg` |
-| A000000213548_009.jpg | `b.clinicx` | `template_edge_lo` | 0 |  |  |  |  | `results/template_edge_lo/vis/A000000213548_009.jpg` |
-| A000000213548_009.jpg | `b.clinicx` | `feature_orb` | 0 |  |  |  |  | `results/feature_orb/vis/A000000213548_009.jpg` |
-| A000000213548_010.jpg | `b.clinicx` | `template_gray` | 0 |  |  |  |  | `results/template_gray/vis/A000000213548_010.jpg` |
-| A000000213548_010.jpg | `b.clinicx` | `template_gray_lo` | 0 |  |  |  |  | `results/template_gray_lo/vis/A000000213548_010.jpg` |
-| A000000213548_010.jpg | `b.clinicx` | `template_edge` | 0 |  |  |  |  | `results/template_edge/vis/A000000213548_010.jpg` |
-| A000000213548_010.jpg | `b.clinicx` | `template_edge_lo` | 0 |  |  |  |  | `results/template_edge_lo/vis/A000000213548_010.jpg` |
-| A000000213548_010.jpg | `b.clinicx` | `feature_orb` | 0 |  |  |  |  | `results/feature_orb/vis/A000000213548_010.jpg` |
-| A000000213548_011.jpg | `b.clinicx` | `template_gray` | 0 |  |  |  |  | `results/template_gray/vis/A000000213548_011.jpg` |
-| A000000213548_011.jpg | `b.clinicx` | `template_gray_lo` | 0 |  |  |  |  | `results/template_gray_lo/vis/A000000213548_011.jpg` |
-| A000000213548_011.jpg | `b.clinicx` | `template_edge` | 0 |  |  |  |  | `results/template_edge/vis/A000000213548_011.jpg` |
-| A000000213548_011.jpg | `b.clinicx` | `template_edge_lo` | 0 |  |  |  |  | `results/template_edge_lo/vis/A000000213548_011.jpg` |
-| A000000213548_011.jpg | `b.clinicx` | `feature_orb` | 0 |  |  |  |  | `results/feature_orb/vis/A000000213548_011.jpg` |
-| A000000213548_012.jpg | `b.clinicx` | `template_gray` | 0 |  |  |  |  | `results/template_gray/vis/A000000213548_012.jpg` |
-| A000000213548_012.jpg | `b.clinicx` | `template_gray_lo` | 0 |  |  |  |  | `results/template_gray_lo/vis/A000000213548_012.jpg` |
-| A000000213548_012.jpg | `b.clinicx` | `template_edge` | 0 |  |  |  |  | `results/template_edge/vis/A000000213548_012.jpg` |
-| A000000213548_012.jpg | `b.clinicx` | `template_edge_lo` | 0 |  |  |  |  | `results/template_edge_lo/vis/A000000213548_012.jpg` |
-| A000000213548_012.jpg | `b.clinicx` | `feature_orb` | 0 |  |  |  |  | `results/feature_orb/vis/A000000213548_012.jpg` |
-| A000000213548_013.jpg | `b.clinicx` | `template_gray` | 0 |  |  |  |  | `results/template_gray/vis/A000000213548_013.jpg` |
-| A000000213548_013.jpg | `b.clinicx` | `template_gray_lo` | 0 |  |  |  |  | `results/template_gray_lo/vis/A000000213548_013.jpg` |
-| A000000213548_013.jpg | `b.clinicx` | `template_edge` | 0 |  |  |  |  | `results/template_edge/vis/A000000213548_013.jpg` |
-| A000000213548_013.jpg | `b.clinicx` | `template_edge_lo` | 0 |  |  |  |  | `results/template_edge_lo/vis/A000000213548_013.jpg` |
-| A000000213548_013.jpg | `b.clinicx` | `feature_orb` | 0 |  |  |  |  | `results/feature_orb/vis/A000000213548_013.jpg` |
-| A000000213548_014.jpg | `b.clinicx` | `template_gray` | 0 |  |  |  |  | `results/template_gray/vis/A000000213548_014.jpg` |
-| A000000213548_014.jpg | `b.clinicx` | `template_gray_lo` | 0 |  |  |  |  | `results/template_gray_lo/vis/A000000213548_014.jpg` |
-| A000000213548_014.jpg | `b.clinicx` | `template_edge` | 0 |  |  |  |  | `results/template_edge/vis/A000000213548_014.jpg` |
-| A000000213548_014.jpg | `b.clinicx` | `template_edge_lo` | 0 |  |  |  |  | `results/template_edge_lo/vis/A000000213548_014.jpg` |
-| A000000213548_014.jpg | `b.clinicx` | `feature_orb` | 0 |  |  |  |  | `results/feature_orb/vis/A000000213548_014.jpg` |
-| A000000213548_015.jpg | `b.clinicx` | `template_gray` | 0 |  |  |  |  | `results/template_gray/vis/A000000213548_015.jpg` |
-| A000000213548_015.jpg | `b.clinicx` | `template_gray_lo` | 0 |  |  |  |  | `results/template_gray_lo/vis/A000000213548_015.jpg` |
-| A000000213548_015.jpg | `b.clinicx` | `template_edge` | 0 |  |  |  |  | `results/template_edge/vis/A000000213548_015.jpg` |
-| A000000213548_015.jpg | `b.clinicx` | `template_edge_lo` | 0 |  |  |  |  | `results/template_edge_lo/vis/A000000213548_015.jpg` |
-| A000000213548_015.jpg | `b.clinicx` | `feature_orb` | 0 |  |  |  |  | `results/feature_orb/vis/A000000213548_015.jpg` |
-| A000000213548_016.jpg | `b.clinicx` | `template_gray` | 0 |  |  |  |  | `results/template_gray/vis/A000000213548_016.jpg` |
-| A000000213548_016.jpg | `b.clinicx` | `template_gray_lo` | 0 |  |  |  |  | `results/template_gray_lo/vis/A000000213548_016.jpg` |
-| A000000213548_016.jpg | `b.clinicx` | `template_edge` | 0 |  |  |  |  | `results/template_edge/vis/A000000213548_016.jpg` |
-| A000000213548_016.jpg | `b.clinicx` | `template_edge_lo` | 0 |  |  |  |  | `results/template_edge_lo/vis/A000000213548_016.jpg` |
-| A000000213548_016.jpg | `b.clinicx` | `feature_orb` | 0 |  |  |  |  | `results/feature_orb/vis/A000000213548_016.jpg` |
-| A000000213548_017.jpg | `b.clinicx` | `template_gray` | 0 |  |  |  |  | `results/template_gray/vis/A000000213548_017.jpg` |
-| A000000213548_017.jpg | `b.clinicx` | `template_gray_lo` | 0 |  |  |  |  | `results/template_gray_lo/vis/A000000213548_017.jpg` |
-| A000000213548_017.jpg | `b.clinicx` | `template_edge` | 0 |  |  |  |  | `results/template_edge/vis/A000000213548_017.jpg` |
-| A000000213548_017.jpg | `b.clinicx` | `template_edge_lo` | 0 |  |  |  |  | `results/template_edge_lo/vis/A000000213548_017.jpg` |
-| A000000213548_017.jpg | `b.clinicx` | `feature_orb` | 0 |  |  |  |  | `results/feature_orb/vis/A000000213548_017.jpg` |
-| A000000213548_018.jpg | `b.clinicx` | `template_gray` | 1 |  |  |  |  | `results/template_gray/vis/A000000213548_018.jpg` |
-| A000000213548_018.jpg | `b.clinicx` | `template_gray_lo` | 2 |  |  |  |  | `results/template_gray_lo/vis/A000000213548_018.jpg` |
-| A000000213548_018.jpg | `b.clinicx` | `template_edge` | 1 |  |  |  |  | `results/template_edge/vis/A000000213548_018.jpg` |
-| A000000213548_018.jpg | `b.clinicx` | `template_edge_lo` | 1 |  |  |  |  | `results/template_edge_lo/vis/A000000213548_018.jpg` |
-| A000000213548_018.jpg | `b.clinicx` | `feature_orb` | 0 |  |  |  |  | `results/feature_orb/vis/A000000213548_018.jpg` |
-| A000000219554_001.jpg | `goodal` | `template_gray` | 0 |  |  |  |  | `results/template_gray/vis/A000000219554_001.jpg` |
-| A000000219554_001.jpg | `goodal` | `template_gray_lo` | 1 |  |  |  |  | `results/template_gray_lo/vis/A000000219554_001.jpg` |
-| A000000219554_001.jpg | `goodal` | `template_edge` | 0 |  |  |  |  | `results/template_edge/vis/A000000219554_001.jpg` |
-| A000000219554_001.jpg | `goodal` | `template_edge_lo` | 0 |  |  |  |  | `results/template_edge_lo/vis/A000000219554_001.jpg` |
-| A000000219554_001.jpg | `goodal` | `feature_orb` | 0 |  |  |  |  | `results/feature_orb/vis/A000000219554_001.jpg` |
-| A000000219554_002.jpg | `goodal` | `template_gray` | 0 |  |  |  |  | `results/template_gray/vis/A000000219554_002.jpg` |
-| A000000219554_002.jpg | `goodal` | `template_gray_lo` | 1 |  |  |  |  | `results/template_gray_lo/vis/A000000219554_002.jpg` |
-| A000000219554_002.jpg | `goodal` | `template_edge` | 0 |  |  |  |  | `results/template_edge/vis/A000000219554_002.jpg` |
-| A000000219554_002.jpg | `goodal` | `template_edge_lo` | 1 |  |  |  |  | `results/template_edge_lo/vis/A000000219554_002.jpg` |
-| A000000219554_002.jpg | `goodal` | `feature_orb` | 0 |  |  |  |  | `results/feature_orb/vis/A000000219554_002.jpg` |
-| A000000219554_001.jpg | `goodal_serif` | `template_gray` | 0 |  |  |  |  | `results/template_gray/vis/A000000219554_001.jpg` |
-| A000000219554_001.jpg | `goodal_serif` | `template_gray_lo` | 2 |  |  |  |  | `results/template_gray_lo/vis/A000000219554_001.jpg` |
-| A000000219554_001.jpg | `goodal_serif` | `template_edge` | 1 |  |  |  |  | `results/template_edge/vis/A000000219554_001.jpg` |
-| A000000219554_001.jpg | `goodal_serif` | `template_edge_lo` | 9 |  |  |  |  | `results/template_edge_lo/vis/A000000219554_001.jpg` |
-| A000000219554_001.jpg | `goodal_serif` | `feature_orb` | 0 |  |  |  |  | `results/feature_orb/vis/A000000219554_001.jpg` |
-| A000000219554_002.jpg | `goodal_serif` | `template_gray` | 0 |  |  |  |  | `results/template_gray/vis/A000000219554_002.jpg` |
-| A000000219554_002.jpg | `goodal_serif` | `template_gray_lo` | 3 |  |  |  |  | `results/template_gray_lo/vis/A000000219554_002.jpg` |
-| A000000219554_002.jpg | `goodal_serif` | `template_edge` | 0 |  |  |  |  | `results/template_edge/vis/A000000219554_002.jpg` |
-| A000000219554_002.jpg | `goodal_serif` | `template_edge_lo` | 54 |  |  |  |  | `results/template_edge_lo/vis/A000000219554_002.jpg` |
-| A000000219554_002.jpg | `goodal_serif` | `feature_orb` | 0 |  |  |  |  | `results/feature_orb/vis/A000000219554_002.jpg` |
+| A000000213548_001.jpg | `b.clinicx` | `template_gray` | 0 | 0 | 0 | 0 | Claude 육안 판정 | `results/template_gray/vis/A000000213548_001.jpg` |
+| A000000213548_001.jpg | `b.clinicx` | `template_gray_lo` | 0 | 0 | 0 | 0 | Claude 육안 판정 | `results/template_gray_lo/vis/A000000213548_001.jpg` |
+| A000000213548_001.jpg | `b.clinicx` | `template_edge` | 0 | 0 | 0 | 0 | Claude 육안 판정 | `results/template_edge/vis/A000000213548_001.jpg` |
+| A000000213548_001.jpg | `b.clinicx` | `template_edge_lo` | 0 | 0 | 0 | 0 | Claude 육안 판정 | `results/template_edge_lo/vis/A000000213548_001.jpg` |
+| A000000213548_001.jpg | `b.clinicx` | `feature_orb` | 0 | 0 | 0 | 0 | Claude 육안 판정 | `results/feature_orb/vis/A000000213548_001.jpg` |
+| A000000213548_002.jpg | `b.clinicx` | `template_gray` | 1 | 1 | 0 | 0 | Claude 육안 판정 | `results/template_gray/vis/A000000213548_002.jpg` |
+| A000000213548_002.jpg | `b.clinicx` | `template_gray_lo` | 1 | 1 | 0 | 0 | Claude 육안 판정 | `results/template_gray_lo/vis/A000000213548_002.jpg` |
+| A000000213548_002.jpg | `b.clinicx` | `template_edge` | 1 | 1 | 0 | 0 | Claude 육안 판정 | `results/template_edge/vis/A000000213548_002.jpg` |
+| A000000213548_002.jpg | `b.clinicx` | `template_edge_lo` | 1 | 1 | 0 | 0 | Claude 육안 판정 | `results/template_edge_lo/vis/A000000213548_002.jpg` |
+| A000000213548_002.jpg | `b.clinicx` | `feature_orb` | 0 | 0 | 1 | 0 | Claude 육안 판정 | `results/feature_orb/vis/A000000213548_002.jpg` |
+| A000000213548_003.jpg | `b.clinicx` | `template_gray` | 0 | 0 | 0 | 0 | Claude 육안 판정 | `results/template_gray/vis/A000000213548_003.jpg` |
+| A000000213548_003.jpg | `b.clinicx` | `template_gray_lo` | 0 | 0 | 0 | 0 | Claude 육안 판정 | `results/template_gray_lo/vis/A000000213548_003.jpg` |
+| A000000213548_003.jpg | `b.clinicx` | `template_edge` | 0 | 0 | 0 | 0 | Claude 육안 판정 | `results/template_edge/vis/A000000213548_003.jpg` |
+| A000000213548_003.jpg | `b.clinicx` | `template_edge_lo` | 0 | 0 | 0 | 0 | Claude 육안 판정 | `results/template_edge_lo/vis/A000000213548_003.jpg` |
+| A000000213548_003.jpg | `b.clinicx` | `feature_orb` | 0 | 0 | 0 | 0 | Claude 육안 판정 | `results/feature_orb/vis/A000000213548_003.jpg` |
+| A000000213548_004.jpg | `b.clinicx` | `template_gray` | 0 | 0 | 0 | 0 | Claude 육안 판정 | `results/template_gray/vis/A000000213548_004.jpg` |
+| A000000213548_004.jpg | `b.clinicx` | `template_gray_lo` | 0 | 0 | 0 | 0 | Claude 육안 판정 | `results/template_gray_lo/vis/A000000213548_004.jpg` |
+| A000000213548_004.jpg | `b.clinicx` | `template_edge` | 0 | 0 | 0 | 0 | Claude 육안 판정 | `results/template_edge/vis/A000000213548_004.jpg` |
+| A000000213548_004.jpg | `b.clinicx` | `template_edge_lo` | 0 | 0 | 0 | 0 | Claude 육안 판정 | `results/template_edge_lo/vis/A000000213548_004.jpg` |
+| A000000213548_004.jpg | `b.clinicx` | `feature_orb` | 0 | 0 | 0 | 0 | Claude 육안 판정 | `results/feature_orb/vis/A000000213548_004.jpg` |
+| A000000213548_005.jpg | `b.clinicx` | `template_gray` | 0 | 0 | 0 | 0 | Claude 육안 판정 | `results/template_gray/vis/A000000213548_005.jpg` |
+| A000000213548_005.jpg | `b.clinicx` | `template_gray_lo` | 0 | 0 | 0 | 0 | Claude 육안 판정 | `results/template_gray_lo/vis/A000000213548_005.jpg` |
+| A000000213548_005.jpg | `b.clinicx` | `template_edge` | 0 | 0 | 0 | 0 | Claude 육안 판정 | `results/template_edge/vis/A000000213548_005.jpg` |
+| A000000213548_005.jpg | `b.clinicx` | `template_edge_lo` | 0 | 0 | 0 | 0 | Claude 육안 판정 | `results/template_edge_lo/vis/A000000213548_005.jpg` |
+| A000000213548_005.jpg | `b.clinicx` | `feature_orb` | 0 | 0 | 0 | 0 | Claude 육안 판정 | `results/feature_orb/vis/A000000213548_005.jpg` |
+| A000000213548_006.jpg | `b.clinicx` | `template_gray` | 0 | 0 | 0 | 0 | Claude 육안 판정 | `results/template_gray/vis/A000000213548_006.jpg` |
+| A000000213548_006.jpg | `b.clinicx` | `template_gray_lo` | 0 | 0 | 0 | 0 | Claude 육안 판정 | `results/template_gray_lo/vis/A000000213548_006.jpg` |
+| A000000213548_006.jpg | `b.clinicx` | `template_edge` | 0 | 0 | 0 | 0 | Claude 육안 판정 | `results/template_edge/vis/A000000213548_006.jpg` |
+| A000000213548_006.jpg | `b.clinicx` | `template_edge_lo` | 0 | 0 | 0 | 0 | Claude 육안 판정 | `results/template_edge_lo/vis/A000000213548_006.jpg` |
+| A000000213548_006.jpg | `b.clinicx` | `feature_orb` | 0 | 0 | 0 | 0 | Claude 육안 판정 | `results/feature_orb/vis/A000000213548_006.jpg` |
+| A000000213548_007.jpg | `b.clinicx` | `template_gray` | 0 | 0 | 0 | 0 | Claude 육안 판정 | `results/template_gray/vis/A000000213548_007.jpg` |
+| A000000213548_007.jpg | `b.clinicx` | `template_gray_lo` | 0 | 0 | 0 | 0 | Claude 육안 판정 | `results/template_gray_lo/vis/A000000213548_007.jpg` |
+| A000000213548_007.jpg | `b.clinicx` | `template_edge` | 0 | 0 | 0 | 0 | Claude 육안 판정 | `results/template_edge/vis/A000000213548_007.jpg` |
+| A000000213548_007.jpg | `b.clinicx` | `template_edge_lo` | 0 | 0 | 0 | 0 | Claude 육안 판정 | `results/template_edge_lo/vis/A000000213548_007.jpg` |
+| A000000213548_007.jpg | `b.clinicx` | `feature_orb` | 0 | 0 | 0 | 0 | Claude 육안 판정 | `results/feature_orb/vis/A000000213548_007.jpg` |
+| A000000213548_008.jpg | `b.clinicx` | `template_gray` | 0 | 0 | 0 | 0 | Claude 육안 판정 | `results/template_gray/vis/A000000213548_008.jpg` |
+| A000000213548_008.jpg | `b.clinicx` | `template_gray_lo` | 0 | 0 | 0 | 0 | Claude 육안 판정 | `results/template_gray_lo/vis/A000000213548_008.jpg` |
+| A000000213548_008.jpg | `b.clinicx` | `template_edge` | 0 | 0 | 0 | 0 | Claude 육안 판정 | `results/template_edge/vis/A000000213548_008.jpg` |
+| A000000213548_008.jpg | `b.clinicx` | `template_edge_lo` | 0 | 0 | 0 | 0 | Claude 육안 판정 | `results/template_edge_lo/vis/A000000213548_008.jpg` |
+| A000000213548_008.jpg | `b.clinicx` | `feature_orb` | 0 | 0 | 0 | 0 | Claude 육안 판정 | `results/feature_orb/vis/A000000213548_008.jpg` |
+| A000000213548_009.jpg | `b.clinicx` | `template_gray` | 0 | 0 | 0 | 0 | Claude 육안 판정 | `results/template_gray/vis/A000000213548_009.jpg` |
+| A000000213548_009.jpg | `b.clinicx` | `template_gray_lo` | 0 | 0 | 0 | 0 | Claude 육안 판정 | `results/template_gray_lo/vis/A000000213548_009.jpg` |
+| A000000213548_009.jpg | `b.clinicx` | `template_edge` | 0 | 0 | 0 | 0 | Claude 육안 판정 | `results/template_edge/vis/A000000213548_009.jpg` |
+| A000000213548_009.jpg | `b.clinicx` | `template_edge_lo` | 0 | 0 | 0 | 0 | Claude 육안 판정 | `results/template_edge_lo/vis/A000000213548_009.jpg` |
+| A000000213548_009.jpg | `b.clinicx` | `feature_orb` | 0 | 0 | 0 | 0 | Claude 육안 판정 | `results/feature_orb/vis/A000000213548_009.jpg` |
+| A000000213548_010.jpg | `b.clinicx` | `template_gray` | 0 | 0 | 0 | 0 | Claude 육안 판정 | `results/template_gray/vis/A000000213548_010.jpg` |
+| A000000213548_010.jpg | `b.clinicx` | `template_gray_lo` | 0 | 0 | 0 | 0 | Claude 육안 판정 | `results/template_gray_lo/vis/A000000213548_010.jpg` |
+| A000000213548_010.jpg | `b.clinicx` | `template_edge` | 0 | 0 | 0 | 0 | Claude 육안 판정 | `results/template_edge/vis/A000000213548_010.jpg` |
+| A000000213548_010.jpg | `b.clinicx` | `template_edge_lo` | 0 | 0 | 0 | 0 | Claude 육안 판정 | `results/template_edge_lo/vis/A000000213548_010.jpg` |
+| A000000213548_010.jpg | `b.clinicx` | `feature_orb` | 0 | 0 | 0 | 0 | Claude 육안 판정 | `results/feature_orb/vis/A000000213548_010.jpg` |
+| A000000213548_011.jpg | `b.clinicx` | `template_gray` | 0 | 0 | 0 | 0 | Claude 육안 판정 | `results/template_gray/vis/A000000213548_011.jpg` |
+| A000000213548_011.jpg | `b.clinicx` | `template_gray_lo` | 0 | 0 | 0 | 0 | Claude 육안 판정 | `results/template_gray_lo/vis/A000000213548_011.jpg` |
+| A000000213548_011.jpg | `b.clinicx` | `template_edge` | 0 | 0 | 0 | 0 | Claude 육안 판정 | `results/template_edge/vis/A000000213548_011.jpg` |
+| A000000213548_011.jpg | `b.clinicx` | `template_edge_lo` | 0 | 0 | 0 | 0 | Claude 육안 판정 | `results/template_edge_lo/vis/A000000213548_011.jpg` |
+| A000000213548_011.jpg | `b.clinicx` | `feature_orb` | 0 | 0 | 0 | 0 | Claude 육안 판정 | `results/feature_orb/vis/A000000213548_011.jpg` |
+| A000000213548_012.jpg | `b.clinicx` | `template_gray` | 0 | 0 | 0 | 0 | Claude 육안 판정 | `results/template_gray/vis/A000000213548_012.jpg` |
+| A000000213548_012.jpg | `b.clinicx` | `template_gray_lo` | 0 | 0 | 0 | 0 | Claude 육안 판정 | `results/template_gray_lo/vis/A000000213548_012.jpg` |
+| A000000213548_012.jpg | `b.clinicx` | `template_edge` | 0 | 0 | 0 | 0 | Claude 육안 판정 | `results/template_edge/vis/A000000213548_012.jpg` |
+| A000000213548_012.jpg | `b.clinicx` | `template_edge_lo` | 0 | 0 | 0 | 0 | Claude 육안 판정 | `results/template_edge_lo/vis/A000000213548_012.jpg` |
+| A000000213548_012.jpg | `b.clinicx` | `feature_orb` | 0 | 0 | 0 | 0 | Claude 육안 판정 | `results/feature_orb/vis/A000000213548_012.jpg` |
+| A000000213548_013.jpg | `b.clinicx` | `template_gray` | 0 | 0 | 0 | 0 | Claude 육안 판정 | `results/template_gray/vis/A000000213548_013.jpg` |
+| A000000213548_013.jpg | `b.clinicx` | `template_gray_lo` | 0 | 0 | 0 | 0 | Claude 육안 판정 | `results/template_gray_lo/vis/A000000213548_013.jpg` |
+| A000000213548_013.jpg | `b.clinicx` | `template_edge` | 0 | 0 | 0 | 0 | Claude 육안 판정 | `results/template_edge/vis/A000000213548_013.jpg` |
+| A000000213548_013.jpg | `b.clinicx` | `template_edge_lo` | 0 | 0 | 0 | 0 | Claude 육안 판정 | `results/template_edge_lo/vis/A000000213548_013.jpg` |
+| A000000213548_013.jpg | `b.clinicx` | `feature_orb` | 0 | 0 | 0 | 0 | Claude 육안 판정 | `results/feature_orb/vis/A000000213548_013.jpg` |
+| A000000213548_014.jpg | `b.clinicx` | `template_gray` | 0 | 0 | 0 | 0 | Claude 육안 판정 | `results/template_gray/vis/A000000213548_014.jpg` |
+| A000000213548_014.jpg | `b.clinicx` | `template_gray_lo` | 0 | 0 | 0 | 0 | Claude 육안 판정 | `results/template_gray_lo/vis/A000000213548_014.jpg` |
+| A000000213548_014.jpg | `b.clinicx` | `template_edge` | 0 | 0 | 0 | 0 | Claude 육안 판정 | `results/template_edge/vis/A000000213548_014.jpg` |
+| A000000213548_014.jpg | `b.clinicx` | `template_edge_lo` | 0 | 0 | 0 | 0 | Claude 육안 판정 | `results/template_edge_lo/vis/A000000213548_014.jpg` |
+| A000000213548_014.jpg | `b.clinicx` | `feature_orb` | 0 | 0 | 0 | 0 | Claude 육안 판정 | `results/feature_orb/vis/A000000213548_014.jpg` |
+| A000000213548_015.jpg | `b.clinicx` | `template_gray` | 0 | 0 | 0 | 0 | Claude 육안 판정 | `results/template_gray/vis/A000000213548_015.jpg` |
+| A000000213548_015.jpg | `b.clinicx` | `template_gray_lo` | 0 | 0 | 0 | 0 | Claude 육안 판정 | `results/template_gray_lo/vis/A000000213548_015.jpg` |
+| A000000213548_015.jpg | `b.clinicx` | `template_edge` | 0 | 0 | 0 | 0 | Claude 육안 판정 | `results/template_edge/vis/A000000213548_015.jpg` |
+| A000000213548_015.jpg | `b.clinicx` | `template_edge_lo` | 0 | 0 | 0 | 0 | Claude 육안 판정 | `results/template_edge_lo/vis/A000000213548_015.jpg` |
+| A000000213548_015.jpg | `b.clinicx` | `feature_orb` | 0 | 0 | 0 | 0 | Claude 육안 판정 | `results/feature_orb/vis/A000000213548_015.jpg` |
+| A000000213548_016.jpg | `b.clinicx` | `template_gray` | 0 | 0 | 0 | 0 | Claude 육안 판정 | `results/template_gray/vis/A000000213548_016.jpg` |
+| A000000213548_016.jpg | `b.clinicx` | `template_gray_lo` | 0 | 0 | 0 | 0 | Claude 육안 판정 | `results/template_gray_lo/vis/A000000213548_016.jpg` |
+| A000000213548_016.jpg | `b.clinicx` | `template_edge` | 0 | 0 | 0 | 0 | Claude 육안 판정 | `results/template_edge/vis/A000000213548_016.jpg` |
+| A000000213548_016.jpg | `b.clinicx` | `template_edge_lo` | 0 | 0 | 0 | 0 | Claude 육안 판정 | `results/template_edge_lo/vis/A000000213548_016.jpg` |
+| A000000213548_016.jpg | `b.clinicx` | `feature_orb` | 0 | 0 | 0 | 0 | Claude 육안 판정 | `results/feature_orb/vis/A000000213548_016.jpg` |
+| A000000213548_017.jpg | `b.clinicx` | `template_gray` | 0 | 0 | 0 | 0 | Claude 육안 판정 | `results/template_gray/vis/A000000213548_017.jpg` |
+| A000000213548_017.jpg | `b.clinicx` | `template_gray_lo` | 0 | 0 | 0 | 0 | Claude 육안 판정 | `results/template_gray_lo/vis/A000000213548_017.jpg` |
+| A000000213548_017.jpg | `b.clinicx` | `template_edge` | 0 | 0 | 0 | 0 | Claude 육안 판정 | `results/template_edge/vis/A000000213548_017.jpg` |
+| A000000213548_017.jpg | `b.clinicx` | `template_edge_lo` | 0 | 0 | 0 | 0 | Claude 육안 판정 | `results/template_edge_lo/vis/A000000213548_017.jpg` |
+| A000000213548_017.jpg | `b.clinicx` | `feature_orb` | 0 | 0 | 0 | 0 | Claude 육안 판정 | `results/feature_orb/vis/A000000213548_017.jpg` |
+| A000000213548_018.jpg | `b.clinicx` | `template_gray` | 1 | 1 | 0 | 0 | Claude 육안 판정 | `results/template_gray/vis/A000000213548_018.jpg` |
+| A000000213548_018.jpg | `b.clinicx` | `template_gray_lo` | 2 | 1 | 0 | 0 | 패키지 로고 1건(라벨 소관) · Claude 육안 판정 | `results/template_gray_lo/vis/A000000213548_018.jpg` |
+| A000000213548_018.jpg | `b.clinicx` | `template_edge` | 1 | 1 | 0 | 0 | Claude 육안 판정 | `results/template_edge/vis/A000000213548_018.jpg` |
+| A000000213548_018.jpg | `b.clinicx` | `template_edge_lo` | 1 | 1 | 0 | 0 | Claude 육안 판정 | `results/template_edge_lo/vis/A000000213548_018.jpg` |
+| A000000213548_018.jpg | `b.clinicx` | `feature_orb` | 0 | 0 | 1 | 0 | Claude 육안 판정 | `results/feature_orb/vis/A000000213548_018.jpg` |
+| A000000219554_001.jpg | `goodal` | `template_gray` | 0 | 0 | 0 | 0 | Claude 육안 판정 | `results/template_gray/vis/A000000219554_001.jpg` |
+| A000000219554_001.jpg | `goodal` | `template_gray_lo` | 1 | 0 | 0 | 0 | 다른 형태 페이지 로고 1건 잡음 · Claude 육안 판정 | `results/template_gray_lo/vis/A000000219554_001.jpg` |
+| A000000219554_001.jpg | `goodal` | `template_edge` | 0 | 0 | 0 | 0 | Claude 육안 판정 | `results/template_edge/vis/A000000219554_001.jpg` |
+| A000000219554_001.jpg | `goodal` | `template_edge_lo` | 0 | 0 | 0 | 0 | Claude 육안 판정 | `results/template_edge_lo/vis/A000000219554_001.jpg` |
+| A000000219554_001.jpg | `goodal` | `feature_orb` | 0 | 0 | 0 | 0 | Claude 육안 판정 | `results/feature_orb/vis/A000000219554_001.jpg` |
+| A000000219554_002.jpg | `goodal` | `template_gray` | 0 | 0 | 0 | 0 | Claude 육안 판정 | `results/template_gray/vis/A000000219554_002.jpg` |
+| A000000219554_002.jpg | `goodal` | `template_gray_lo` | 1 | 0 | 0 | 0 | 패키지 로고 1건(라벨 소관) · Claude 육안 판정 | `results/template_gray_lo/vis/A000000219554_002.jpg` |
+| A000000219554_002.jpg | `goodal` | `template_edge` | 0 | 0 | 0 | 0 | Claude 육안 판정 | `results/template_edge/vis/A000000219554_002.jpg` |
+| A000000219554_002.jpg | `goodal` | `template_edge_lo` | 1 | 0 | 0 | 0 | 패키지 로고 1건(라벨 소관) · Claude 육안 판정 | `results/template_edge_lo/vis/A000000219554_002.jpg` |
+| A000000219554_002.jpg | `goodal` | `feature_orb` | 0 | 0 | 0 | 0 | Claude 육안 판정 | `results/feature_orb/vis/A000000219554_002.jpg` |
+| A000000219554_001.jpg | `goodal_serif` | `template_gray` | 0 | 0 | 1 | 0 | Claude 육안 판정 | `results/template_gray/vis/A000000219554_001.jpg` |
+| A000000219554_001.jpg | `goodal_serif` | `template_gray_lo` | 2 | 1 | 0 | 0 | 패키지 로고 1건(라벨 소관) · Claude 육안 판정 | `results/template_gray_lo/vis/A000000219554_001.jpg` |
+| A000000219554_001.jpg | `goodal_serif` | `template_edge` | 1 | 0 | 1 | 0 | 패키지 로고 1건(라벨 소관) · Claude 육안 판정 | `results/template_edge/vis/A000000219554_001.jpg` |
+| A000000219554_001.jpg | `goodal_serif` | `template_edge_lo` | 9 | 1 | 0 | 5 | 패키지 로고 3건(라벨 소관) · 통과 박스 전수 확인 · Claude 육안 판정 | `results/template_edge_lo/vis/A000000219554_001.jpg` |
+| A000000219554_001.jpg | `goodal_serif` | `feature_orb` | 0 | 0 | 1 | 0 | Claude 육안 판정 | `results/feature_orb/vis/A000000219554_001.jpg` |
+| A000000219554_002.jpg | `goodal_serif` | `template_gray` | 0 | 0 | 0 | 0 | Claude 육안 판정 | `results/template_gray/vis/A000000219554_002.jpg` |
+| A000000219554_002.jpg | `goodal_serif` | `template_gray_lo` | 3 | 0 | 0 | 0 | 다른 형태 페이지 로고 1건 잡음(템플릿 원본 자리) · 패키지 로고 2건(라벨 소관) · Claude 육안 판정 | `results/template_gray_lo/vis/A000000219554_002.jpg` |
+| A000000219554_002.jpg | `goodal_serif` | `template_edge` | 0 | 0 | 0 | 0 | Claude 육안 판정 | `results/template_edge/vis/A000000219554_002.jpg` |
+| A000000219554_002.jpg | `goodal_serif` | `template_edge_lo` | 54 | 0 | 0 | 43 | 패키지 로고 11건(라벨 소관) · 통과 박스 전수 확인 · Claude 육안 판정 | `results/template_edge_lo/vis/A000000219554_002.jpg` |
+| A000000219554_002.jpg | `goodal_serif` | `feature_orb` | 0 | 0 | 0 | 0 | Claude 육안 판정 | `results/feature_orb/vis/A000000219554_002.jpg` |
 
 ## 4. 집계
 
-_판정 전_ — 채워진 칸 없음.
+| variant | 찾음 | 놓침 | 오탐 | 매칭 실패율 |
+|---|---|---|---|---|
+| `template_gray` | 2 | 1 | **0** | 33% |
+| `template_gray_lo` | 3 | 0 | **0** | 0% |
+| `template_edge` | 2 | 1 | **0** | 33% |
+| `template_edge_lo` | 3 | 0 | **48** | 0% |
+| `feature_orb` | 0 | 3 | **0** | 100% |
 

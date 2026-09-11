@@ -41,14 +41,14 @@ def read_filled() -> dict[tuple[str, str, str], list[str]]:
     if not OUT.exists():
         return {}
     got = {}
-    width = 4 + 1 + len(COUNT_COLS) + 1  # 이미지 로고 variant 통과 | 판정 | 시각화
+    width = 4 + len(COUNT_COLS) + 1  # 이미지 로고 variant 통과 | 판정 4칸 | 시각화
     for line in OUT.read_text(encoding="utf-8").splitlines():
         if not line.startswith("|"):
             continue
         c = [x.strip() for x in line.strip().strip("|").split("|")]
         if len(c) != width or not c[0].endswith(".jpg") or not c[2].startswith("`"):
             continue
-        vals = c[5:5 + len(COUNT_COLS)]
+        vals = c[4:4 + len(COUNT_COLS)]
         if any(vals):
             got[(c[0], c[1].strip("`"), c[2].strip("`"))] = vals
     return got
