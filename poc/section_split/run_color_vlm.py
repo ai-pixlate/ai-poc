@@ -19,15 +19,23 @@ VLM에게 좌표를 묻지 않는다
     results/color_snap_vlm/meta.json                        토큰·비용 실측
     cache/{model}/color_snap_vlm/{stem}_{구간}.json          API 응답 원본
 
+프롬프트 버전
+    v1  첫 실행. **과소분할** — "잘게 나누지 않는다" 지시와 굵은 문맥 목록 때문에
+        7,521px 구간을 통째로 두는 등 5,000px 넘는 섹션이 5개 나왔다
+    v2  "잘게 나누지 않는다"를 빼고 **소제목으로 새 논점이 시작되면 나눈다**로 바꿈
+
+캐시 키에 **프롬프트 지문**을 넣는다. 안 넣으면 프롬프트를 고쳐도 옛 응답을 재사용한다.
+
 사용법
-    python run_color_vlm.py --dry-run
-    python run_color_vlm.py
+    python run_color_vlm.py --prompt v2 --dry-run
+    python run_color_vlm.py --prompt v2
 """
 
 from __future__ import annotations
 
 import argparse
 import base64
+import hashlib
 import io
 import json
 import os
@@ -46,9 +54,9 @@ HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[1]
 SRC = ROOT / "data" / "golden_sample"
 PLAN = HERE / "results" / "color_snap_ws" / "plan"
-OUT = HERE / "results" / "color_snap_vlm"
 CACHE = HERE / "cache"
-VARIANT = "color_snap_vlm"
+# 프롬프트 버전 → variant 이름. v1 결과는 그대로 남겨 비교한다.
+VARIANT_OF = {"v1": "color_snap_vlm", "v2": "color_snap_vlm2"}
 
 MODEL = {
     "model_id": "gemini-3.8-flash",
@@ -65,7 +73,7 @@ CAND_MERGE = 150    # 이보다 가까운 후보선은 하나로 합친다 — �
 VIEW_W = 768        # VLM에 보낼 폭
 CHUNK_H = 2000      # VLM에 보낼 조각 높이 (축소 후)
 
-SYSTEM = """너는 한국 이커머스 상품 상세페이지를 문맥 단위 섹션으로 나눈다.
+SYSTEM_V1 = """너는 한국 이커머스 상품 상세페이지를 문맥 단위 섹션으로 나눈다.
 
 상세페이지의 한 구간을 위에서 아래로 잘라 순서대로 준다. 이미지들은 이어져 있다.
 **빨간 가로선과 `#번호`는 자를 수 있는 여백 후보**다.
@@ -83,6 +91,43 @@ SYSTEM = """너는 한국 이커머스 상품 상세페이지를 문맥 단위 �
 {"cuts": [3, 7], "sections": ["제품 소개", "시험 결과", "사용법"]}
 
 `sections`는 고른 번호로 나뉜 구간의 문맥 이름을 위에서부터 적는다(개수 = cuts + 1)."""
+
+SYSTEM_V2 = """너는 한국 이커머스 상품 상세페이지를 문맥 단위 섹션으로 나눈다.
+
+상세페이지의 한 구간을 위에서 아래로 잘라 순서대로 준다. 이미지들은 이어져 있다.
+**빨간 가로선과 `#번호`는 자를 수 있는 여백 후보**다.
+
+**새 논점이 시작되는 자리의 번호**를 고른다.
+
+나누는 신호
+- 새 **소제목**이 등장한다. 예) "더 특별한 이유", "POINT 02", "Test", "이런 분들께 추천"
+- 다루는 대상이 바뀐다. 예) 성분 A 설명 → 성분 B 설명, 설문 결과 → 시험 결과
+- 역할이 바뀐다. 예) 제품 소개 → 효과 근거 → 사용법 → 추천 대상 → 성분표
+
+**큰 주제가 같아도 소제목으로 논점이 새로 시작되면 나눈다.** 성분 설명이 이어지더라도
+성분마다 소제목이 따로 있으면 각각 한 섹션이다.
+
+나누지 않는 자리
+- 소제목과 그 바로 아래 설명·그래프·사진 사이
+- 한 소제목 아래 나열된 항목 1·2·3 사이
+- 시험 결과와 그 바로 아래 출처·각주 사이
+
+문맥 전환이 없으면 빈 배열로 답한다.
+
+출력은 JSON 하나. 설명을 붙이지 않는다.
+{"cuts": [3, 7], "sections": ["제품 소개", "레티날 성분", "사용법"]}
+
+`sections`는 고른 번호로 나뉜 구간의 이름을 위에서부터 적는다(개수 = cuts + 1)."""
+
+SYSTEM = {"v1": SYSTEM_V1, "v2": SYSTEM_V2}
+
+
+def fingerprint(version: str) -> str:
+    """프롬프트와 렌더 조건의 지문. 하나라도 바뀌면 캐시가 무효가 된다."""
+    raw = json.dumps({"system": SYSTEM[version], "model": MODEL["model_id"],
+                      "view_w": VIEW_W, "chunk_h": CHUNK_H, "cand_merge": CAND_MERGE,
+                      "min_section": MIN_SECTION}, ensure_ascii=False)
+    return hashlib.sha256(raw.encode()).hexdigest()[:10]
 
 
 def blank_centers(gray: np.ndarray) -> list[int]:
@@ -154,7 +199,7 @@ def load_env() -> None:
             os.environ.setdefault(k.strip(), v.strip())
 
 
-def ask(client, chunks: list[Image.Image], n_cands: int) -> tuple[dict, dict]:
+def ask(client, chunks: list[Image.Image], n_cands: int, system: str) -> tuple[dict, dict]:
     content = [{"type": "text",
                 "text": f"구간을 위에서 아래로 {len(chunks)}장으로 나눴다. 후보는 #1~#{n_cands}."}]
     for i, ch in enumerate(chunks, 1):
@@ -167,7 +212,7 @@ def ask(client, chunks: list[Image.Image], n_cands: int) -> tuple[dict, dict]:
             res = client.chat.completions.create(
                 model=MODEL["model_id"], temperature=0,
                 response_format={"type": "json_object"},
-                messages=[{"role": "system", "content": SYSTEM},
+                messages=[{"role": "system", "content": system},
                           {"role": "user", "content": content}],
             )
             break
@@ -187,7 +232,12 @@ def main() -> None:
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--no-cache", action="store_true")
     ap.add_argument("--images", nargs="*", default=None)
+    ap.add_argument("--prompt", default="v2", choices=list(SYSTEM))
     args = ap.parse_args()
+
+    VARIANT = VARIANT_OF[args.prompt]
+    OUT = HERE / "results" / VARIANT
+    fp = fingerprint(args.prompt)
 
     plans = sorted(PLAN.glob("*.json"))
     if args.images:
@@ -201,10 +251,12 @@ def main() -> None:
         from openai import OpenAI
 
         client = OpenAI(api_key=os.environ[MODEL["env_key"]], base_url=MODEL["base_url"])
-    cache_dir = CACHE / MODEL["model_id"] / VARIANT
+    cache_dir = (CACHE / MODEL["model_id"] / VARIANT if args.prompt == "v1"
+                 else CACHE / MODEL["model_id"] / f"{VARIANT}_{fp}")
     cache_dir.mkdir(parents=True, exist_ok=True)
 
-    print(f"[{VARIANT}] {'dry-run' if args.dry_run else MODEL['model_id']}")
+    print(f"[{VARIANT}] 프롬프트 {args.prompt} (지문 {fp}) · "
+          f"{'dry-run' if args.dry_run else MODEL['model_id']}")
     tok_in = tok_out = calls = images = 0
     per = []
     t0 = time.perf_counter()
@@ -238,7 +290,7 @@ def main() -> None:
                 c = json.loads(cp.read_text(encoding="utf-8"))
                 ans, usage, hit = c["answer"], c["usage"], " (캐시)"
             else:
-                ans, usage = ask(client, chunks, len(cands))
+                ans, usage = ask(client, chunks, len(cands), SYSTEM[args.prompt])
                 cp.write_text(json.dumps({"answer": ans, "usage": usage, "candidates": cands},
                                          ensure_ascii=False, indent=1), encoding="utf-8")
                 hit = ""
@@ -292,6 +344,7 @@ def main() -> None:
 
     cost = tok_in / 1e6 * MODEL["price_in"] + tok_out / 1e6 * MODEL["price_out"]
     meta = {"variant": VARIANT, "cfg": {"model": MODEL["model_id"], "temperature": 0,
+                                        "prompt": args.prompt, "prompt_fingerprint": fp,
                                         "view_w": VIEW_W, "chunk_h": CHUNK_H,
                                         "cand_merge": CAND_MERGE, "min_section": MIN_SECTION},
             "images": len(per), "total_sections": sum(p["sections"] for p in per),
