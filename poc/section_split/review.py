@@ -6,8 +6,9 @@
 출력
     results/{variant}/contact/{stem}.jpg   섹션을 가로로 나열한 대지
 
-각 칸 위에 `번호 · 원본 y범위 · 높이`를 적는다. 강제 분할로 생긴 섹션은
-칸 제목을 주황으로 칠한다.
+각 칸 위에 `번호 · 원본 y범위 · 높이 · 절단 출처`를 적는다. 제목 띠 색이 출처다.
+    검정 여백·시작  빨강 배경색 전환  파랑 보조 분해(여백+병합)  보라 보조 분해(VLM)
+    주황 강제 분할
 
 사용법
     python review.py --variant gap_major
@@ -62,12 +63,16 @@ def contact_sheet(variant: str, stem: str) -> Path | None:
     draw = ImageDraw.Draw(canvas)
     font = _font(15)
 
+    fills = {"color": (200, 40, 40), "aux_ws": (40, 100, 210), "aux_vlm": (130, 60, 180)}
+    tags = {"color": "색", "aux_ws": "보조", "aux_vlm": "VLM"}
     for i, (s, im) in enumerate(zip(secs, panels)):
         x = i * (PANEL_W + GAP)
         canvas.paste(im, (x, BAR))
-        draw.rectangle([x, 0, x + PANEL_W, BAR],
-                       fill=(255, 150, 0) if s["forced"] else (30, 30, 30))
-        draw.text((x + 6, 8), f"{s['index']}  y{s['range'][0]}~{s['range'][1]}  "
+        src = s.get("cut_source", "")
+        fill = (255, 150, 0) if s["forced"] else fills.get(src, (30, 30, 30))
+        draw.rectangle([x, 0, x + PANEL_W, BAR], fill=fill)
+        tag = tags.get(src, "")
+        draw.text((x + 6, 8), f"{s['index']} {tag} y{s['range'][0]}~{s['range'][1]} "
                               f"{s['height']}px", fill=(255, 255, 255), font=font)
 
     out = RESULTS / variant / "contact" / f"{stem}.jpg"
