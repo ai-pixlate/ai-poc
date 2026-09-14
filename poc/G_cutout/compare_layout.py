@@ -128,6 +128,63 @@ def read_filled() -> dict[str, list[str]]:
 
 
 OCR_META = ROOT / "poc" / "ocr_split" / "results" / "section_vlm2" / "meta.json"
+RULE_JUDGE = ["그래픽 잔존", "대상 누락", "비고"]
+# variant → 판정표 앞쪽 고정 열 수. 두 판정표를 열 수로 구분함(rule_flat은 깎음% 열이 더 있음)
+RULE_FIXED = {"rule_comp": 4, "rule_flat": 5}
+
+
+def read_rule_filled(variant: str) -> dict[str, list[str]]:
+    if not OUT.exists():
+        return {}
+    got, fixed = {}, RULE_FIXED[variant]
+    for line in OUT.read_text(encoding="utf-8").splitlines():
+        c = [x.strip() for x in line.strip().strip("|").split("|")]
+        if line.startswith("| `A0") and len(c) == fixed + len(RULE_JUDGE):
+            vals = c[fixed:]
+            if any(vals):
+                got[c[0].strip("`")] = vals
+    return got
+
+
+def rule_section(variant: str, number: int, filled: dict[str, list[str]]) -> list[str]:
+    """요소 선별 variant — 기계 집계 + 판정표(판정 칸은 사람이 채움)."""
+    d = RESULTS / variant
+    if not (d / "features.json").exists():
+        return []
+    rows = json.loads((d / "features.json").read_text(encoding="utf-8"))
+    meta = json.loads((d / "meta.json").read_text(encoding="utf-8"))
+    flat = variant == "rule_flat"
+    how = (f"덩어리로 쪼개기 **전에** 평평한 영역(창 {meta.get('flat_win')}px 안 채널 차이 ≤ {meta.get('flat_range')} · "
+           f"면적 {meta.get('flat_min_area', 0) * 100:.1f}% 이상 · 최소 외접 사각형 채움률 ≥ {meta.get('flat_rect')})을 "
+           f"{meta.get('carve_dilate')}px 넓혀 깎고, " if flat else "")
+    L = [f"## {number}. 요소 선별 — `{variant}`", "",
+         f"`run_rule.py --variant {variant}` · s50 누끼 마스크에서 {how}덩어리로 쪼개 "
+         f"**색 수 ≥ {meta['min_colors']} · 질감 비율 ≥ {meta['min_textured']}**인 덩어리만 남김. "
+         f"면적 {meta['min_area'] * 100:.1f}% 미만 덩어리는 버림. 비용 0 · 섹션당 {meta['sec_per_section']}s.", "",
+         "- **대상** — 사람 · 제품 · 사진류(피부 전후 · 원료 · 제형 · 현미경)",
+         "- **버림** — 그래픽(말풍선 · 배지 · 차트 · 아이콘 · 패널 · 선) · 도식 · 문서 이미지 · 지운 자국", "",
+         "| 항목 | 값 |", "|---|---|",
+         f"| 덩어리 (면적 기준 이상) | {meta['components']} |", f"| 남긴 덩어리 | {meta['kept']} |",
+         f"| 요소 없음 섹션 (남긴 덩어리 0) | {meta['no_element']} |", "",
+         f"`results/{variant}/vis/{{섹션}}.jpg` — 1. s50 누끼 | 2. {'평평한 영역 깎음(붉은 칠) + ' if flat else ''}"
+         "덩어리(초록 남김 · 빨강 버림, t=질감 비율 · c=색 수) | 3. 선별 결과.",
+         "**판정 칸** — `그래픽 잔존`: 선별 결과에 그래픽·도식·문서·지운 자국이 남음 O/X · "
+         "`대상 누락`: s50 누끼에 있던 사람·제품·사진류를 버리거나 구멍을 냄 O/X, 대상이 없으면 —.", "",
+         "| 섹션 | " + ("깎음% | " if flat else "") + "덩어리 | 남김 | 요소 없음 | " + " | ".join(RULE_JUDGE) + " |",
+         "|---|" + ("---|" if flat else "") + "---|---|---|" + "---|" * len(RULE_JUDGE)]
+    for r in rows:
+        vals = filled.get(r["section"], [""] * len(RULE_JUDGE))
+        L.append(f"| `{r['section']}` | " + (f"{r.get('carved_pct', 0)} | " if flat else "")
+                 + f"{r['components']} | {r['kept']} | {'O' if r['no_element'] else ''} | " + " | ".join(vals) + " |")
+    L.append("")
+    judged = [filled[r["section"]] for r in rows if r["section"] in filled]
+    if judged:
+        cnt = lambda i, v: sum(1 for j in judged if j[i].strip() == v)
+        L += [f"판정 {len(judged)}/{len(rows)}섹션.", "", "| 항목 | O | X | — |", "|---|---|---|---|"]
+        for i, name in enumerate(RULE_JUDGE[:2]):
+            L.append(f"| {name} | **{cnt(i, 'O')}** | {cnt(i, 'X')} | {cnt(i, '—')} |")
+        L.append("")
+    return L
 
 
 def timing_section(names: list[str], by: dict, variants: list[str]) -> list[str]:
@@ -181,6 +238,7 @@ def timing_section(names: list[str], by: dict, variants: list[str]) -> list[str]
 def main() -> None:
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     filled = read_filled()
+    rule_filled = {v: read_rule_filled(v) for v in RULE_FIXED}
     (RESULTS / "_compare").mkdir(parents=True, exist_ok=True)
     variants = [RAW] + [v for v in ERASED if (RESULTS / v / "meta.json").exists()]
     metas = {v: json.loads((RESULTS / v / "meta.json").read_text(encoding="utf-8")) for v in variants}
@@ -290,6 +348,8 @@ def main() -> None:
         L += ["", f"- **요소 없음** (사람·제품 없이 빈 패널·지운 자국·그래픽만 요소로 나옴) — {no_elem}섹션", ""]
 
     L += timing_section([r["section"] for r in rows], by, variants)
+    L += rule_section("rule_comp", 5, rule_filled["rule_comp"])
+    L += rule_section("rule_flat", 6, rule_filled["rule_flat"])
     OUT.write_text("\n".join(L) + "\n", encoding="utf-8")
     print(f"작성: {OUT}")
     for v in variants:
