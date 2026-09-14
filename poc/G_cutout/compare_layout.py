@@ -127,6 +127,57 @@ def read_filled() -> dict[str, list[str]]:
     return got
 
 
+OCR_META = ROOT / "poc" / "ocr_split" / "results" / "section_vlm2" / "meta.json"
+
+
+def timing_section(names: list[str], by: dict, variants: list[str]) -> list[str]:
+    """원본 이미지 1장 단위 소요 — 섹션 OCR + 글자 지우기(LaMa) + 누끼.
+
+    OCR·누끼는 실측 합. LaMa는 배치 1회로 돌려 섹션별 시간이 없어 **배치 총시간 ÷ 지운 섹션 수**를
+    그 이미지의 지운 섹션 수만큼 곱한 추정치(모델 적재 시간 포함).
+    """
+    ocr = {Path(p["image"]).stem: p["sec"] for p in json.loads(OCR_META.read_text(encoding="utf-8"))["per_image"]}
+    s50 = "birefnet_erased_s50"
+    em = json.loads((RESULTS / ERASED[s50] / "meta.json").read_text(encoding="utf-8"))
+    erased_by = {r["section"]: r["regions"] > 0 for r in em["per_section"]}
+    lama_per = em["lama_sec"] / max(1, sum(erased_by.values()))
+
+    per = {}
+    for name in names:
+        stem = name.rsplit("_", 1)[0]
+        d = per.setdefault(stem, {"n": 0, "lama": 0.0, "raw": 0.0, "s50": 0.0})
+        d["n"] += 1
+        d["lama"] += lama_per if erased_by.get(name) else 0.0
+        d["raw"] += by[RAW][name]["sec"]
+        if s50 in variants:
+            d["s50"] += by[s50][name]["sec"]
+    rows = []
+    for stem, d in per.items():
+        h = json.loads((SECTIONS / "sections" / f"{stem}.json").read_text(encoding="utf-8"))["size"][1]
+        total = ocr[stem] + d["lama"] + d["s50"]
+        rows.append((stem, h, d["n"], ocr[stem], d["lama"], d["s50"], total, d["raw"]))
+
+    def stat(i):
+        vals = sorted(r[i] for r in rows)
+        return sum(vals) / len(vals), vals[len(vals) // 2], vals[-1]
+
+    n_sec = sum(r[2] for r in rows)
+    L = ["## 4. 소요 시간 — 원본 이미지 1장 기준", "",
+         f"골든 샘플 {len(rows)}장 · 섹션 {n_sec}개. **s50 흐름** = 섹션 OCR(GPU) → 글자 지우기 LaMa(GPU) → 누끼 `birefnet-general`(**CPU**).",
+         f"LaMa는 배치 1회 실행이라 섹션별 시간이 없어 **총 {em['lama_sec']}s ÷ 지운 섹션 {sum(erased_by.values())}개 = 섹션당 {lama_per:.2f}s**로 추정(모델 적재 포함).", "",
+         "| 단계 | 평균 | 중앙 | 최대 | 섹션당 평균 |", "|---|---|---|---|---|"]
+    for label, i in (("섹션 OCR", 3), ("글자 지우기 (LaMa, 추정)", 4), ("누끼 (s50 입력)", 5), ("**s50 흐름 합계**", 6),
+                     ("참고 — 원본 입력 누끼만", 7)):
+        a, m, x = stat(i)
+        L.append(f"| {label} | {a:.1f}s | {m:.1f}s | {x:.1f}s | {sum(r[i] for r in rows) / n_sec:.2f}s |")
+    L += ["", "- 누끼가 합계의 대부분 — CPU 실행이라 섹션당 약 12초. **GPU 실행은 측정 안 함**", "",
+          "| 이미지 | 높이 | 섹션 | OCR | LaMa(추정) | 누끼 | 합계 |", "|---|---|---|---|---|---|---|"]
+    for stem, h, n_s, o, la, cu, tot, _ in sorted(rows):
+        L.append(f"| {stem} | {h:,}px | {n_s} | {o:.1f}s | {la:.1f}s | {cu:.1f}s | **{tot:.1f}s** |")
+    L.append("")
+    return L
+
+
 def main() -> None:
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     filled = read_filled()
@@ -237,6 +288,8 @@ def main() -> None:
         for i, name in enumerate(JUDGE[:3]):
             L.append(f"| {name} | **{cnt(i, 'O')}** | {cnt(i, 'X')} | {cnt(i, '—')} |")
         L += ["", f"- **요소 없음** (사람·제품 없이 빈 패널·지운 자국·그래픽만 요소로 나옴) — {no_elem}섹션", ""]
+
+    L += timing_section([r["section"] for r in rows], by, variants)
     OUT.write_text("\n".join(L) + "\n", encoding="utf-8")
     print(f"작성: {OUT}")
     for v in variants:
