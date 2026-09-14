@@ -129,8 +129,8 @@ def read_filled() -> dict[str, list[str]]:
 
 OCR_META = ROOT / "poc" / "ocr_split" / "results" / "section_vlm2" / "meta.json"
 RULE_JUDGE = ["그래픽 잔존", "대상 누락", "비고"]
-# variant → 판정표 앞쪽 고정 열 수. 두 판정표를 열 수로 구분함(rule_flat은 깎음% 열이 더 있음)
-RULE_FIXED = {"rule_comp": 4, "rule_flat": 5}
+# variant → 판정표 앞쪽 고정 열 수. 판정표를 열 수로 구분함(rule_flat은 깎음%, vlm_pick은 혼합·VLM 판단 열이 더 있음)
+RULE_FIXED = {"rule_comp": 4, "rule_flat": 5, "vlm_pick": 6}
 
 
 def read_rule_filled(variant: str) -> dict[str, list[str]]:
@@ -144,6 +144,54 @@ def read_rule_filled(variant: str) -> dict[str, list[str]]:
             if any(vals):
                 got[c[0].strip("`")] = vals
     return got
+
+
+def vlm_section(number: int, filled: dict[str, list[str]]) -> list[str]:
+    """요소 선별 `vlm_pick` — 덩어리 번호를 VLM이 고름. 기계 집계 + 판정표."""
+    d = RESULTS / "vlm_pick"
+    if not (d / "answers.json").exists():
+        return []
+    ans = json.loads((d / "answers.json").read_text(encoding="utf-8"))
+    meta = json.loads((d / "meta.json").read_text(encoding="utf-8"))
+    rule = json.loads((RESULTS / "rule_comp" / "features.json").read_text(encoding="utf-8"))
+    regions = [p for a in ans.values() for p in a["regions"]]
+    kinds: dict[str, int] = {}
+    for p in regions:
+        k = p["kind"] or "응답 없음"
+        kinds[k] = kinds.get(k, 0) + 1
+    kept_of = {s: sum(p["keep"] for p in a["regions"]) for s, a in ans.items()}
+    no_elem = sum(1 for r in rule if kept_of.get(r["section"], 0) == 0)
+    cost = meta["all_answers"]
+    L = [f"## {number}. 요소 선별 — `vlm_pick`", "",
+         f"`run_vlm_pick.py` · `rule_comp`와 같은 덩어리에 **윤곽선·번호를 그려** `{meta['model']}`가 대상 번호를 고름. "
+         "좌표를 묻지 않음. 대상과 그래픽이 한 덩어리면 `혼합`으로 남김.", "",
+         "| 항목 | 값 |", "|---|---|",
+         f"| 호출 섹션 (덩어리 1개 이상) | {len(ans)} |",
+         f"| 덩어리 | {len(regions)} · 남김 {sum(p['keep'] for p in regions)} · 응답 누락 {sum(p['missing'] for p in regions)} |",
+         "| 판단 종류 | " + " · ".join(f"{k} {v}" for k, v in sorted(kinds.items(), key=lambda x: -x[1])) + " |",
+         f"| 요소 없음 섹션 | {no_elem} |",
+         f"| 토큰 · 비용 | 입력 {cost['tokens_in']:,} · 출력 {cost['tokens_out']:,} · **${cost['cost_usd']}** |", "",
+         "`results/vlm_pick/vis/{섹션}.jpg` — 번호 그린 섹션(VLM 입력) | 선별 결과 + 번호별 판단.",
+         "**판정 칸**은 5·6장과 같음.", "",
+         "| 섹션 | 덩어리 | 남김 | 요소 없음 | 혼합 | VLM 판단 | " + " | ".join(RULE_JUDGE) + " |",
+         "|---|---|---|---|---|---|" + "---|" * len(RULE_JUDGE)]
+    for r in rule:
+        s = r["section"]
+        regs = ans.get(s, {}).get("regions", [])
+        kept = kept_of.get(s, 0)
+        mixed = sum(1 for p in regs if p["kind"] == "혼합")
+        brief = " · ".join(f"#{p['id']} {p['kind'] or '?'}" for p in regs) or "호출 안 함"
+        vals = filled.get(s, [""] * len(RULE_JUDGE))
+        L.append(f"| `{s}` | {len(regs)} | {kept} | {'O' if kept == 0 else ''} | {mixed or ''} | {brief} | " + " | ".join(vals) + " |")
+    L.append("")
+    judged = [filled[r["section"]] for r in rule if r["section"] in filled]
+    if judged:
+        cnt = lambda i, v: sum(1 for j in judged if j[i].strip() == v)
+        L += [f"판정 {len(judged)}/{len(rule)}섹션.", "", "| 항목 | O | X | — |", "|---|---|---|---|"]
+        for i, name in enumerate(RULE_JUDGE[:2]):
+            L.append(f"| {name} | **{cnt(i, 'O')}** | {cnt(i, 'X')} | {cnt(i, '—')} |")
+        L.append("")
+    return L
 
 
 def rule_section(variant: str, number: int, filled: dict[str, list[str]]) -> list[str]:
@@ -350,6 +398,7 @@ def main() -> None:
     L += timing_section([r["section"] for r in rows], by, variants)
     L += rule_section("rule_comp", 5, rule_filled["rule_comp"])
     L += rule_section("rule_flat", 6, rule_filled["rule_flat"])
+    L += vlm_section(7, rule_filled["vlm_pick"])
     OUT.write_text("\n".join(L) + "\n", encoding="utf-8")
     print(f"작성: {OUT}")
     for v in variants:
