@@ -4,14 +4,19 @@
     python run.py --variant heuristic_v1
     python run.py --variant all
     python run.py --variant heuristic_v1 --images 1.jpg 2.jpg
+    python run.py --variant heuristic_v2 --sample golden        # 골든 샘플 섹션 102개
 
 입력
     ../B_ocr/results/baseline/regions/{stem}.json   (텍스트 인식 결과)
+    --sample golden
+    ../B_ocr/results/golden/baseline/regions/{섹션}.json   (섹션 로컬 좌표)
 
 출력
     results/{variant}/blocks/{stem}.json   블록 단위 결과
     results/{variant}/vis/{stem}.jpg       블록 박스 + role 색상 시각화
     results/{variant}/meta.json            실행 조건·집계
+    --sample golden
+    results/golden/{variant}/blocks/{섹션}.json · vis/{섹션}.jpg · meta.json
 
 검증 질문
     좌표 규칙만으로 블록 1건 = 문단 1개가 성립하는가.
@@ -259,7 +264,10 @@ def _font(size: int):
 
 
 def visualize(img_path: Path, regions: list[dict], blocks: list[dict], out_path: Path) -> None:
-    img = Image.open(img_path).convert("RGB")
+    draw_blocks(Image.open(img_path).convert("RGB"), regions, blocks, out_path)
+
+
+def draw_blocks(img: Image.Image, regions: list[dict], blocks: list[dict], out_path: Path) -> None:
     draw = ImageDraw.Draw(img)
     size = max(13, min(img.width, img.height) // 55)
     font = _font(size)
@@ -349,6 +357,93 @@ def run_variant(name: str, stems: list[str]) -> None:
           f" {meta['total_sec']}s\n")
 
 
+# ---------------------------------------------------------------- 골든 샘플 — 섹션 단위
+
+GOLDEN_SRC = ROOT / "poc" / "B_ocr" / "results" / "golden" / "baseline" / "regions"
+GOLDEN_PAGES = ROOT / "data" / "golden_sample"
+GOLDEN_RESULTS = RESULTS / "golden"
+GOLDEN_VARIANTS = ("heuristic_v2",)  # 병합 1단계 채택안 — llm_assist 입력
+
+
+class PageCache:
+    """섹션 이미지는 원본 페이지를 섹션 range로 잘라 쓴다. 같은 페이지는 한 번만 연다."""
+
+    def __init__(self) -> None:
+        Image.MAX_IMAGE_PIXELS = None
+        self.paths = {p.name: p for p in GOLDEN_PAGES.rglob("*.jpg")}
+        self.name: str | None = None
+        self.img: Image.Image | None = None
+
+    def section(self, image: str, top: int, bottom: int) -> Image.Image:
+        if image != self.name:
+            self.name = image
+            self.img = Image.open(self.paths[image]).convert("RGB")
+        return self.img.crop((0, top, self.img.width, bottom))
+
+
+def run_golden(name: str, only: list[str] | None) -> None:
+    if name not in GOLDEN_VARIANTS:
+        raise SystemExit(f"골든 샘플은 {', '.join(GOLDEN_VARIANTS)}만 실행")
+    cfg = VARIANTS[name]
+    files = sorted(GOLDEN_SRC.glob("*.json"))
+    if only:
+        files = [f for f in files if f.stem in only]
+    if not files:
+        raise SystemExit("섹션 인식 결과 없음 — poc/B_ocr/run.py --sample golden 먼저 실행할 것")
+
+    out_dir = GOLDEN_RESULTS / name
+    (out_dir / "blocks").mkdir(parents=True, exist_ok=True)
+    (out_dir / "vis").mkdir(parents=True, exist_ok=True)
+    pages = PageCache()
+
+    print(f"[golden/{name}] {cfg}")
+    per, roles_total = [], {r: 0 for r in ROLES}
+    t_all = time.perf_counter()
+    for f in files:
+        sec = json.loads(f.read_text(encoding="utf-8"))
+        sid, regions = sec["section"], sec["regions"]
+        top, bottom = sec["range"]
+
+        t0 = time.perf_counter()
+        blocks = build_blocks(regions, cfg, sec["size"][0])
+        elapsed = time.perf_counter() - t0
+
+        dump_json(
+            out_dir / "blocks" / f"{sid}.json",
+            {"section": sid, "image": sec["image"], "variant": name, "top_offset": sec["top_offset"],
+             "range": sec["range"], "size": sec["size"], "regions_in": len(regions), "blocks": blocks},
+        )
+        draw_blocks(pages.section(sec["image"], top, bottom), regions, blocks, out_dir / "vis" / f"{sid}.jpg")
+
+        counts = {r: sum(1 for b in blocks if b["role"] == r) for r in ROLES}
+        for r in ROLES:
+            roles_total[r] += counts[r]
+        per.append({"section": sid, "regions": len(regions), "blocks": len(blocks),
+                    "roles": counts, "sec": round(elapsed, 3)})
+        tail = " ".join(f"{r}{counts[r]}" for r in ROLES if counts[r])
+        print(f"  {sid:<24} 영역 {len(regions):>3} → 블록 {len(blocks):>3}   {tail}")
+
+    if only:
+        print(f"[golden/{name}] 일부 섹션만 실행 — meta.json 갱신 안 함")
+        return
+    meta = {
+        "variant": name,
+        "sample": "golden",
+        "cfg": cfg,
+        "source": "poc/B_ocr/results/golden/baseline",
+        "sections": len(per),
+        "total_regions": sum(p["regions"] for p in per),
+        "total_blocks": sum(p["blocks"] for p in per),
+        "roles": roles_total,
+        "total_sec": round(time.perf_counter() - t_all, 2),
+        "per_section": per,
+        "run_at": time.strftime("%Y-%m-%d %H:%M:%S"),
+    }
+    (out_dir / "meta.json").write_text(json.dumps(meta, ensure_ascii=False, indent=1), encoding="utf-8")
+    print(f"[golden/{name}] 완료 — 영역 {meta['total_regions']} → 블록 {meta['total_blocks']},"
+          f" {meta['total_sec']}s\n")
+
+
 def main() -> None:
     # 콘솔 기본 코드페이지가 cp949라 한글·기호 출력에서 죽는다.
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
@@ -356,7 +451,16 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--variant", required=True, help=f"{', '.join(VARIANTS)}, all")
     ap.add_argument("--images", nargs="*", default=None, help="파일명 또는 stem")
+    ap.add_argument("--sample", choices=("default", "golden"), default="default",
+                    help="default = data/images 12장 · golden = 골든 샘플 섹션")
+    ap.add_argument("--sections", nargs="*", default=None, help="golden 일부 섹션 id")
     args = ap.parse_args()
+
+    if args.sample == "golden":
+        names = list(GOLDEN_VARIANTS) if args.variant == "all" else [args.variant]
+        for name in names:
+            run_golden(name, args.sections)
+        return
 
     if args.images:
         stems = [Path(n).stem for n in args.images]
