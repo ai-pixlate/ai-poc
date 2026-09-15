@@ -22,8 +22,14 @@
     results/vlm_pick/answers.json · meta.json
     cache/gemini-3.8-flash/vlm_pick_{지문}/{section}.json
 
+variant
+    vlm_pick   rule_comp 덩어리 · 프롬프트 v1
+    sam_pick   SAM 2 조각(run_sam_parts.py) · 프롬프트 v2 — **3D 렌더를 대상에 추가**(2026-09-14 결정),
+               한 물체가 여러 조각으로 쪼개졌을 수 있음을 알림. 결과는 results/sam_pick/
+
 사용법
     python run_vlm_pick.py --dry-run                       # 이미지·조각 수만 (과금 없음)
+    python run_vlm_pick.py --variant sam_pick --dry-run
     python run_vlm_pick.py --sections A000000250199_009_005 A000000219554_002_008
     python run_vlm_pick.py                                  # 덩어리 있는 전 섹션
 """
@@ -95,10 +101,55 @@ SYSTEM = """너는 한국 이커머스 상품 상세페이지의 한 섹션에�
 kind는 사람 · 제품 · 사진 · 혼합 · 그래픽 · 도식 · 문서 · 지운 자국 중 하나. note는 20자 이내."""
 
 
-def fingerprint() -> str:
-    raw = json.dumps({"system": SYSTEM, "model": MODEL["model_id"], "view_w": VIEW_W,
-                      "chunk_h": CHUNK_H, "min_area": MIN_AREA, "palette": PALETTE}, ensure_ascii=False)
+SYSTEM_V2 = """너는 한국 이커머스 상품 상세페이지의 한 섹션에서 **재배치할 요소**를 고른다.
+
+배경을 지운 뒤 남은 부분을 **물체 단위 조각**으로 나눠 조각마다 **색 윤곽선과 `#번호`**를 그렸다.
+페이지 글자는 이미 지웠다. 이미지가 여러 장이면 위에서 아래로 이어진 한 섹션이다.
+**한 물체가 여러 조각으로 쪼개졌을 수 있다** — 사람·제품·사진에 속한 조각은 작아도 빠짐없이 남긴다.
+
+남길 것 (keep = true)
+- 사람 — 얼굴 · 머리카락 · 손 · 몸 · 옷
+- 제품 — 용기 · 튜브 · 패키지 · 박스 · 뚜껑 (인쇄 글자가 지워져 있어도 제품이다)
+- 사진 — 피부 전후 확대 사진 · 원료 · 제형(크림 질감) · 현미경 사진 (흑백이어도 사진이다)
+- 3D 렌더 — 오일 방울 · 성분 구체 · 캡슐 같은 입체 렌더 이미지
+
+버릴 것 (keep = false)
+- 그래픽 — 말풍선 · 배지 · 아이콘 · 차트 · 막대 · 표 칸 · 빈 박스 · 테두리 · 선 · 화살표 · QR 코드
+- 도식 — 원리 설명 일러스트(평면 그림)
+- 문서 — 시험성적서 · 논문 · 앱 화면 캡처
+- 지운 자국 — 글자를 지운 자리에 남은 흐릿한 얼룩 · 빈 패널
+
+한 조각에 남길 것과 버릴 것이 섞였으면 keep = true, kind = "혼합"으로 답한다.
+
+출력은 JSON 하나. 모든 번호를 빠짐없이 적는다.
+{"regions": [{"id": 1, "keep": true, "kind": "사람", "note": "모델 얼굴"}]}
+
+kind는 사람 · 제품 · 사진 · 3D 렌더 · 혼합 · 그래픽 · 도식 · 문서 · 지운 자국 중 하나. note는 20자 이내."""
+
+VARIANTS = {"vlm_pick": {"parts": "rule_comp", "system": SYSTEM},
+            "sam_pick": {"parts": "sam_parts", "system": SYSTEM_V2}}
+SAM_PARTS = RESULTS / "sam_parts"
+
+
+def fingerprint(variant: str = "vlm_pick") -> str:
+    if variant == "vlm_pick":  # 기존 캐시 지문 유지
+        raw = json.dumps({"system": SYSTEM, "model": MODEL["model_id"], "view_w": VIEW_W,
+                          "chunk_h": CHUNK_H, "min_area": MIN_AREA, "palette": PALETTE}, ensure_ascii=False)
+    else:
+        raw = json.dumps({"variant": variant, "system": VARIANTS[variant]["system"], "model": MODEL["model_id"],
+                          "view_w": VIEW_W, "chunk_h": CHUNK_H, "palette": PALETTE}, ensure_ascii=False)
     return hashlib.sha256(raw.encode()).hexdigest()[:10]
+
+
+def sam_components(name: str) -> tuple[np.ndarray, list[dict]]:
+    """run_sam_parts.py가 만든 조각 번호 지도 — 번호 = 조각 번호."""
+    labels = cv2.imdecode(np.fromfile(str(SAM_PARTS / "labels" / f"{name}.png"), np.uint8), cv2.IMREAD_UNCHANGED).astype(np.int32)
+    comps = []
+    for i in range(1, int(labels.max()) + 1):
+        ys, xs = np.nonzero(labels == i)
+        if len(ys):
+            comps.append({"id": i, "label": i, "bbox": [int(xs.min()), int(ys.min()), int(xs.max()) + 1, int(ys.max()) + 1]})
+    return labels, comps
 
 
 def read(p: Path, flag=cv2.IMREAD_COLOR) -> np.ndarray:
@@ -165,7 +216,7 @@ def load_env() -> None:
             os.environ.setdefault(k.strip(), v.strip())
 
 
-def ask(client, views: list[Image.Image], n: int) -> tuple[dict, dict]:
+def ask(client, views: list[Image.Image], n: int, system: str = SYSTEM) -> tuple[dict, dict]:
     content = [{"type": "text", "text": f"섹션을 위에서 아래로 {len(views)}장으로 나눴다. 조각은 #1~#{n}."}]
     for i, v in enumerate(views, 1):
         content.append({"type": "text", "text": f"[{i}/{len(views)}]"})
@@ -174,7 +225,7 @@ def ask(client, views: list[Image.Image], n: int) -> tuple[dict, dict]:
         try:
             res = client.chat.completions.create(
                 model=MODEL["model_id"], temperature=0, response_format={"type": "json_object"},
-                messages=[{"role": "system", "content": SYSTEM}, {"role": "user", "content": content}])
+                messages=[{"role": "system", "content": system}, {"role": "user", "content": content}])
             break
         except Exception as e:  # noqa: BLE001
             if "503" not in str(e) or attempt == 4:
@@ -192,16 +243,25 @@ def checker(h: int, w: int, size: int = 16) -> np.ndarray:
 
 
 def main() -> None:
+    global OUT
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     ap = argparse.ArgumentParser()
+    ap.add_argument("--variant", default="vlm_pick", choices=list(VARIANTS))
     ap.add_argument("--sections", nargs="*", default=None)
     ap.add_argument("--dry-run", action="store_true")
     args = ap.parse_args()
+    variant = args.variant
+    system = VARIANTS[variant]["system"]
+    OUT = RESULTS / variant
 
     rule = {r["section"]: r for r in json.loads(RULE_FEATURES.read_text(encoding="utf-8"))}
-    names = args.sections or sorted(s for s, r in rule.items() if r["components"] > 0)
-    fp = fingerprint()
-    cache_dir = CACHE / MODEL["model_id"] / f"vlm_pick_{fp}"
+    if variant == "sam_pick":
+        sam_report = json.loads((SAM_PARTS / "parts.json").read_text(encoding="utf-8"))
+        names = args.sections or sorted(sam_report)
+    else:
+        names = args.sections or sorted(s for s, r in rule.items() if r["components"] > 0)
+    fp = fingerprint(variant)
+    cache_dir = CACHE / MODEL["model_id"] / f"{variant}_{fp}"
     for sub in ("views", "mask", "rgba", "vis"):
         (OUT / sub).mkdir(parents=True, exist_ok=True)
     cache_dir.mkdir(parents=True, exist_ok=True)
@@ -220,9 +280,12 @@ def main() -> None:
     for name in names:
         img = read(SRC_IMG / f"{name}.png")
         alpha = read(SRC_MASK / f"{name}.png", cv2.IMREAD_GRAYSCALE)
-        labels, comps = components(alpha)
-        # 번호가 rule_comp와 같은지 확인
-        assert [c["bbox"] for c in comps] == [c["bbox"] for c in rule[name]["comps"]], f"{name} 덩어리 불일치"
+        if variant == "sam_pick":
+            labels, comps = sam_components(name)
+        else:
+            labels, comps = components(alpha)
+            # 번호가 rule_comp와 같은지 확인
+            assert [c["bbox"] for c in comps] == [c["bbox"] for c in rule[name]["comps"]], f"{name} 덩어리 불일치"
         if not comps:
             continue
         views = render_views(img, labels, comps)
@@ -238,13 +301,15 @@ def main() -> None:
             c = json.loads(cp.read_text(encoding="utf-8"))
             ans, usage, hit = c["answer"], c["usage"], " (캐시)"
         else:
-            ans, usage = ask(client, views, len(comps))
+            ans, usage = ask(client, views, len(comps), system)
             cp.write_text(json.dumps({"answer": ans, "usage": usage}, ensure_ascii=False, indent=1), encoding="utf-8")
             hit = ""
             calls += 1
             tok_in += usage["in"]
             tok_out += usage["out"]
 
+        if isinstance(ans, list):  # 가끔 {"regions": [...]} 없이 배열만 돌려줌
+            ans = {"regions": ans}
         by_id = {int(r["id"]): r for r in ans.get("regions", []) if str(r.get("id", "")).isdigit() or isinstance(r.get("id"), int)}
         keep_mask = np.zeros(alpha.shape, bool)
         picked = []
@@ -286,7 +351,7 @@ def main() -> None:
     cost = tok_in / 1e6 * MODEL["price_in"] + tok_out / 1e6 * MODEL["price_out"]
     all_in = sum(a["usage"]["in"] for a in answers.values())
     all_out = sum(a["usage"]["out"] for a in answers.values())
-    meta = {"variant": "vlm_pick", "model": MODEL["model_id"], "prompt_fingerprint": fp, "view_w": VIEW_W,
+    meta = {"variant": variant, "model": MODEL["model_id"], "prompt_fingerprint": fp, "view_w": VIEW_W,
             "chunk_h": CHUNK_H, "min_area": MIN_AREA, "sections_answered": len(answers),
             "this_run": {"calls": calls, "tokens_in": tok_in, "tokens_out": tok_out, "cost_usd": round(cost, 4),
                          "sec": round(time.perf_counter() - t0, 1)},
@@ -294,7 +359,7 @@ def main() -> None:
                             "cost_usd": round(all_in / 1e6 * MODEL["price_in"] + all_out / 1e6 * MODEL["price_out"], 4)},
             "run_at": time.strftime("%Y-%m-%d %H:%M:%S")}
     (OUT / "meta.json").write_text(json.dumps(meta, ensure_ascii=False, indent=1), encoding="utf-8")
-    print(f"[vlm_pick] 이번 실행 호출 {calls} · in {tok_in} · out {tok_out} · ${cost:.4f}")
+    print(f"[{variant}] 이번 실행 호출 {calls} · in {tok_in} · out {tok_out} · ${cost:.4f}")
 
 
 if __name__ == "__main__":

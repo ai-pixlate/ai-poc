@@ -130,7 +130,7 @@ def read_filled() -> dict[str, list[str]]:
 OCR_META = ROOT / "poc" / "ocr_split" / "results" / "section_vlm2" / "meta.json"
 RULE_JUDGE = ["그래픽 잔존", "대상 누락", "비고"]
 # variant → 판정표 앞쪽 고정 열 수. 판정표를 열 수로 구분함(rule_flat은 깎음%, vlm_pick은 혼합·VLM 판단 열이 더 있음)
-RULE_FIXED = {"rule_comp": 4, "rule_flat": 5, "vlm_pick": 6}
+RULE_FIXED = {"rule_comp": 4, "rule_flat": 5, "vlm_pick": 6, "sam_pick": 7}
 
 
 def read_rule_filled(variant: str) -> dict[str, list[str]]:
@@ -144,6 +144,53 @@ def read_rule_filled(variant: str) -> dict[str, list[str]]:
             if any(vals):
                 got[c[0].strip("`")] = vals
     return got
+
+
+def sam_section(number: int, filled: dict[str, list[str]]) -> list[str]:
+    """붙은 그래픽 분리 `sam_pick` — SAM 2 조각을 VLM이 고름. 표본 섹션만."""
+    d = RESULTS / "sam_pick"
+    if not (d / "answers.json").exists():
+        return []
+    ans = json.loads((d / "answers.json").read_text(encoding="utf-8"))
+    meta = json.loads((d / "meta.json").read_text(encoding="utf-8"))
+    parts = json.loads((RESULTS / "sam_parts" / "parts.json").read_text(encoding="utf-8"))
+    regions = [p for a in ans.values() for p in a["regions"]]
+    kinds: dict[str, int] = {}
+    for p in regions:
+        k = p["kind"] or "응답 없음"
+        kinds[k] = kinds.get(k, 0) + 1
+    cost = meta["all_answers"]
+    sam_sec = [parts[s]["sec"] for s in ans if s in parts]
+    L = [f"## {number}. 붙은 그래픽 분리 — `sam_pick`", "",
+         "`run_sam_parts.py`(SAM 2 `sam2.1_hiera_small` 자동 분할 · 로컬 GPU)로 누끼 전경을 **물체 단위 조각**으로 쪼갠 뒤 "
+         f"`run_vlm_pick.py --variant sam_pick`(프롬프트 v2 — 3D 렌더 대상 추가)으로 `{meta['model']}`가 조각 번호를 고름.", "",
+         "표본 — `vlm_pick` 그래픽 잔존·대상 누락 섹션 + 대조군(이상 없던 섹션). 판정 칸은 5~7장과 같고, **조각을 빠뜨려 생긴 구멍도 대상 누락**으로 셈.", "",
+         "| 항목 | 값 |", "|---|---|",
+         f"| 섹션 | {len(ans)} |",
+         f"| 조각 | {len(regions)} · 남김 {sum(p['keep'] for p in regions)} · 응답 누락 {sum(p['missing'] for p in regions)} |",
+         "| 판단 종류 | " + " · ".join(f"{k} {v}" for k, v in sorted(kinds.items(), key=lambda x: -x[1])) + " |",
+         f"| SAM 2 소요 | 섹션당 평균 {sum(sam_sec) / max(1, len(sam_sec)):.1f}s |",
+         f"| 토큰 · 비용 | 입력 {cost['tokens_in']:,} · 출력 {cost['tokens_out']:,} · **${cost['cost_usd']}** |", "",
+         "`results/sam_pick/vis/{섹션}.jpg` — 조각 번호 그린 섹션(VLM 입력) | 선별 결과 + 번호별 판단. `results/sam_parts/vis/` — 조각 색칠.", "",
+         "| 섹션 | SAM 마스크 | 조각 | 남김 | 요소 없음 | 혼합 | VLM 판단 | " + " | ".join(RULE_JUDGE) + " |",
+         "|---|---|---|---|---|---|---|" + "---|" * len(RULE_JUDGE)]
+    for s in sorted(ans):
+        regs = ans[s]["regions"]
+        kept = sum(p["keep"] for p in regs)
+        mixed = sum(1 for p in regs if p["kind"] == "혼합")
+        brief = " · ".join(f"#{p['id']} {p['kind'] or '?'}" for p in regs)
+        vals = filled.get(s, [""] * len(RULE_JUDGE))
+        L.append(f"| `{s}` | {parts.get(s, {}).get('sam_masks', '')} | {len(regs)} | {kept} | {'O' if kept == 0 else ''} | "
+                 f"{mixed or ''} | {brief} | " + " | ".join(vals) + " |")
+    L.append("")
+    judged = [filled[s] for s in ans if s in filled]
+    if judged:
+        cnt = lambda i, v: sum(1 for j in judged if j[i].strip() == v)
+        L += [f"판정 {len(judged)}/{len(ans)}섹션.", "", "| 항목 | O | X | — |", "|---|---|---|---|"]
+        for i, name in enumerate(RULE_JUDGE[:2]):
+            L.append(f"| {name} | **{cnt(i, 'O')}** | {cnt(i, 'X')} | {cnt(i, '—')} |")
+        L.append("")
+    return L
 
 
 def vlm_section(number: int, filled: dict[str, list[str]]) -> list[str]:
@@ -399,6 +446,7 @@ def main() -> None:
     L += rule_section("rule_comp", 5, rule_filled["rule_comp"])
     L += rule_section("rule_flat", 6, rule_filled["rule_flat"])
     L += vlm_section(7, rule_filled["vlm_pick"])
+    L += sam_section(8, rule_filled["sam_pick"])
     OUT.write_text("\n".join(L) + "\n", encoding="utf-8")
     print(f"작성: {OUT}")
     for v in variants:
