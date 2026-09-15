@@ -438,6 +438,7 @@ GOLDEN_NAMES = ("heuristic_v2", "llm_assist")
 JUDGED = "llm_assist"  # 판정 대상 — 채택 파이프라인
 GOLDEN_REGIONS = HERE.parents[1] / "poc" / "golden" / "1_B_ocr" / "results" / "baseline" / "regions"  # 단계 1 이동 후 위치
 OCR_SUMMARY = HERE.parents[1] / "poc" / "golden" / "1_B_ocr" / "summary.md"  # 단계 1 판정 — 글자 없는 섹션
+LABEL_TRUTH = HERE.parents[1] / "poc" / "golden" / "3_product_label" / "results" / "vlm_relation" / "truth.json"  # 단계 3 라벨 정답
 BOARD_PANEL_W = 640
 
 import re  # noqa: E402
@@ -490,8 +491,19 @@ def read_golden_tables() -> tuple[dict[str, list[str]], dict[str, list[str]]]:
     return counts, overrides
 
 
-def make_board(sid: str, blocks: list[dict], out: Path) -> None:
-    """판정 대지 — 왼쪽 llm_assist vis, 오른쪽 블록 번호·역할·텍스트·출처 휴리스틱 블록."""
+def load_truth() -> dict[str, list[int]]:
+    """단계 3 라벨 정답지 — 섹션별 라벨 블록 번호(1부터). llm_assist 블록 순서와 같음."""
+    if not LABEL_TRUTH.exists():
+        return {}
+    return json.loads(LABEL_TRUTH.read_text(encoding="utf-8"))["labels"]
+
+
+def make_board(sid: str, blocks: list[dict], out: Path, labels: list[int] | None = None) -> None:
+    """판정 대지 — 왼쪽 llm_assist vis, 오른쪽 블록 번호·역할·텍스트·출처 휴리스틱 블록.
+
+    labels(단계 3 정답 라벨 번호)가 있으면 해당 블록에 [라벨 — 역할 판정 제외]를 붙이고 회색으로 쓴다.
+    """
+    labels = set(labels or [])
     from PIL import Image, ImageDraw
 
     sys.path.insert(0, str(HERE))
@@ -507,15 +519,18 @@ def make_board(sid: str, blocks: list[dict], out: Path) -> None:
         ("", (0, 0, 0)),
     ]
     for i, b in enumerate(blocks, 1):
-        text = f"{i} [{b['role']}] " + b["text"].replace("\n", " / ") + f"   ← h{','.join(map(str, b.get('from', [])))}"
+        is_label = i in labels
+        mark = "  [라벨 — 역할 판정 제외]" if is_label else ""
+        col = (150, 150, 150) if is_label else H.ROLE_COLOR[b["role"]]
+        text = f"{i} [{b['role']}] " + b["text"].replace("\n", " / ") + f"   ← h{','.join(map(str, b.get('from', [])))}{mark}"
         cur = ""
         for ch in text:
             if cur and probe.textlength(cur + ch, font=font) > BOARD_PANEL_W - 24:
-                lines.append((cur, H.ROLE_COLOR[b["role"]]))
+                lines.append((cur, col))
                 cur = "    " + ch
             else:
                 cur += ch
-        lines.append((cur, H.ROLE_COLOR[b["role"]]))
+        lines.append((cur, col))
     h = max(vis.height, 12 + lh * len(lines) + 12)
     board = Image.new("RGB", (vis.width + BOARD_PANEL_W, h), (255, 255, 255))
     board.paste(vis, (0, 0))
@@ -548,8 +563,9 @@ def main_golden() -> None:
     counts, overrides = read_golden_tables()
     rel = f"results/golden/{JUDGED}"
 
+    truth = load_truth()
     for s in sids:
-        make_board(s, blocks[(JUDGED, s)], GOLDEN / JUDGED / "board" / f"{s}.jpg")
+        make_board(s, blocks[(JUDGED, s)], GOLDEN / JUDGED / "board" / f"{s}.jpg", truth.get(s))
 
     L: list[str] = []
     L.append("# 줄·문단 병합 + 역할 분류 — 골든 샘플 섹션 판정")
@@ -664,6 +680,19 @@ def main_golden() -> None:
     L.append("| 제품 인쇄 글자 | 한 제품 한 면의 글자가 한 블록이면 오류 아님(12장 `5.jpg` 판정 선례). 서로 다른 제품·컷끼리, 라벨 밖 글자와 붙으면 과병합 |")
     L.append("| 비텍스트 오검출 | 단독 블록은 세지 않음. 글자 블록에 붙어 박스가 크게 부풀면 과병합 1 |")
     L.append("| 제외 | OCR 오독·누락(단계 1 판정) · 판독 불가 흐린 잔글씨 경계 |")
+    L.append("")
+    L.append("**역할 세는 법 (골든 1차 판정 공통 — 검토 필요)**")
+    L.append("")
+    L.append("| 항목 | 규칙 |")
+    L.append("|---|---|")
+    L.append("| 라벨 | 단계 3 정답지(`poc/golden/3_product_label/results/vlm_relation/truth.json`) 라벨 블록은 오분류에서 제외, `라벨` 칸 = 섹션별 라벨 블록 수 |")
+    L.append("| 주의문구 미탐 · 가격 미탐 | 정답이 주의문구·가격인데 다른 역할 — 오분류에도 포함. 주의문구 미탐 1건이면 역할 최대 B, 2건 이상 C(6장 덮어쓰기) |")
+    L.append("| 과병합 블록 | 포함 문단 중 하나의 역할과 맞으면 오분류 아님. 주의문구·가격 문단이 섞였는데 그 역할이 아니면 미탐 |")
+    L.append("| 광고 근거 각주 | 시험 조건 외 각주(랭킹 기준·특허번호·효과 한정 문구·출고량 기준) — 주의문구 여부 미정이라 세지 않음, 비고 기록 |")
+    L.append("| 이벤트 유의사항 | 지급 조건·중복 불가 등은 이벤트 조건 — 세지 않음, 비고 기록 |")
+    L.append("| 사용법·보관 | 경고 표현(피할 것·중단·상담) 있으면 주의문구, 없으면 본문 |")
+    L.append("| 캡처 문서 · 애매 | 캡처 안 글자는 캡션·본문 허용(판독 불가면 제외). 정의상 두 역할 모두 성립하면 세지 않음 — 명백히 틀린 것만 셈 |")
+    L.append("| 비텍스트 오검출 | 세지 않음 |")
     L.append("- 등급 산식(12장 확정): 병합 = (과분할 + 과병합×2) ÷ 블록 ≤10% & 과병합 0 → A, ≤25% → B, 그 외 C (블록 10개 미만은 1건까지 A) · 역할 = 오분류 ÷ (블록 − 라벨) ≤10% A, ≤25% B")
     if empty:
         L.append(f"- **글자 없는 섹션(단계 1 판정 `-`) — 분모 제외:** " + ", ".join(f"`{s}`" for s in sorted(empty)))
