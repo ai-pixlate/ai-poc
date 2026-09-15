@@ -29,7 +29,8 @@ results/ 아래 실행된 모든 variant를 읽어 summary.md를 만든다.
     heuristic_v2 · llm_assist 골든 결과를 읽어 섹션 단위 판정표를 만든다.
     판정 대상은 llm_assist. 산식·제외 관례는 12장과 같다.
     라벨 칸은 제품 라벨 판정(단계 3) 검토 확정 정답으로 채운다 — 채우기 전엔 역할 등급 계산 안 함.
-    글자 없는 섹션(B_ocr summary_golden.md 텍스트·bbox `-`)은 분모에서 뺀다.
+    글자 없는 섹션(단계 1 판정표 poc/golden/1_B_ocr/summary.md 텍스트·bbox `-`)은 분모에서 뺀다.
+    출력은 과업 폴더에 나오고 poc/golden/move.py 2 로 옮긴다. 재실행은 --restore 후.
 """
 
 from __future__ import annotations
@@ -435,8 +436,8 @@ GOLDEN = RESULTS / "golden"
 GOLDEN_OUT = HERE / "summary_golden.md"
 GOLDEN_NAMES = ("heuristic_v2", "llm_assist")
 JUDGED = "llm_assist"  # 판정 대상 — 채택 파이프라인
-GOLDEN_REGIONS = HERE.parents[1] / "poc" / "B_ocr" / "results" / "golden" / "baseline" / "regions"
-OCR_SUMMARY = HERE.parents[1] / "poc" / "B_ocr" / "summary_golden.md"  # 단계 1 판정 — 글자 없는 섹션
+GOLDEN_REGIONS = HERE.parents[1] / "poc" / "golden" / "1_B_ocr" / "results" / "baseline" / "regions"  # 단계 1 이동 후 위치
+OCR_SUMMARY = HERE.parents[1] / "poc" / "golden" / "1_B_ocr" / "summary.md"  # 단계 1 판정 — 글자 없는 섹션
 BOARD_PANEL_W = 640
 
 import re  # noqa: E402
@@ -648,6 +649,21 @@ def main_golden() -> None:
     L.append("- **과분할** = 한 문단이 여러 블록으로 쪼개진 건 · **과병합** = 서로 다른 문단이 한 블록으로 붙은 건")
     L.append("- **오분류** = 역할 5종을 잘못 준 블록 수 — **라벨 블록은 세지 않음**")
     L.append("- **라벨** = 제품 인쇄 글자 블록 수. **단계 3 검토 확정 정답 기준으로 채움** — 채우기 전엔 역할 등급 계산 안 함")
+    L.append("- **시험 조건 각주**(시험기관·기간·대상·개인차 있음 등)는 **주의문구**로 봄 (2026-09-15 / 예람님) — 캡션으로 매겼으면 오분류")
+    L.append("")
+    L.append("**병합 세는 법 (골든 1차 판정 공통 — 12장에 문서화된 계수 규칙이 없어 이번에 정함, 검토 필요)**")
+    L.append("")
+    L.append("| 항목 | 규칙 |")
+    L.append("|---|---|")
+    L.append("| 건수 | 과분할 = 불필요한 블록 경계 1개당 1건 · 과병합 = 잘못 붙은 문단 경계 1개당 1건 |")
+    L.append("| 문단 | 이어 읽어야 뜻이 사는 한 문구. 리드 문구·아이브로우 + 헤드라인이 한 문구로 이어지면 한 문단 |")
+    L.append("| 제목 + 설명 본문 | 색·크기·간격이 달라 한 문구로 안 이어지면 과병합 1 |")
+    L.append("| 제목 위 태그 | 태그가 별도 도형(배지·박스·괄호 장식) 안이면 과병합 1, 글자만 얹혀 있으면 한 문단 |")
+    L.append("| 도형 안 | 한 배지·카드·원·도장 안 문구끼리 묶임은 오류 아님. 서로 다른 도형·열·박스끼리 붙으면 과병합 |")
+    L.append("| 목록·각주·표 | 같은 자리 같은 스타일 항목은 묶여도 나뉘어도 오류 아님. 한 항목이 줄 중간에서 갈리면 과분할 |")
+    L.append("| 제품 인쇄 글자 | 한 제품 한 면의 글자가 한 블록이면 오류 아님(12장 `5.jpg` 판정 선례). 서로 다른 제품·컷끼리, 라벨 밖 글자와 붙으면 과병합 |")
+    L.append("| 비텍스트 오검출 | 단독 블록은 세지 않음. 글자 블록에 붙어 박스가 크게 부풀면 과병합 1 |")
+    L.append("| 제외 | OCR 오독·누락(단계 1 판정) · 판독 불가 흐린 잔글씨 경계 |")
     L.append("- 등급 산식(12장 확정): 병합 = (과분할 + 과병합×2) ÷ 블록 ≤10% & 과병합 0 → A, ≤25% → B, 그 외 C (블록 10개 미만은 1건까지 A) · 역할 = 오분류 ÷ (블록 − 라벨) ≤10% A, ≤25% B")
     if empty:
         L.append(f"- **글자 없는 섹션(단계 1 판정 `-`) — 분모 제외:** " + ", ".join(f"`{s}`" for s in sorted(empty)))

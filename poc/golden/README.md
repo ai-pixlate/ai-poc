@@ -1,0 +1,27 @@
+# 골든 샘플 재실행 결과
+
+> 계획 `PoC_골든샘플_재실행_계획.md`. 골든 샘플 3상품 34장 → 섹션 102개로 확정 기술 7종 재실행한 결과 모음.
+> 등급·집계 원본은 각 단계 `summary.md`. 이 표는 현황·링크만 담음.
+
+## 현황
+
+| 단계 | 과업 | 코드 | 결과 · 판정표 | 상태 | 게이트 |
+|---|---|---|---|---|---|
+| 1 | 텍스트 추출 | `poc/B_ocr` | [1_B_ocr](1_B_ocr/summary.md) | 실행 완료 · Claude 1차 판정 완료 · 예람님 검토 대기 | 텍스트 98/100 · bbox 99/100 — 1차 기준 통과 |
+| 2 | 줄·문단 병합 + 역할 분류 | `poc/block_role` | _이동 전_ | 실행 완료($0.1761) · 병합 Claude 1차 판정 중 · 역할은 단계 3 뒤 | _미정_ |
+| 3 | 제품 라벨 판정 | `poc/product_label` | — | 미착수 | _미정_ |
+| 4 | 브랜드 로고 제외 재확인 | `poc/logo_match` | — | 미착수 | _미정_ |
+| 5 | 원문 지우기 | `poc/E1_inpaint` | — | 미착수 | _미정_ |
+| 6 | 스타일 추출 | `poc/style_extract` | — | 미착수 | _미정_ |
+| 7 | 번역 길이 팽창률 | `poc/length_expansion` | — | 미착수 | _미정_ |
+
+## 이동 규칙
+
+| 항목 | 내용 |
+|---|---|
+| 실행 출력 | `poc/{과업}/results/golden/{variant}/` · `poc/{과업}/summary_golden.md` — 코드 출력 경로 그대로 |
+| 이동 | `python poc/golden/move.py {단계}` → `poc/golden/{단계}_{과업}/results/{variant}/` · `summary.md` (판정표 링크 자동 수정) |
+| 재실행 | `move.py {단계} --restore` → 실행 · compare → `move.py {단계}`. 채운 등급은 원위치 판정표에서 회수됨 |
+| 다음 단계 입력 | 이동 위치(`poc/golden/`)에서 읽음 |
+| git | `summary.md`만 추적. `results/`는 `.gitignore` |
+| API 캐시 | 과업 폴더 `cache/`에 남김. 이동 안 함 |

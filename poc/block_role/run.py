@@ -359,7 +359,7 @@ def run_variant(name: str, stems: list[str]) -> None:
 
 # ---------------------------------------------------------------- 골든 샘플 — 섹션 단위
 
-GOLDEN_SRC = ROOT / "poc" / "B_ocr" / "results" / "golden" / "baseline" / "regions"
+GOLDEN_SRC = ROOT / "poc" / "golden" / "1_B_ocr" / "results" / "baseline" / "regions"  # 단계 1 이동 후 위치
 GOLDEN_PAGES = ROOT / "data" / "golden_sample"
 GOLDEN_RESULTS = RESULTS / "golden"
 GOLDEN_VARIANTS = ("heuristic_v2",)  # 병합 1단계 채택안 — llm_assist 입력

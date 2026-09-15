@@ -17,6 +17,13 @@
 
 variant는 실험 조건명으로 짓는다 (baseline, vl_model, upscale_2x, clahe 등).
 
+골든 샘플 재실행 (`PoC_골든샘플_재실행_계획.md`):
+- `poc/golden/{단계}_{과업}/` — 단계별 결과 모음. `results/{variant}/` + `summary.md`. 단계 번호는 계획 3장 실행 순서
+- 코드는 과업 폴더에 둔다(`--sample golden`). **출력 경로는 바꾸지 않는다** — 과업 폴더 `results/golden/` · `summary_golden.md`로 나온 뒤 `python poc/golden/move.py {단계}`로 이동
+- 재실행 시 `move.py {단계} --restore`로 되돌린 뒤 실행하고 다시 이동한다. 채운 등급을 compare가 원위치 판정표에서 회수하기 때문
+- 다음 단계가 읽는 앞 단계 결과는 `poc/golden/` 이동 위치를 입력으로 쓴다
+- 단계 폴더는 이동 시점에 생긴다. `poc/golden/README.md`에 단계별 현황·판정표 링크
+
 데이터:
 - `data/images/` — 테스트 이미지 원본. 하위 폴더로 나누지 않는다.
 

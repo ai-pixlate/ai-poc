@@ -295,7 +295,7 @@ def main_default(args) -> None:
 
 GOLDEN_SRC = RESULTS / "golden" / "heuristic_v2" / "blocks"
 GOLDEN_OUT = RESULTS / "golden" / VARIANT
-GOLDEN_REGIONS = ROOT / "poc" / "B_ocr" / "results" / "golden" / "baseline" / "regions"
+GOLDEN_REGIONS = ROOT / "poc" / "golden" / "1_B_ocr" / "results" / "baseline" / "regions"  # 단계 1 이동 후 위치
 GOLDEN_CACHE = CACHE / MODEL["model_id"] / "golden"
 SEC_PER_CALL_12 = 6.7  # 12장 실측 평균 (79.85s / 12장)
 
