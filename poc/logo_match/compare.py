@@ -16,8 +16,14 @@
     OCR 텍스트를 브랜드명과 대조. 상품마다 자기 브랜드명만 대조하므로 "남의 페이지"
     축이 없다. 통과 목록(기계)과 판정표(사람)를 따로 둔다.
 
+--sample golden
+    results/golden/block_exact/meta.json 을 읽어 summary_golden.md 를 만든다.
+    기존 정답(페이지 로고 7개)과 기계 대조 결과라 사람이 채울 칸 없음 — 대지로 확인만.
+    출력은 과업 폴더에 나오고 poc/golden/move.py 4 로 옮긴다.
+
 사용법
     python compare.py
+    python compare.py --sample golden
 """
 
 from __future__ import annotations
@@ -66,8 +72,7 @@ def read_filled() -> tuple[dict, dict]:
     return got, got_text
 
 
-def main() -> None:
-    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+def main_default() -> None:
     names = variants()
     if not names:
         raise SystemExit("실행 결과 없음 — run.py 를 먼저 돌릴 것")
@@ -228,6 +233,91 @@ def main() -> None:
 
     OUT.write_text("\n".join(L) + "\n", encoding="utf-8")
     print(f"작성: {OUT}")
+
+
+# ── 골든 샘플 — 단계 4 재확인 ───────────────────────────────────────────
+
+GOLDEN = RESULTS / "golden" / "block_exact"
+GOLDEN_OUT = HERE / "summary_golden.md"
+
+
+def g_text(s: str | None) -> str:
+    return (s or "—").replace("|", "\\|").replace("\n", " / ").strip()
+
+
+def main_golden() -> None:
+    p = GOLDEN / "meta.json"
+    if not p.exists():
+        raise SystemExit(f"{p} 없음 — run_text.py --sample golden 먼저")
+    m = json.loads(p.read_text(encoding="utf-8"))
+    c, prev = m["counts"], m["prev"]
+    rel = "results/golden/block_exact"
+
+    L = ["# 브랜드 로고 제외 — 골든 샘플 재확인", "",
+         "> `compare.py --sample golden`이 생성함. 계획 `PoC_골든샘플_재실행_계획.md` 단계 4. 12장·34장 결과(`summary.md`)는 건드리지 않음.",
+         "> **기계 대조** — 기존 정답(페이지 로고 7개 · 5장)과 페이지 좌표 IoU ≥ 0.5로 맞춤. 사람이 채울 칸 없음, 대지로 확인만.",
+         ""]
+
+    L += ["## 1. 실행 조건", "", "| 항목 | 값 |", "|---|---|",
+          "| 규칙 | `block_exact` — 블록 텍스트 전체 == 브랜드명(NFKC · 소문자 · 공백·문장부호 제거) |",
+          "| 입력 | 단계 2 `llm_assist` 블록 · 단계 3 라벨 정답(패키지 위 로고 = 라벨 소관, 세지 않음) |",
+          "| 기존 결과 | 병합 1단계 `heuristic_v2` 블록 기준 — 결과 문서 6장 |",
+          f"| 섹션 · 블록 | {m['sections']} · {m['blocks']} |",
+          f"| 브랜드명 통과 | {m['pass']} (라벨 블록 {m['pass_label']} · 라벨 밖 {m['pass'] - m['pass_label']}) |",
+          f"| 대조 소요 | {m['match_sec']}s |",
+          "| 브랜드명 사전 | " + " · ".join(f"{k.replace('images_', '')} `{'` `'.join(v)}`" for k, v in m["brands"].items()) + " |",
+          ""]
+
+    L += ["## 2. 기계 대조 결과", "",
+          "| 블록 기준 | 찾음 | 놓침 | 오탐 | 종결 기준 (놓침·오탐이 기존보다 늘지 않음) |", "|---|---|---|---|---|",
+          f"| 기존 `heuristic_v2` | {prev['found']} | {prev['missed']} | {prev['false']} | — |",
+          f"| **이번 `llm_assist`** | **{c['found']}** | **{c['missed']}** | **{c['false']}** | **{m['gate']}** |", ""]
+
+    L += ["## 3. 페이지 로고 7개", "",
+          f"대지 `{rel}/logos.jpg` — 초록 찾음 · 빨강 놓침 · 파랑 = 로고를 품은 `llm_assist` 블록.", "",
+          "| # | 페이지 | y | 로고 | 기존 | 이번 | 품은 블록 | 블록 텍스트 |", "|---|---|---|---|---|---|---|---|"]
+    for i, r in enumerate(m["page_logos"], 1):
+        host = f"`{r['host_section']}` #{r['host_block']}" if r["host_section"] else "없음"
+        mark = "**놓침**" if r["status"] == "놓침" else "찾음"
+        L.append(f"| {i} | {r['image'][:-4]} | {r['bbox'][1]} | `{r['text']}` | {r['prev_block_exact']} | {mark} | {host} | {g_text(r['host_text'])} |")
+    L.append("")
+
+    L += ["## 4. 브랜드명 통과 블록", "",
+          "| 섹션 | 블록 | y (페이지) | 텍스트 | 구분 |", "|---|---|---|---|---|"]
+    logo_keys = {(r["host_section"], r["host_block"]) for r in m["page_logos"] if r["status"] == "찾음"}
+    rows = [(h, "라벨 소관(패키지)") for h in m["package_hits"]] + [(h, "오탐") for h in m["false_hits"]]
+    for r in m["page_logos"]:
+        if r["status"] == "찾음":
+            rows.append(({"section": r["host_section"], "block": r["host_block"], "page_bbox": r["host_page_bbox"],
+                          "text": r["host_text"]}, "페이지 로고 찾음"))
+    for h, kind in sorted(rows, key=lambda x: (x[0]["section"], x[0]["block"])):
+        L.append(f"| `{h['section']}` | {h['block']} | {h['page_bbox'][1]} | {g_text(h['text'])} | {kind} |")
+    L.append("")
+
+    missed = [r for r in m["page_logos"] if r["status"] == "놓침"]
+    if missed:
+        L += ["## 5. 놓침 원인", "", "| 페이지 | y | 기존 | 품은 블록 텍스트 | 원인 |", "|---|---|---|---|---|"]
+        for r in missed:
+            why = ("기존부터 놓침 — 공동 로고가 옆 글자와 묶임" if r["prev_block_exact"] == "놓침"
+                   else "**새 놓침** — LLM 보정이 로고를 옆 글자와 한 블록으로 묶음")
+            L.append(f"| {r['image'][:-4]} | {r['bbox'][1]} | {r['prev_block_exact']} | {g_text(r['host_text'])} | {why} |")
+        L += ["", "> 계획서 단계 4 근거(결과 문서 9장 한계 3 · 10장 19번) — LLM 보정이 로고를 옆 글자와 묶으면 놓침이 늘 수 있음.", ""]
+
+    GOLDEN_OUT.write_text("\n".join(L) + "\n", encoding="utf-8")
+    print(f"작성: {GOLDEN_OUT}  (찾음 {c['found']} · 놓침 {c['missed']} · 오탐 {c['false']} → {m['gate']})")
+
+
+def main() -> None:
+    import argparse
+
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--sample", choices=("default", "golden"), default="default")
+    args = ap.parse_args()
+    if args.sample == "golden":
+        main_golden()
+    else:
+        main_default()
 
 
 if __name__ == "__main__":

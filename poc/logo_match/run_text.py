@@ -34,9 +34,15 @@ variant
     results/{variant}/hits.jpg            통과 region을 주변과 함께 잘라 모은 대지
     results/{variant}/meta.json
 
+--sample golden (골든 샘플 단계 4 재확인)
+    단계 2 `llm_assist` 블록(poc/golden/2_block_role)에 `block_exact`를 적용하고 기존 정답 페이지 로고 7개와
+    페이지 좌표로 기계 대조. 라벨 블록(poc/golden/3_product_label 정답) 위 통과는 라벨 소관이라 세지 않음.
+    출력 results/golden/block_exact/meta.json · logos.jpg → poc/golden/move.py 4 로 이동
+
 사용법
     python run_text.py --variant all
     python run_text.py --variant text_exact --images A000000219554_001.jpg
+    python run_text.py --sample golden
 """
 
 from __future__ import annotations
@@ -361,12 +367,159 @@ def run_variant(name: str, paths: list[Path], ocr: dict[str, dict], ocr_sec: flo
         print(f"    {path.stem:<20} y{m['bbox'][1]:>6}  {m['ratio']:<5} 「{m['text']}」".replace("\n", " / "))
 
 
+# ── 골든 샘플 — 단계 4 재확인 ───────────────────────────────────────────
+# 입력 = 단계 2 `llm_assist` 블록(섹션 좌표) + 단계 3 라벨 정답. 대조 규칙은 `block_exact` 그대로.
+# 기존 정답과 페이지 좌표로 기계 대조한다. 패키지 위 로고(라벨 블록)는 라벨 판정 소관이라 세지 않는다.
+GOLDEN_BLOCKS = ROOT / "poc" / "golden" / "2_block_role" / "results" / "llm_assist" / "blocks"  # 단계 2 이동 후 위치
+GOLDEN_LABELS = ROOT / "poc" / "golden" / "3_product_label" / "results" / "vlm_relation" / "truth.json"  # 단계 3 정답
+GOLDEN_RESULTS = RESULTS / "golden" / "block_exact"
+
+# 기존 정답 — 페이지 로고 7개(5장), 페이지 좌표.
+# summary.md 6장 `text_exact` 판정(찾음 7 · 놓침 0)의 통과 region 중 단계 3 라벨 블록 밖이고
+# 기존 오탐(`비클리닉스` 제목 첫 줄 2건)이 아닌 것. 페이지별 개수가 기존 판정과 일치함.
+PAGE_LOGOS = [
+    {"image": "A000000213548_002.jpg", "bbox": [385, 162, 611, 230], "text": "b.clinicx"},
+    {"image": "A000000213548_002.jpg", "bbox": [386, 5565, 611, 5628], "text": "b.clinicx"},
+    {"image": "A000000213548_018.jpg", "bbox": [376, 7601, 623, 7675], "text": "b.clinicx"},
+    {"image": "A000000219554_001.jpg", "bbox": [421, 1219, 580, 1288], "text": "goodal"},
+    {"image": "A000000219554_002.jpg", "bbox": [556, 33883, 727, 33945], "text": "goodal"},
+    {"image": "A000000219554_002.jpg", "bbox": [64, 36418, 396, 36553], "text": "goodal"},
+    {"image": "A000000250199_002.jpg", "bbox": [274, 86, 487, 124], "text": "celimax×"},
+]
+PREV = {"found": 6, "missed": 1, "false": 0}  # 기존 `block_exact`(heuristic_v2 블록) 결과 — 결과 문서 6장
+
+
+def iou(a: list[int], b: list[int]) -> float:
+    ix = max(0, min(a[2], b[2]) - max(a[0], b[0]))
+    iy = max(0, min(a[3], b[3]) - max(a[1], b[1]))
+    inter = ix * iy
+    if not inter:
+        return 0.0
+    return inter / ((a[2] - a[0]) * (a[3] - a[1]) + (b[2] - b[0]) * (b[3] - b[1]) - inter)
+
+
+def contains(outer: list[int], inner: list[int], tol: int = 6) -> bool:
+    return (inner[0] >= outer[0] - tol and inner[1] >= outer[1] - tol
+            and inner[2] <= outer[2] + tol and inner[3] <= outer[3] + tol)
+
+
+def logo_sheet(rows: list[dict], out: Path) -> None:
+    """정답 로고 7개 — 초록 찾음 · 빨강 놓침, 파랑 = 로고를 품은 블록."""
+    paths = {p.name: p for p in SRC.rglob("*.jpg")}
+    cw, ch, cols = 420, 230, 2
+    font = _font(13)
+    sheet = Image.new("RGB", (cols * cw, ((len(rows) + cols - 1) // cols) * ch), (120, 120, 120))
+    opened: dict[str, Image.Image] = {}
+    for i, r in enumerate(rows):
+        if r["image"] not in opened:
+            opened[r["image"]] = Image.open(paths[r["image"]]).convert("RGB")
+        im = opened[r["image"]]
+        boxes = [r["bbox"]] + ([r["host_page_bbox"]] if r.get("host_page_bbox") else [])
+        u = union_box(boxes)
+        pad = 30
+        box = (max(0, u[0] - pad), max(0, u[1] - pad), min(im.width, u[2] + pad), min(im.height, u[3] + pad))
+        crop = im.crop(box)
+        dr = ImageDraw.Draw(crop)
+        if r.get("host_page_bbox"):
+            h = r["host_page_bbox"]
+            dr.rectangle([h[0] - box[0], h[1] - box[1], h[2] - box[0], h[3] - box[1]], outline=(30, 90, 220), width=3)
+        col = (20, 170, 60) if r["status"] == "찾음" else (220, 30, 30)
+        x1, y1, x2, y2 = r["bbox"]
+        dr.rectangle([x1 - box[0], y1 - box[1], x2 - box[0], y2 - box[1]], outline=col, width=2)
+        s = min((cw - 4) / crop.width, (ch - 40) / crop.height, 2.0)
+        crop = crop.resize((max(1, int(crop.width * s)), max(1, int(crop.height * s))))
+        tile = Image.new("RGB", (cw - 2, ch - 2), (255, 255, 255))
+        tile.paste(crop, (0, 38))
+        td = ImageDraw.Draw(tile)
+        td.text((3, 1), f"{i + 1} {r['image'][:-4]} y{y1} — {r['status']}", fill=col, font=font)
+        td.text((3, 19), f"블록 「{(r.get('host_text') or '없음')[:34]}」".replace("\n", " / "), fill=(0, 0, 0), font=font)
+        sheet.paste(tile, ((i % cols) * cw, (i // cols) * ch))
+    out.parent.mkdir(parents=True, exist_ok=True)
+    sheet.save(out, quality=88)
+
+
+def run_golden() -> None:
+    if not GOLDEN_BLOCKS.exists() or not GOLDEN_LABELS.exists():
+        raise SystemExit("단계 2·3 결과 없음 — poc/golden/2_block_role · 3_product_label 확인")
+    labels = json.loads(GOLDEN_LABELS.read_text(encoding="utf-8"))["labels"]
+    cfg = VARIANTS["block_exact"]
+    t0 = time.perf_counter()
+    blocks_by_page: dict[str, list[dict]] = {}
+    hits: list[dict] = []
+    sections = 0
+    for f in sorted(GOLDEN_BLOCKS.glob("*.json")):
+        d = json.loads(f.read_text(encoding="utf-8"))
+        sid, off = d["section"], d["top_offset"]
+        image = f"{sid[:17]}.jpg"
+        keys = BRANDS[f"images_{sid[:13]}"]
+        lab = set(labels.get(sid, []))
+        sections += 1
+        for i, b in enumerate(d["blocks"], 1):
+            x0, y0, x1, y1 = b["bbox"]
+            row = {"section": sid, "block": i, "image": image, "text": b["text"], "bbox": b["bbox"],
+                   "page_bbox": [x0, y0 + off, x1, y1 + off], "is_product_label": i in lab}
+            blocks_by_page.setdefault(image, []).append(row)
+            h = match(b["text"], keys, cfg)
+            if h:
+                hits.append({**row, "key": h[0]})
+    match_sec = round(time.perf_counter() - t0, 3)
+
+    prev = {}
+    for g in PAGE_LOGOS:
+        m = json.loads((RESULTS / "block_exact" / "matches" / f"{g['image'][:-4]}.json").read_text(encoding="utf-8"))["matches"]
+        prev[(g["image"], tuple(g["bbox"]))] = any(iou(g["bbox"], x["bbox"]) >= 0.5 for x in m)
+
+    truth_rows, used = [], set()
+    for g in PAGE_LOGOS:
+        page_hits = [h for h in hits if h["image"] == g["image"] and not h["is_product_label"]]
+        best = max(page_hits, key=lambda h: iou(g["bbox"], h["page_bbox"]), default=None)
+        ok = best is not None and iou(g["bbox"], best["page_bbox"]) >= 0.5
+        if ok:
+            used.add((best["section"], best["block"]))
+        host = next((b for b in blocks_by_page.get(g["image"], []) if contains(b["page_bbox"], g["bbox"])), None)
+        truth_rows.append({**g, "status": "찾음" if ok else "놓침",
+                           "prev_block_exact": "찾음" if prev[(g["image"], tuple(g["bbox"]))] else "놓침",
+                           "host_section": host["section"] if host else None, "host_block": host["block"] if host else None,
+                           "host_text": host["text"] if host else None, "host_page_bbox": host["page_bbox"] if host else None,
+                           "host_is_label": host["is_product_label"] if host else None})
+    false_hits = [h for h in hits if not h["is_product_label"] and (h["section"], h["block"]) not in used]
+    package = [h for h in hits if h["is_product_label"]]
+    counts = {"found": sum(r["status"] == "찾음" for r in truth_rows),
+              "missed": sum(r["status"] == "놓침" for r in truth_rows), "false": len(false_hits)}
+    passed = counts["missed"] <= PREV["missed"] and counts["false"] <= PREV["false"]
+
+    GOLDEN_RESULTS.mkdir(parents=True, exist_ok=True)
+    logo_sheet(truth_rows, GOLDEN_RESULTS / "logos.jpg")
+    meta = {"variant": "block_exact", "sample": "golden", "cfg": cfg, "brands": BRANDS,
+            "source": "poc/golden/2_block_role/results/llm_assist · 라벨 poc/golden/3_product_label/.../truth.json",
+            "sections": sections, "blocks": sum(len(v) for v in blocks_by_page.values()),
+            "pass": len(hits), "pass_label": len(package), "match_sec": match_sec,
+            "counts": counts, "prev": PREV, "gate": "통과" if passed else "미달",
+            "page_logos": truth_rows, "false_hits": false_hits, "package_hits": package,
+            "run_at": time.strftime("%Y-%m-%d %H:%M:%S")}
+    (GOLDEN_RESULTS / "meta.json").write_text(json.dumps(meta, ensure_ascii=False, indent=1), encoding="utf-8")
+    print(f"[golden/block_exact] 섹션 {sections} · 통과 {len(hits)} (라벨 소관 {len(package)}) · {match_sec}s")
+    print(f"  찾음 {counts['found']} · 놓침 {counts['missed']} · 오탐 {counts['false']}  "
+          f"(기존 {PREV['found']}·{PREV['missed']}·{PREV['false']}) → {meta['gate']}")
+    for r in truth_rows:
+        print(f"    {r['image']:<22} y{r['bbox'][1]:>6} {r['status']} (기존 {r['prev_block_exact']})  "
+              f"블록 {r['host_section']}#{r['host_block']} 「{r['host_text']}」".replace("\n", " / "))
+
+
 def main() -> None:
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     ap = argparse.ArgumentParser()
-    ap.add_argument("--variant", required=True, help=f"{', '.join(VARIANTS)}, all")
+    ap.add_argument("--variant", help=f"{', '.join(VARIANTS)}, all")
     ap.add_argument("--images", nargs="*", default=None)
+    ap.add_argument("--sample", choices=("default", "golden"), default="default",
+                    help="golden = 단계 2 llm_assist 블록으로 block_exact 재확인")
     args = ap.parse_args()
+
+    if args.sample == "golden":
+        run_golden()
+        return
+    if not args.variant:
+        raise SystemExit("--variant 필요")
 
     paths = sorted(SRC.rglob("*.jpg"), key=lambda p: (p.parent.name, p.name))
     if args.images:
