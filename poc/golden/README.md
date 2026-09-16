@@ -12,7 +12,7 @@
 | 3 | 제품 라벨 판정 | `poc/product_label` | [3_product_label](3_product_label/summary.md) | 실행 완료($0.2171) · Claude 1차 전수 판정 완료 · 예람님 검토 대기 · 정답지 `results/vlm_relation/truth.json` | 미탐 0 · 오탐 0 — 1차 기준 통과 |
 | 4 | 브랜드 로고 제외 재확인 | `poc/logo_match` | [4_logo_match](4_logo_match/summary.md) | 실행 완료(비용 0) · 기존 정답과 기계 대조 완료 | 찾음 5 · 놓침 2 · 오탐 0 — **미달**(기존 6·1·0보다 놓침 +1) · 대응 _미정_ |
 | 5 | 원문 지우기 | `poc/E1_inpaint` | [5_E1_inpaint](5_E1_inpaint/summary.md) | 실행 완료(비용 0) · Claude 1차 판정 완료 · 예람님 검토 대기 | `erase_all` 66% · 사진 54% — **미달** / `erase_s50` 72% · 사진 71% — 통과 · 확정 조건 변경 _미정_ |
-| 6 | 스타일 추출 | `poc/style_extract` | — | 미착수 | _미정_ |
+| 6 | 스타일 추출 | `poc/style_extract` | [6_style_extract](6_style_extract/summary.md) | 실행 완료(비용 0) · Claude 1차 판정 완료 · 예람님 검토 대기 | 색 95/99(96%) · 크기 99/99(100%) · 정렬 99/99(100%) — 통과 |
 | 7 | 번역 길이 팽창률 | `poc/length_expansion` | — | 미착수 | _미정_ |
 
 ## 이동 규칙
