@@ -154,6 +154,53 @@ def board(sid: str) -> None:
     cv2.imencode(".jpg", canvas, [cv2.IMWRITE_JPEG_QUALITY, 85])[1].tofile(str(OUT_DIR / "board" / f"{sid}.jpg"))
 
 
+
+def dilate_section(grades: dict) -> list:
+    """마스크를 넓히면 잔존이 줄어드는가 — run_dilate_golden.py 결과. grades = {섹션: erase_s50 등급}"""
+    f = OUT_DIR / "dilate" / "meta.json"
+    if not f.exists():
+        return []
+    m = json.loads(f.read_text(encoding="utf-8"))
+    rows, s = m["per_section"], m["summary"]
+    L = ["## 5. 마스크를 넓혀 다시 지우기 (`run_dilate_golden.py` · 확정 조건 `erase_s50`)", "",
+         f"섹션 {m['sections']} · 지운 영역 {m['regions']:,}. **남은 글자** = 결과를 다시 OCR해 지운 자리에서 읽힌 영역(신뢰도 0.5 이상) · "
+         "**얼룩** = 지운 덩어리 안쪽 색과 바깥 둘레 색의 Lab 거리(면적 가중 평균)", "",
+         "| 조건 | 내용 | 남은 글자 | 남은 섹션 | 얼룩 평균 | 마스크 | LaMa |", "|---|---|---|---|---|---|---|"]
+    desc = {"d15": "확정 조건 — 글자 높이 15% 팽창", "d30": "처음부터 30%", "d50": "처음부터 50%",
+            "loop30": f"d15 결과에서 **다시 읽힌 영역만** 30%로 넓혀 한 번 더 ({m['loop_sections']}섹션)"}
+    for n in ("d15", "d30", "d50", "loop30"):
+        v = s[n]
+        L.append(f"| `{n}` | {desc[n]} | {v['left']} ({v['left_rate']}%) | {v['sections_with_left']} | "
+                 f"{v['blotch_mean']} | {v['mask_pct_mean']}% | {v['lama_sec']}s |")
+    L += ["", "**얼룩 변화 — 섹션 수**(차이 1 초과)", "", "| 조건 | 늘어남 | 줄어듦 | 그대로 |", "|---|---|---|---|"]
+    for n in ("d30", "d50"):
+        up = sum(1 for r in rows if r[n]["blotch"] - r["d15"]["blotch"] > 1)
+        dn = sum(1 for r in rows if r["d15"]["blotch"] - r[n]["blotch"] > 1)
+        L.append(f"| `{n}` | {up} | {dn} | {len(rows) - up - dn} |")
+    L += ["", "**등급별 얼룩 평균** — 단계 5 `erase_s50` 판정 기준", "", "| 등급 | 섹션 | d15 | d30 | d50 |", "|---|---|---|---|---|"]
+    for g in "ABC":
+        rs = [r for r in rows if grades.get(r["section"]) == g]
+        if rs:
+            L.append(f"| {g} | {len(rs)} | " + " | ".join(f"{sum(r[n]['blotch'] for r in rs) / len(rs):.2f}" for n in ("d15", "d30", "d50")) + " |")
+    ab = [r["d15"]["blotch"] for r in rows if grades.get(r["section"]) in ("A", "B")]
+    c = [r["d15"]["blotch"] for r in rows if grades.get(r["section"]) == "C"]
+    L += ["", "**얼룩 지표로 C 가르기** — d15 기준, 임계 이상을 C 후보로 볼 때", "",
+          "| 임계 | C 중 잡힘 | A·B 중 잘못 잡힘 |", "|---|---|---|"]
+    for th in (3, 5, 8):
+        L.append(f"| {th} | {sum(1 for x in c if x >= th)}/{len(c)} | {sum(1 for x in ab if x >= th)}/{len(ab)} |")
+    L += ["", "**해석 — 넓혀서 다시 지우는 것은 도움이 되지 않음**", "",
+          f"- **OCR로 다시 읽히는 글자는 거의 없음** — {s['d15']['left']}/{m['regions']:,}({s['d15']['left_rate']}%). 판정 비고에 잔상이 적힌 "
+          f"{len(m['residue_tagged_sections'])}섹션의 잔상은 대부분 OCR이 못 읽는 희미한 흔적이라, **OCR 재검출로는 루프를 걸 수 없음**",
+          "- 루프(`loop30`)는 다시 읽힌 3영역을 모두 없애고 얼룩도 늘리지 않음 — 다만 대상이 3섹션뿐이라 게이트에 영향 없음",
+          "- **처음부터 넓히면 얼룩이 늘어남** — 평균 3.38 → 4.59(30%) → 7.04(50%). 50%에서 42섹션이 나빠지고 8섹션만 나아짐. "
+          "**A 섹션이 가장 크게 나빠짐**(1.88 → 8.69) — 멀쩡하던 자리를 망가뜨림",
+          "- 드물게 나아지는 경우도 있음 — `219554_002_010` 헤드라인 자리 회색 덩어리가 50%에서 사라짐(13.86 → 2.51). 일관되지 않아 규칙으로 쓸 수 없음",
+          "- 배지 둘레의 곡선 글자(`인체 적용 테스트 완료`)는 **애초에 마스크에 없어** 넓혀도 남음 — 잔상의 일부는 OCR 미검출이 원인",
+          "- **부수 발견: 얼룩 지표는 C에서 높게 나옴**(d15 C 평균 7.23 · A·B 약 1.9). 다만 임계 3에서 C 16/28을 잡는 동안 A·B 8/71도 걸리고, 임계 5에서는 C를 9/28만 잡음 — **단독 판정은 못 하고, 검수 우선순위를 매기는 보조 신호 수준**임",
+          "",
+          "> 육안 확인은 대지 `results/dilate/board/`(잔상이 적힌 섹션·다시 읽힌 섹션 25개) 중 일부만 봄. 조건별 A/B/C 재판정은 하지 않음", ""]
+    return L
+
 def main() -> None:
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     meta_path = OUT_DIR / "meta.json"
@@ -266,6 +313,7 @@ def main() -> None:
         L += ["", "> 게이트 — 섹션 A+B 70%, 사진·그라데이션 위 글자 포함(계획 7장).", ""]
     L.append("")
 
+    L += dilate_section({k: v[2] for k, v in filled.items()})
     SUMMARY.write_text("\n".join(L) + "\n", encoding="utf-8")
     print(f"작성: {SUMMARY}  (섹션 {len(rows)} · 대지 {rel}/board/ · 판정 {len(filled)})")
     print(f"  글자 아닌 영역 지워지는 섹션 — erase_all {len(nt_sections)} · erase_s50 {len(nt_s50_sections)}")
