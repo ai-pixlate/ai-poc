@@ -82,7 +82,47 @@ def load_region_docs() -> list[dict]:
     return docs
 
 
-LOADERS = {"block": load_block_docs, "region": load_region_docs}
+# ── 골든 샘플 (계획 단계 7) ────────────────────────────────────────────
+# 채택 파이프라인 단위 그대로 — 단계 2 블록에서 단계 3 라벨·단계 4 로고를 뺀 조판 대상.
+GOLDEN_BLOCKS = ROOT / "poc" / "golden" / "2_block_role" / "results" / "llm_assist" / "blocks"
+GOLDEN_TRUTH = ROOT / "poc" / "golden" / "3_product_label" / "results" / "vlm_relation" / "truth.json"
+GOLDEN_LOGO = ROOT / "poc" / "golden" / "4_logo_match" / "results" / "block_exact" / "meta.json"
+
+
+def golden_logo_blocks() -> set:
+    m = json.loads(GOLDEN_LOGO.read_text(encoding="utf-8"))
+    out = {(r["host_section"], r["host_block"]) for r in m["page_logos"]
+           if r["status"] == "찾음" and r["host_section"]}
+    out |= {(r["section"], r["block"]) for r in m.get("false_hits", [])}
+    return out
+
+
+def load_golden_docs() -> list[dict]:
+    """골든 섹션별 조판 대상 블록. 라벨·로고·한글 없는 블록은 뺀다. 문서 = 섹션."""
+    for p in (GOLDEN_BLOCKS, GOLDEN_TRUTH, GOLDEN_LOGO):
+        if not p.exists():
+            raise SystemExit(f"상류 결과 없음: {p}")
+    labels_all = json.loads(GOLDEN_TRUTH.read_text(encoding="utf-8"))["labels"]
+    logos = golden_logo_blocks()
+    docs = []
+    for path in sorted(GOLDEN_BLOCKS.glob("*.json")):
+        d = json.loads(path.read_text(encoding="utf-8"))
+        sid, blocks = d["section"], d["blocks"]
+        labels = set(labels_all.get(sid, []))
+        segs, context = [], []
+        for i, b in enumerate(blocks, 1):
+            flat = b["text"].replace("\n", " ")
+            context.append(flat)
+            if i in labels or (sid, i) in logos or not HANGUL.search(b["text"]):
+                continue
+            segs.append({"id": f"{sid}-{i:02d}", "text": flat, "bbox": b["bbox"],
+                         "role": b.get("role"), "src_lines": b["text"].count("\n") + 1})
+        if segs:
+            docs.append({"image": sid, "segments": segs, "page_text": context})
+    return docs
+
+
+LOADERS = {"block": load_block_docs, "region": load_region_docs, "golden": load_golden_docs}
 
 
 def load_env() -> None:
@@ -99,6 +139,36 @@ def max_chars(seg: dict, src_lines: int) -> int:
     x1, y1, x2, y2 = seg["bbox"]
     em = (y2 - y1) / max(1, src_lines) * 1.35
     return max(4, round((x2 - x1) * src_lines / (0.5 * em)))
+
+
+def dry_estimate(name: str, chars: int, n_seg: int, n_doc: int, pvariant: str) -> None:
+    """10장 `block` 실측(translations/block.meta.json)으로 토큰·비용을 환산한다.
+
+    입력 토큰 / 프롬프트 글자 수, 출력 토큰 / 세그먼트 수 두 비율만 쓴다.
+    같은 프롬프트 문안·같은 모델이라 비율이 유지된다고 본다.
+    """
+    meta_path = OUT / "block.meta.json"
+    if not meta_path.exists():
+        print("  (환산 근거 없음 — translations/block.meta.json 필요)")
+        return
+    m = json.loads(meta_path.read_text(encoding="utf-8"))
+    base_chars = 0
+    for doc in load_block_docs():
+        segs = [{"id": s["id"], "text": s["text"]} for s in doc["segments"]]
+        system, user = P.build(segs, doc["page_text"], "default")
+        base_chars += len(system) + len(user)
+    tok_per_char = m["tokens"]["in"] / base_chars
+    out_per_seg = m["tokens"]["out"] / m["segments"]
+    t_in = chars * tok_per_char
+    t_out = n_seg * out_per_seg
+    cost = t_in / 1e6 * MODEL["price_in"] + t_out / 1e6 * MODEL["price_out"]
+    print(f"  호출 {n_doc}건 · 세그먼트 {n_seg} · 프롬프트 {chars:,}자")
+    print(f"  10장 실측 환산 — 입력 {tok_per_char:.3f} tok/자 · 출력 {out_per_seg:.1f} tok/세그먼트 "
+          f"(10장 {m['segments']}세그 in {m['tokens']['in']} out {m['tokens']['out']} ${m['cost_usd']})")
+    print(f"  추정 — in {round(t_in):,} · out {round(t_out):,} · ${cost:.4f} "
+          f"({MODEL['model_id']} · in ${MODEL['price_in']}/out ${MODEL['price_out']} per Mtok)")
+    sec = m["total_sec"] / m["documents"] * n_doc
+    print(f"  소요 추정 약 {sec / 60:.1f}분 (10장 {m['total_sec']}s / {m['documents']}건)")
 
 
 def run_input(name: str, dry: bool, no_cache: bool, pvariant: str = "default") -> None:
@@ -171,7 +241,9 @@ def run_input(name: str, dry: bool, no_cache: bool, pvariant: str = "default") -
         print(f"  {doc['image']:<8} 세그 {len(segs):>3}  in {usage['in']} out {usage['out']}{hit}")
 
     if dry:
-        print(f"  → 총 {chars:,}자. 호출 없음\n")
+        print(f"  → 총 {chars:,}자. 호출 없음")
+        dry_estimate(name, chars, n_seg, len(docs), pvariant)
+        print()
         return
 
     out_name = name if pvariant == "default" else f"{name}_{pvariant}"
