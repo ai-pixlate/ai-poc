@@ -254,8 +254,8 @@ def tmpl_section() -> list:
     """
     import run_text as T
     metas = {}
-    for v in ("gray_bg", "gray_mask", "edge_bg"):
-        f = RESULTS / "golden" / f"tmpl_{v}" / "meta.json"
+    for v in ("tmpl_gray_bg", "tmpl_gray_mask", "tmpl_edge_bg", "owl_bg", "owl_white"):
+        f = RESULTS / "golden" / v / "meta.json"
         if f.exists():
             metas[v] = json.loads(f.read_text(encoding="utf-8"))
     if not metas:
@@ -275,24 +275,43 @@ def tmpl_section() -> list:
         ks = keys[sid[:13]]
         return any(center_in(r["bbox"], d["bbox"]) for r in regions[sid] if any(k in T.norm(r["text"]) for k in ks))
 
-    desc = {"gray_bg": "밝기 · 크롭 그대로", "gray_mask": "밝기 · 배경 제거", "edge_bg": "윤곽선 · 크롭 그대로"}
-    L = ["## 7. OCR 전 제외 — 로고 파일(템플릿) 매칭 (`run_tmpl_golden.py`)", "",
+    def covered(d):
+        """오탐 상자가 덮은 실제 글자 영역 수 — 가리면 그대로 지워지는 글자(신뢰도 0.5 이상 · 텍스트 있음)"""
+        sid = d["section"]
+        if sid not in regions:
+            regions[sid] = json.loads((rdir / f"{sid}.json").read_text(encoding="utf-8"))["regions"]
+        return sum(1 for r in regions[sid] if r["text"].strip() and r.get("score", 1) >= 0.5 and center_in(r["bbox"], d["bbox"]))
+
+    desc = {"tmpl_gray_bg": "B · 밝기 · 크롭 그대로", "tmpl_gray_mask": "B · 밝기 · 배경 제거",
+            "tmpl_edge_bg": "B · 윤곽선 · 크롭 그대로",
+            "owl_bg": "A · OWLv2 · 크롭 그대로", "owl_white": "A · OWLv2 · 배경 흰색"}
+    tm = next((m for k, m in metas.items() if k.startswith("tmpl_")), None)
+    L = ["## 7. OCR 전 제외 — 로고 파일로 먼저 찾기 (B `run_tmpl_golden.py` · A `run_owl_golden.py`)", "",
          "기능 전제는 **사용자가 올린 로고 파일**로 로고를 찾아 빼는 것. 로고 파일로 **섹션 이미지에서 먼저 찾아 가린 뒤 OCR**하면 "
          "병합 종속이 없어지는지 확인함. 로고 파일이 없어 **페이지에서 크롭한 템플릿**을 씀 — 떼어낸 자리는 평가에서 뺌.", "",
          "| 항목 | 값 |", "|---|---|",
          "| 단위 | 섹션 102개 · 템플릿은 자기 브랜드 섹션에만 적용 |",
-         f"| 배율 | 0.25~6.0 · 2% 등비 {next(iter(metas.values()))['scales'][2]}단계 — 점수가 정답 배율 ±3% 밖에서 급락함 |",
+         f"| B 템플릿 매칭 | 배율 0.25~6.0 · 2% 등비 {tm['scales'][2] if tm else '-'}단계 — 점수가 정답 배율 ±3% 밖에서 급락함 |",
+         "| A OWLv2 원샷 검출 | `google/owlv2-base-patch16-ensemble` · 로고 크롭을 예시 이미지로 질의 · 섹션을 정사각 조각(겹침 300px)으로 입력 · 점수는 보정 전 코사인 유사도 |",
          "| 평가 대상 | 페이지 로고 7개 중 **템플릿을 떼지 않은 4개**(b.clinicx 2 · goodal 2). celimax는 한 번뿐이라 제외 |",
          "| 글자 확인 | 후보 자리의 OCR 글자에 브랜드명이 들어 있을 때만 확정. 여기서는 단계 1 영역으로 대신 확인함 |", "",
-         "| 조건 | 방식 | 찾음 | 놓침 | 오탐 | 오탐 중 높이 20px 미만 | **+ 글자 확인** | 섹션당 소요 |",
-         "|---|---|---|---|---|---|---|---|"]
+         "| 조건 | 방식 | 임계 | 찾음 | 놓침 | 오탐 | 오탐 중 높이 20px 미만 | 오탐이 덮은 글자 | **+ 글자 확인** | 섹션당 소요 |",
+         "|---|---|---|---|---|---|---|---|---|---|"]
     for v, m in metas.items():
         c = m["counts"]
         vf = [d for d in m["false_hits"] if verified(d)]
         vt = sum(1 for t in m["targets"] if t["status"] == "찾음" and t["best"] and verified(t["best"]))
-        L.append(f"| `tmpl_{v}` | {desc[v]} | {c['found']} | {c['missed']} | {c['false']} | "
-                 f"{m['false_by_height']['<20px']} | **{vt} · {4 - vt} · {len(vf)}** | "
+        th = m.get("rep_thresh", m.get("cfg", {}).get("thresh"))
+        L.append(f"| `{v}` | {desc[v]} | {th} | {c['found']} | {c['missed']} | {c['false']} | "
+                 f"{m['false_by_height']['<20px']} | {sum(covered(d) for d in m['false_hits'])} | **{vt} · {4 - vt} · {len(vf)}** | "
                  f"{m['sec_per_section']['mean']}s (최대 {m['sec_per_section']['max']}s) |")
+    owl = {k: m for k, m in metas.items() if k.startswith("owl_")}
+    if owl:
+        L += ["", "**A 임계별** — 찾음 · 놓침 · 오탐", "",
+              "| 조건 | " + " | ".join(f"{s['thresh']:.2f}" for s in next(iter(owl.values()))["sweep"]) + " |",
+              "|---|" + "---|" * len(next(iter(owl.values()))["sweep"])]
+        for k, m in owl.items():
+            L.append(f"| `{k}` | " + " | ".join(f"{s['counts']['found']} · {s['counts']['missed']} · {s['counts']['false']}" for s in m["sweep"]) + " |")
     L += ["", "**정답 4개**", "", "| 로고 | 크기 | " + " | ".join(f"`{v}`" for v in metas) + " |",
           "|---|---|" + "---|" * len(metas)]
     first = next(iter(metas.values()))
@@ -302,11 +321,12 @@ def tmpl_section() -> list:
         for v, m in metas.items():
             tt = m["targets"][i]
             b = tt["best"]
-            cells.append(f"{tt['status']} {b['score']} ×{b['scale']:.2f}" if b else f"{tt['status']} (후보 없음)")
+            sc = f" ×{b['scale']:.2f}" if b and b.get("scale") else ""
+            cells.append(f"{tt['status']} {b['score']}{sc}" if b else f"{tt['status']} (후보 없음)")
         L.append(f"| {g['image'][:-4]} y{g['bbox'][1]} `{g['text']}` | {g['bbox'][2] - g['bbox'][0]}×{g['bbox'][3] - g['bbox'][1]} | " + " | ".join(cells) + " |")
     L.append("")
-    if "gray_bg" in metas:
-        d = metas["gray_bg"].get("downstream_counts")
+    if "tmpl_gray_bg" in metas:
+        d = metas["tmpl_gray_bg"].get("downstream_counts")
         if d:
             L += ["**하류 — `tmpl_gray_bg` 통과 후보를 가리고 OCR·휴리스틱 병합 재실행**", "",
                   "| 가린 섹션 | 가린 자리에서 브랜드명이 다시 읽힘 | 가린 자리 밖에서 사라진 글자(후보) |", "|---|---|---|",
@@ -322,6 +342,15 @@ def tmpl_section() -> list:
           "- 배경 제거 템플릿은 오탐을 줄이나 파랑 배경 대형 goodal을 놓치고 **3배 느림** · 윤곽선은 오탐 과다로 탈락",
           "- **소요가 큼** — 섹션당 평균 5.7s(최대 19s), 34장 약 10분. `block_exact`는 0.02s. 탐색을 줄이는 개선(성긴 탐색 → 후보 주변 정밀 탐색)은 미측정",
           ""]
+    if owl:
+        L += ["**A(OWLv2) 해석 — 검출 단계에서 탈락**", "",
+              "- **로고를 덮는 상자는 만들지만 유사도 순위가 낮음** — 템플릿을 떼어낸 바로 그 자리에서도 로고 상자(IoU 0.94)가 3,600개 중 **81위**, "
+              "대형 goodal은 **1,756위**. 1위는 조각 전체나 다른 글자 덩어리임. 모델이 워드마크를 '그 로고'가 아니라 '글자 덩어리'로 뭉뚱그림",
+              "- 어떤 임계에서도 **놓침 2 이상 · 오탐 수백 건** — 글자 확인을 겹쳐도 놓침이 남아 기준 미달",
+              "- 구현상 함정 3개를 거침 — ① 후처리 점수가 조각 안 최고점을 1.0으로 맞춘 **표시용 값** ② 기본 질의 선택이 정사각 패딩 탓에 "
+              "**회색 패딩을 질의로 고름** ③ sigmoid(로짓)이 이미지 질의에서 **0.999로 포화**. ②는 로고 자리 상자를 직접 골라, ③은 코사인 유사도로 바꿔 우회함",
+              "- 심볼형 로고는 표본이 없어 확인 못 함 — 다만 워드마크조차 순위가 낮아 **기대하기 어려움**",
+              ""]
     return L
 
 

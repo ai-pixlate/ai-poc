@@ -32,6 +32,7 @@
 사용법
     python run_tmpl_golden.py                  # 3 variant + 하류
     python run_tmpl_golden.py --variant gray_bg --no-ocr
+    python run_tmpl_golden.py --from-passed owl_bg     # 후보 A 결과로 하류만
 """
 
 from __future__ import annotations
@@ -346,6 +347,8 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--variant", default="all")
     ap.add_argument("--no-ocr", action="store_true")
+    ap.add_argument("--from-passed", default=None,
+                    help="다른 검출기(run_owl_golden.py) 결과 폴더명 — results/golden/{이름}/passed.json 으로 하류만 돌림")
     args = ap.parse_args()
 
     for p in (REGIONS, BLOCKS, LABELS):
@@ -354,6 +357,24 @@ def main() -> None:
     pages = {p.name: p for p in R.SRC.rglob("*.jpg")}
     tps = templates()
     secs = load_sections()
+    if args.from_passed:
+        from paddleocr import PaddleOCR
+        name = args.from_passed
+        out_dir = OUT / name
+        passed = json.loads((out_dir / "passed.json").read_text(encoding="utf-8"))
+        meta = json.loads((out_dir / "meta.json").read_text(encoding="utf-8"))
+        ocr = PaddleOCR(**T.OCR_KWARGS)
+        masked = mask_sections(passed, secs, pages, OUT / "_masked" / name)
+        meta["downstream"] = downstream(ocr, masked, secs)
+        meta["downstream_counts"] = {"sections": len(masked),
+                                     "reread": sum(len(r["reread"]) for r in meta["downstream"]),
+                                     "lost": sum(len(r["lost"]) for r in meta["downstream"]),
+                                     "brand_in_block": sum(len(r["brand_in_block"]) for r in meta["downstream"])}
+        (out_dir / "meta.json").write_text(json.dumps(meta, ensure_ascii=False, indent=1, default=str), encoding="utf-8")
+        sheet(meta, pages, out_dir / "sheet.jpg")
+        print(f"[{name}] 하류 — {meta['downstream_counts']}")
+        return
+
     names = list(VARIANTS) if args.variant == "all" else [args.variant]
     model = None
     if not args.no_ocr:
