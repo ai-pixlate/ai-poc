@@ -246,6 +246,85 @@ def g_text(s: str | None) -> str:
     return (s or "—").replace("|", "\\|").replace("\n", " / ").strip()
 
 
+def tmpl_section() -> list:
+    """7장 — OCR 전 제외(템플릿 매칭) 결과. run_tmpl_golden.py 출력을 읽는다.
+
+    '글자 확인'은 템플릿 후보 자리에 단계 1 OCR 영역이 있고 그 글자에 브랜드명이 들어 있을 때만
+    로고로 확정하는 조건. 실제 파이프라인에선 후보 자리만 잘라 OCR하는 것에 해당함(여기서는 단계 1 영역으로 대신함).
+    """
+    import run_text as T
+    metas = {}
+    for v in ("gray_bg", "gray_mask", "edge_bg"):
+        f = RESULTS / "golden" / f"tmpl_{v}" / "meta.json"
+        if f.exists():
+            metas[v] = json.loads(f.read_text(encoding="utf-8"))
+    if not metas:
+        return []
+    regions = {}
+    rdir = ROOT / "poc" / "golden" / "1_B_ocr" / "results" / "baseline" / "regions"
+    keys = {v.replace("images_", ""): [T.norm(k) for k in ks] for v, ks in T.BRANDS.items()}
+
+    def center_in(a, b):
+        cx, cy = (a[0] + a[2]) / 2, (a[1] + a[3]) / 2
+        return b[0] <= cx <= b[2] and b[1] <= cy <= b[3]
+
+    def verified(d):
+        sid = d["section"]
+        if sid not in regions:
+            regions[sid] = json.loads((rdir / f"{sid}.json").read_text(encoding="utf-8"))["regions"]
+        ks = keys[sid[:13]]
+        return any(center_in(r["bbox"], d["bbox"]) for r in regions[sid] if any(k in T.norm(r["text"]) for k in ks))
+
+    desc = {"gray_bg": "밝기 · 크롭 그대로", "gray_mask": "밝기 · 배경 제거", "edge_bg": "윤곽선 · 크롭 그대로"}
+    L = ["## 7. OCR 전 제외 — 로고 파일(템플릿) 매칭 (`run_tmpl_golden.py`)", "",
+         "기능 전제는 **사용자가 올린 로고 파일**로 로고를 찾아 빼는 것. 로고 파일로 **섹션 이미지에서 먼저 찾아 가린 뒤 OCR**하면 "
+         "병합 종속이 없어지는지 확인함. 로고 파일이 없어 **페이지에서 크롭한 템플릿**을 씀 — 떼어낸 자리는 평가에서 뺌.", "",
+         "| 항목 | 값 |", "|---|---|",
+         "| 단위 | 섹션 102개 · 템플릿은 자기 브랜드 섹션에만 적용 |",
+         f"| 배율 | 0.25~6.0 · 2% 등비 {next(iter(metas.values()))['scales'][2]}단계 — 점수가 정답 배율 ±3% 밖에서 급락함 |",
+         "| 평가 대상 | 페이지 로고 7개 중 **템플릿을 떼지 않은 4개**(b.clinicx 2 · goodal 2). celimax는 한 번뿐이라 제외 |",
+         "| 글자 확인 | 후보 자리의 OCR 글자에 브랜드명이 들어 있을 때만 확정. 여기서는 단계 1 영역으로 대신 확인함 |", "",
+         "| 조건 | 방식 | 찾음 | 놓침 | 오탐 | 오탐 중 높이 20px 미만 | **+ 글자 확인** | 섹션당 소요 |",
+         "|---|---|---|---|---|---|---|---|"]
+    for v, m in metas.items():
+        c = m["counts"]
+        vf = [d for d in m["false_hits"] if verified(d)]
+        vt = sum(1 for t in m["targets"] if t["status"] == "찾음" and t["best"] and verified(t["best"]))
+        L.append(f"| `tmpl_{v}` | {desc[v]} | {c['found']} | {c['missed']} | {c['false']} | "
+                 f"{m['false_by_height']['<20px']} | **{vt} · {4 - vt} · {len(vf)}** | "
+                 f"{m['sec_per_section']['mean']}s (최대 {m['sec_per_section']['max']}s) |")
+    L += ["", "**정답 4개**", "", "| 로고 | 크기 | " + " | ".join(f"`{v}`" for v in metas) + " |",
+          "|---|---|" + "---|" * len(metas)]
+    first = next(iter(metas.values()))
+    for i, t in enumerate(first["targets"]):
+        g = t["logo"]
+        cells = []
+        for v, m in metas.items():
+            tt = m["targets"][i]
+            b = tt["best"]
+            cells.append(f"{tt['status']} {b['score']} ×{b['scale']:.2f}" if b else f"{tt['status']} (후보 없음)")
+        L.append(f"| {g['image'][:-4]} y{g['bbox'][1]} `{g['text']}` | {g['bbox'][2] - g['bbox'][0]}×{g['bbox'][3] - g['bbox'][1]} | " + " | ".join(cells) + " |")
+    L.append("")
+    if "gray_bg" in metas:
+        d = metas["gray_bg"].get("downstream_counts")
+        if d:
+            L += ["**하류 — `tmpl_gray_bg` 통과 후보를 가리고 OCR·휴리스틱 병합 재실행**", "",
+                  "| 가린 섹션 | 가린 자리에서 브랜드명이 다시 읽힘 | 가린 자리 밖에서 사라진 글자(후보) |", "|---|---|---|",
+                  f"| {d['sections']} | {d['reread']} | {d['lost']} |", "",
+                  "- `Good all goodal`(`219554_002_022`) — 로고 자리를 가리니 **`Good all`만 읽힘.** 병합 종속이 풀림",
+                  "- 사라진 글자 후보 13건을 전부 확인함 — **글자가 없어진 건 0.** 11건은 OCR 재실행 시 영역이 다르게 묶인 것(`효과는` → `효과는 압도적으로`)",
+                  "- **2건은 오탐 자리를 가려 글자가 변형됨** — 한글 가로획을 가려 `해도` → `해노`, `단독` → `단도`. 오탐이 조용히 원문을 훼손하는 경로임 — 글자 확인을 겹치면 이 가림이 생기지 않음",
+                  ""]
+    L += ["**해석**", "",
+          "- **배율이 핵심 원인이었음** — 상한 2.0 → 6.0으로 대형 goodal(332px, 2.97배)을 잡음. 간격을 12.5% → 2%로 좁히니 회색 배경 b.clinicx도 0.96으로 잡힘",
+          "- **오탐은 거의 전부 작게 줄인 템플릿** — 한글 획의 가로줄에 걸림(높이 20px 미만). 나머지는 평범한 영문(`check point`)을 `celimax`로 본 것 — **산세리프 워드마크는 일반 글자와 닮음**",
+          "- **글자 확인을 겹치면 오탐이 0이 됨** — 대신 확인 단계가 OCR에 의존하므로 **심볼형 로고는 이 조건으로 확정할 수 없음**",
+          "- 배경 제거 템플릿은 오탐을 줄이나 파랑 배경 대형 goodal을 놓치고 **3배 느림** · 윤곽선은 오탐 과다로 탈락",
+          "- **소요가 큼** — 섹션당 평균 5.7s(최대 19s), 34장 약 10분. `block_exact`는 0.02s. 탐색을 줄이는 개선(성긴 탐색 → 후보 주변 정밀 탐색)은 미측정",
+          ""]
+    return L
+
+
 def main_golden() -> None:
     p = GOLDEN / "meta.json"
     if not p.exists():
@@ -332,6 +411,7 @@ def main_golden() -> None:
               "| 놓침 | 로고가 번역 대상에 남음 | 브랜드명이 번역되거나 그대로 남음 — 검수에서 걸러짐 |",
               "| 오탐 | 제목 첫 줄이 번역에서 빠짐 | **제목이 반쪽만 번역됨** — 눈에 띄고 복구 비용이 큼 |", "",
               "→ 오탐이 더 나쁘므로 **`block_exact` 유지가 맞음.** 영역 단위는 채택하지 않음", ""]
+    L += tmpl_section()
     GOLDEN_OUT.write_text("\n".join(L) + "\n", encoding="utf-8")
     print(f"작성: {GOLDEN_OUT}  (찾음 {c['found']} · 놓침 {c['missed']} · 오탐 {c['false']} → {m['gate']})")
 
