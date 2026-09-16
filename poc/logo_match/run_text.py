@@ -372,7 +372,11 @@ def run_variant(name: str, paths: list[Path], ocr: dict[str, dict], ocr_sec: flo
 # 기존 정답과 페이지 좌표로 기계 대조한다. 패키지 위 로고(라벨 블록)는 라벨 판정 소관이라 세지 않는다.
 GOLDEN_BLOCKS = ROOT / "poc" / "golden" / "2_block_role" / "results" / "llm_assist" / "blocks"  # 단계 2 이동 후 위치
 GOLDEN_LABELS = ROOT / "poc" / "golden" / "3_product_label" / "results" / "vlm_relation" / "truth.json"  # 단계 3 정답
+GOLDEN_REGIONS = ROOT / "poc" / "golden" / "1_B_ocr" / "results" / "baseline" / "regions"  # 단계 1 이동 후 위치
 GOLDEN_RESULTS = RESULTS / "golden" / "block_exact"
+# 대조 단위별 규칙 — 정규화·완전 일치는 같고 입력 단위만 다름
+RULE = {"block": VARIANTS["block_exact"], "region": VARIANTS["text_exact"]}
+RULE_NAME = {"block": "block_exact", "region": "region_exact"}
 
 # 기존 정답 — 페이지 로고 7개(5장), 페이지 좌표.
 # summary.md 6장 `text_exact` 판정(찾음 7 · 놓침 0)의 통과 region 중 단계 3 라벨 블록 밖이고
@@ -438,13 +442,14 @@ def logo_sheet(rows: list[dict], out: Path) -> None:
     sheet.save(out, quality=88)
 
 
-def run_golden() -> None:
-    if not GOLDEN_BLOCKS.exists() or not GOLDEN_LABELS.exists():
-        raise SystemExit("단계 2·3 결과 없음 — poc/golden/2_block_role · 3_product_label 확인")
-    labels = json.loads(GOLDEN_LABELS.read_text(encoding="utf-8"))["labels"]
-    cfg = VARIANTS["block_exact"]
-    t0 = time.perf_counter()
-    blocks_by_page: dict[str, list[dict]] = {}
+def golden_units(unit: str, labels: dict) -> tuple[dict, list, int]:
+    """대조 단위를 만든다. `block` = 단계 2 블록 · `region` = 단계 1 OCR 영역.
+
+    영역 단위는 **블록 경계 변화에 영향받지 않는다.** 로고가 옆 글자와 병합돼 놓치는
+    문제를 없애는 대신, OCR이 제목을 끊어 읽으면 오탐이 난다 — 그 맞교환을 잰다.
+    라벨 소관 판단은 두 단위 모두 **단계 3 정답 블록** 기준(영역은 소속 블록을 따름).
+    """
+    units_by_page: dict[str, list[dict]] = {}
     hits: list[dict] = []
     sections = 0
     for f in sorted(GOLDEN_BLOCKS.glob("*.json")):
@@ -454,14 +459,39 @@ def run_golden() -> None:
         keys = BRANDS[f"images_{sid[:13]}"]
         lab = set(labels.get(sid, []))
         sections += 1
-        for i, b in enumerate(d["blocks"], 1):
-            x0, y0, x1, y1 = b["bbox"]
-            row = {"section": sid, "block": i, "image": image, "text": b["text"], "bbox": b["bbox"],
-                   "page_bbox": [x0, y0 + off, x1, y1 + off], "is_product_label": i in lab}
-            blocks_by_page.setdefault(image, []).append(row)
-            h = match(b["text"], keys, cfg)
+        rows = []
+        if unit == "block":
+            for i, b in enumerate(d["blocks"], 1):
+                rows.append({"section": sid, "block": i, "text": b["text"], "bbox": b["bbox"],
+                             "is_product_label": i in lab})
+        else:
+            regions = json.loads((GOLDEN_REGIONS / f"{sid}.json").read_text(encoding="utf-8"))["regions"]
+            owner = {ri: i for i, b in enumerate(d["blocks"], 1) for ri in b["regions"]}
+            for ri, reg in enumerate(regions):
+                bi = owner.get(ri)
+                rows.append({"section": sid, "block": bi, "region": ri + 1, "text": reg["text"],
+                             "bbox": reg["bbox"], "is_product_label": bi in lab})
+        for row in rows:
+            x0, y0, x1, y1 = row["bbox"]
+            row = {**row, "image": image, "page_bbox": [x0, y0 + off, x1, y1 + off]}
+            units_by_page.setdefault(image, []).append(row)
+            h = match(row["text"], keys, RULE[unit])
             if h:
                 hits.append({**row, "key": h[0]})
+    return units_by_page, hits, sections
+
+
+def run_golden(unit: str = "block") -> None:
+    if not GOLDEN_BLOCKS.exists() or not GOLDEN_LABELS.exists():
+        raise SystemExit("단계 2·3 결과 없음 — poc/golden/2_block_role · 3_product_label 확인")
+    if unit == "region" and not GOLDEN_REGIONS.exists():
+        raise SystemExit(f"단계 1 영역 없음 — {GOLDEN_REGIONS}")
+    labels = json.loads(GOLDEN_LABELS.read_text(encoding="utf-8"))["labels"]
+    rule = RULE_NAME[unit]
+    cfg = RULE[unit]
+    out_dir = RESULTS / "golden" / rule
+    t0 = time.perf_counter()
+    blocks_by_page, hits, sections = golden_units(unit, labels)
     match_sec = round(time.perf_counter() - t0, 3)
 
     prev = {}
@@ -475,30 +505,33 @@ def run_golden() -> None:
         best = max(page_hits, key=lambda h: iou(g["bbox"], h["page_bbox"]), default=None)
         ok = best is not None and iou(g["bbox"], best["page_bbox"]) >= 0.5
         if ok:
-            used.add((best["section"], best["block"]))
+            used.add((best["section"], best["block"], best.get("region")))
         host = next((b for b in blocks_by_page.get(g["image"], []) if contains(b["page_bbox"], g["bbox"])), None)
         truth_rows.append({**g, "status": "찾음" if ok else "놓침",
                            "prev_block_exact": "찾음" if prev[(g["image"], tuple(g["bbox"]))] else "놓침",
                            "host_section": host["section"] if host else None, "host_block": host["block"] if host else None,
                            "host_text": host["text"] if host else None, "host_page_bbox": host["page_bbox"] if host else None,
                            "host_is_label": host["is_product_label"] if host else None})
-    false_hits = [h for h in hits if not h["is_product_label"] and (h["section"], h["block"]) not in used]
+    false_hits = [h for h in hits if not h["is_product_label"]
+                  and (h["section"], h["block"], h.get("region")) not in used]
     package = [h for h in hits if h["is_product_label"]]
     counts = {"found": sum(r["status"] == "찾음" for r in truth_rows),
               "missed": sum(r["status"] == "놓침" for r in truth_rows), "false": len(false_hits)}
     passed = counts["missed"] <= PREV["missed"] and counts["false"] <= PREV["false"]
 
-    GOLDEN_RESULTS.mkdir(parents=True, exist_ok=True)
-    logo_sheet(truth_rows, GOLDEN_RESULTS / "logos.jpg")
-    meta = {"variant": "block_exact", "sample": "golden", "cfg": cfg, "brands": BRANDS,
-            "source": "poc/golden/2_block_role/results/llm_assist · 라벨 poc/golden/3_product_label/.../truth.json",
-            "sections": sections, "blocks": sum(len(v) for v in blocks_by_page.values()),
+    out_dir.mkdir(parents=True, exist_ok=True)
+    logo_sheet(truth_rows, out_dir / "logos.jpg")
+    meta = {"variant": rule, "unit": unit, "sample": "golden", "cfg": cfg, "brands": BRANDS,
+            "source": ("poc/golden/1_B_ocr/results/baseline 영역" if unit == "region"
+                       else "poc/golden/2_block_role/results/llm_assist 블록")
+                      + " · 라벨 poc/golden/3_product_label/.../truth.json",
+            "sections": sections, "units": sum(len(v) for v in blocks_by_page.values()),
             "pass": len(hits), "pass_label": len(package), "match_sec": match_sec,
             "counts": counts, "prev": PREV, "gate": "통과" if passed else "미달",
             "page_logos": truth_rows, "false_hits": false_hits, "package_hits": package,
             "run_at": time.strftime("%Y-%m-%d %H:%M:%S")}
-    (GOLDEN_RESULTS / "meta.json").write_text(json.dumps(meta, ensure_ascii=False, indent=1), encoding="utf-8")
-    print(f"[golden/block_exact] 섹션 {sections} · 통과 {len(hits)} (라벨 소관 {len(package)}) · {match_sec}s")
+    (out_dir / "meta.json").write_text(json.dumps(meta, ensure_ascii=False, indent=1), encoding="utf-8")
+    print(f"[golden/{rule}] 섹션 {sections} · 통과 {len(hits)} (라벨 소관 {len(package)}) · {match_sec}s")
     print(f"  찾음 {counts['found']} · 놓침 {counts['missed']} · 오탐 {counts['false']}  "
           f"(기존 {PREV['found']}·{PREV['missed']}·{PREV['false']}) → {meta['gate']}")
     for r in truth_rows:
@@ -512,11 +545,14 @@ def main() -> None:
     ap.add_argument("--variant", help=f"{', '.join(VARIANTS)}, all")
     ap.add_argument("--images", nargs="*", default=None)
     ap.add_argument("--sample", choices=("default", "golden"), default="default",
-                    help="golden = 단계 2 llm_assist 블록으로 block_exact 재확인")
+                    help="golden = 골든 샘플 단계 4 재확인")
+    ap.add_argument("--unit", choices=("block", "region", "all"), default="block",
+                    help="golden 전용 — 대조 단위. block=단계 2 블록(block_exact) · region=단계 1 영역(region_exact)")
     args = ap.parse_args()
 
     if args.sample == "golden":
-        run_golden()
+        for u in (("block", "region") if args.unit == "all" else (args.unit,)):
+            run_golden(u)
         return
     if not args.variant:
         raise SystemExit("--variant 필요")

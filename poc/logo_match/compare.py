@@ -33,6 +33,7 @@ import sys
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
+ROOT = HERE.parents[1]
 RESULTS = HERE / "results"
 OUT = HERE / "summary.md"
 
@@ -262,7 +263,7 @@ def main_golden() -> None:
           "| 규칙 | `block_exact` — 블록 텍스트 전체 == 브랜드명(NFKC · 소문자 · 공백·문장부호 제거) |",
           "| 입력 | 단계 2 `llm_assist` 블록 · 단계 3 라벨 정답(패키지 위 로고 = 라벨 소관, 세지 않음) |",
           "| 기존 결과 | 병합 1단계 `heuristic_v2` 블록 기준 — 결과 문서 6장 |",
-          f"| 섹션 · 블록 | {m['sections']} · {m['blocks']} |",
+          f"| 섹션 · 블록 | {m['sections']} · {m.get('blocks', m.get('units'))} |",
           f"| 브랜드명 통과 | {m['pass']} (라벨 블록 {m['pass_label']} · 라벨 밖 {m['pass'] - m['pass_label']}) |",
           f"| 대조 소요 | {m['match_sec']}s |",
           "| 브랜드명 사전 | " + " · ".join(f"{k.replace('images_', '')} `{'` `'.join(v)}`" for k, v in m["brands"].items()) + " |",
@@ -303,6 +304,34 @@ def main_golden() -> None:
             L.append(f"| {r['image'][:-4]} | {r['bbox'][1]} | {r['prev_block_exact']} | {g_text(r['host_text'])} | {why} |")
         L += ["", "> 계획서 단계 4 근거(결과 문서 9장 한계 3 · 10장 19번) — LLM 보정이 로고를 옆 글자와 묶으면 놓침이 늘 수 있음.", ""]
 
+    alt_p = RESULTS / "golden" / "region_exact" / "meta.json"
+    if alt_p.exists():
+        a = json.loads(alt_p.read_text(encoding="utf-8"))
+        ac = a["counts"]
+        L += ["## 6. 대안 단위 — 영역 단위 대조(`region_exact`)", "",
+              "놓침 원인이 **블록 병합**이므로, 병합 앞 단계인 단계 1 OCR 영역에 같은 완전 일치 규칙을 적용해 비교함.",
+              "라벨 소관 판단은 같은 기준(단계 3 정답 블록)을 씀.", "",
+              "| 대조 단위 | 찾음 | 놓침 | 오탐 | 종결 기준 |", "|---|---|---|---|---|",
+              f"| `block_exact` — 단계 2 블록 (확정) | {c['found']} | **{c['missed']}** | {c['false']} | {m['gate']} |",
+              f"| `region_exact` — 단계 1 영역 | {ac['found']} | {ac['missed']} | **{ac['false']}** | {a['gate']} |", "",
+              f"- 영역 단위는 콜라보 로고(`celimax×`)를 되찾아 **놓침 {c['missed']} → {ac['missed']}**",
+              f"- 대신 **제목 첫 줄이 브랜드명인 블록에서 오탐 {ac['false']}건** — 제목 절반이 번역에서 빠짐",
+              f"- `Good all goodal`은 **OCR이 한 영역으로 읽어** 영역 단위로도 못 잡음 — 병합 탓이 아님", ""]
+        if a["false_hits"]:
+            L += ["| 섹션 | 영역 | 텍스트 | 소속 블록 텍스트 |", "|---|---|---|---|"]
+            blk = ROOT / "poc" / "golden" / "2_block_role" / "results" / "llm_assist" / "blocks"
+            for h in a["false_hits"]:
+                bt, bf = "—", blk / f"{h['section']}.json"
+                if bf.exists() and h.get("block"):
+                    bt = json.loads(bf.read_text(encoding="utf-8"))["blocks"][h["block"] - 1]["text"]
+                L.append(f"| `{h['section']}` | {h.get('region', '—')} | {g_text(h['text'])} | {g_text(bt)} |")
+            L.append("")
+        L += ["**맞교환이 구조적임** — 단위를 키우면 로고가 옆 글자와 묶여 놓치고, 줄이면 제목이 끊겨 오탐이 남.",
+              "두 단위 모두 종결 기준(놓침 ≤ 1 · 오탐 0)을 동시에 만족하지 못함.", "",
+              "| | 남는 결과 | 후단 영향 |", "|---|---|---|",
+              "| 놓침 | 로고가 번역 대상에 남음 | 브랜드명이 번역되거나 그대로 남음 — 검수에서 걸러짐 |",
+              "| 오탐 | 제목 첫 줄이 번역에서 빠짐 | **제목이 반쪽만 번역됨** — 눈에 띄고 복구 비용이 큼 |", "",
+              "→ 오탐이 더 나쁘므로 **`block_exact` 유지가 맞음.** 영역 단위는 채택하지 않음", ""]
     GOLDEN_OUT.write_text("\n".join(L) + "\n", encoding="utf-8")
     print(f"작성: {GOLDEN_OUT}  (찾음 {c['found']} · 놓침 {c['missed']} · 오탐 {c['false']} → {m['gate']})")
 

@@ -9,7 +9,7 @@ run_golden.py 결과를 읽어 summary_golden.md 와 판정 대지를 만든다.
 기계 집계
     · 라벨·로고 블록으로 마스크에서 뺀 영역 수
     · 단계 1 판정표의 저신뢰·빈 텍스트 분류(`잡은 것`)를 받아 **글자 아닌 영역이 지워지는 섹션 수**
-      — 확정 조건(erase_all)을 erase_s50으로 바꿀지 판단하는 근거
+      — 확정 조건을 erase_all → erase_s50으로 바꾼 근거(2026-09-16 변경)
 
 사용법
     python compare_golden.py
@@ -197,7 +197,8 @@ def main() -> None:
           f"| 제외 | {meta['cfg']['exclude']} — 라벨 블록 {meta['label_blocks']} · 로고 블록 {meta['logo_blocks']} → 영역 {meta['skipped_regions']}개 |",
           f"| 섹션 · 영역 | {meta['sections']} · {meta['total_regions']} |", ""]
     L += ["| variant | 조건 | 지우는 영역 | 지운 섹션 | LaMa 소요 |", "|---|---|---|---|---|"]
-    cond = {"erase_all": "모든 OCR 영역 (확정 조건)", "erase_s50": "신뢰도 0.5 이상 · 텍스트 있는 영역"}
+    cond = {"erase_all": "모든 OCR 영역 (기존 확정 조건 — 2026-09-16 폐기)",
+            "erase_s50": "신뢰도 0.5 이상 · 텍스트 있는 영역 (**확정 조건** — 2026-09-16 변경)"}
     for v in VARIANTS:
         m = meta["variants"][v]
         L.append(f"| `{v}` | {cond[v]} | {m['total_regions']} | {m['sections_erased']} | {m['lama_sec']}s |")
