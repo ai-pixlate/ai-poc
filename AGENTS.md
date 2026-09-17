@@ -31,7 +31,7 @@ variant는 실험 조건명으로 짓는다 (baseline, vl_model, upscale_2x, cla
 
 ## API 비용
 - 키는 `.env`에서만 읽는다. 하드코딩 금지. `.gitignore` 포함 여부 확인.
-- **유료 API 호출 전 예상 건수·비용을 보고하고 확인받는다.** LLM·VLM을 부르는 스크립트는 전부 해당 — 대개 `run_llm.py` · `run_vlm*.py` 이름이며, 번역 벤치마크(`C_translate`) · 줄·문단 병합 · 제품 라벨 · 번역 길이 · 섹션 분해 VLM · 누끼 요소 선별 · 섹션 판정 등. `--dry-run`이 있으면 먼저 돌려 추정치를 보고한다. PaddleOCR·LaMa·누끼 모델 등 로컬 실행은 해당 없음.
+- **유료 API 호출 전 예상 건수·비용을 보고하고 확인받는다.** LLM·VLM을 부르는 스크립트는 전부 해당 — 대개 `run_llm.py` · `run_vlm*.py` 이름이며, 번역 벤치마크(`C_translate`) · 줄·문단 병합 · 제품 라벨 · 번역 길이 · 섹션 분해 VLM · 누끼 요소 선별 · 섹션 판정 등. **이미지 생성·편집 모델 스크립트도 해당** — `E1_inpaint/run_openai.py` · `E1_inpaint/run_nano_crop.py` · `E1_inpaint/probe_nano.py` · `F_background/run_nano_gap.py`(이름 패턴이 달라 따로 적음). `--dry-run`이 있으면 먼저 돌려 추정치를 보고한다. PaddleOCR·LaMa·누끼 모델 등 로컬 실행은 해당 없음.
 - API 응답은 로컬에 캐싱한다. 재실행 시 캐시 우선.
 
 ## 작업
