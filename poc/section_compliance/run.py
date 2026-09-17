@@ -29,7 +29,9 @@ VLM variant(sec_only · sec_adj · sec_outline)는 같은 입력 조립(`load_se
     results/rule_kw/vis/sections/{섹션}.jpg   섹션 이미지에 근거 블록 박스(항목별 색)
     results/rule_kw/vis/pages/{policy}/{stem}.jpg  페이지 썸네일에 섹션별 결정 색
     results/rule_kw/meta.json
-    summary.md                                요약 · 섹션별 적중 · 판정표(등급 칸 비움)
+    summary.md                                compare.py가 전 variant 결과로 다시 씀
+
+VLM variant는 run_vlm.py, 요약·판정표는 compare.py.
 
 사용법
     python run.py --variant rule_kw
@@ -183,6 +185,9 @@ def match_items(blocks: list[dict]) -> dict[str, dict]:
 
 
 def item_decision(hit: dict) -> str:
+    """VLM variant는 hit에 decision을 담아 온다. rule_kw는 키워드 수로 정한다."""
+    if "decision" in hit:
+        return hit["decision"]
     return "제외" if len(hit["keywords"]) >= 2 else "확인 필요"
 
 
@@ -234,7 +239,7 @@ def vis_section(sec: dict, hits: dict, out: Path) -> None:
 
 
 def vis_page(stem: str, secs: list[dict], decs: dict[str, str], hits: dict[str, dict],
-             items: list[str], out: Path) -> None:
+             items: list[str], out: Path, variant: str = "rule_kw") -> None:
     """페이지 썸네일(폭 240) + 오른쪽 결정 막대(섹션별 색 · 적중 항목 약칭)."""
     src = next(SRC.rglob(f"{stem}.jpg"))
     im = Image.open(src).convert("RGB")
@@ -246,7 +251,7 @@ def vis_page(stem: str, secs: list[dict], decs: dict[str, str], hits: dict[str, 
     canvas.paste(thumb, (0, head))
     d = ImageDraw.Draw(canvas)
     f, fs = _font(13), _font(11)
-    d.text((4, 4), f"{stem} · rule_kw · 정책 {out.parent.name}", fill=(0, 0, 0), font=f)
+    d.text((4, 4), f"{stem} · {variant} · 정책 {out.parent.name}", fill=(0, 0, 0), font=f)
     x = 4
     for name, c in DEC_COLOR.items():
         d.rectangle([x, 30, x + 12, 42], fill=c)
@@ -264,62 +269,6 @@ def vis_page(stem: str, secs: list[dict], decs: dict[str, str], hits: dict[str, 
             d.text((244, y0 + 1), label[:18], fill=(255, 255, 255), font=fs)
     out.parent.mkdir(parents=True, exist_ok=True)
     canvas.save(out, quality=88)
-
-
-# ---------------------------------------------------------------- summary
-
-def write_summary(secs: list[dict], hits: dict, decs: dict, meta: dict) -> None:
-    L = ["# 섹션 단위 규제·현지 부적합 판정", "",
-         "> **2026-09-17 마무리** — `rule_kw` 기준선까지 실행. VLM variant(`sec_only` · `sec_adj` · `sec_outline`) 미실행. 판정표 미작성.",
-         "> 계획 `PoC_추가검증_계획.md` 2장. 입력 골든 섹션 102개(`color_snap_vlm2`) · 블록 `llm_assist`.",
-         "> **사이트 정책은 미정** — `all`(8항목 전부 금지)·`review_ban`(사용자 리뷰만 금지, 사이트 A 예시)은 가정.",
-         "> 판정 칸은 비워둠. 정답 항목은 사람이 채움.", "",
-         "## rule_kw — 키워드 기준선", "",
-         "| 항목 | 내용 |", "|---|---|",
-         "| 규칙 | 항목별 **서로 다른 키워드 2개 이상 → 제외 · 1개 → 확인 필요 · 0개 → 유지**. 전후 비교는 `사용 전`·`사용 후` 동시 적중 |",
-         f"| 소요 · 비용 | {meta['sec']}s · 0 |",
-         f"| 글자 없는 섹션 | {meta['no_text']}개 — 유지로 둠. 이미지 판단은 VLM variant |", "",
-         "### 정책별 결정 수", "",
-         "| 정책 | 유지 | 확인 필요 | 제외 |", "|---|---|---|---|"]
-    for p in POLICIES:
-        c = meta["policies"][p]
-        L.append(f"| `{p}` | {c['유지']} | {c['확인 필요']} | {c['제외']} |")
-    L += ["", "### 항목별 적중 섹션 수", "",
-          "| 항목 | 제외 (키워드 2+) | 확인 필요 (1) | 합 |", "|---|---|---|---|"]
-    for k, n, _ in ITEMS:
-        c = meta["items"][k]
-        L.append(f"| {n} | {c['제외']} | {c['확인 필요']} | {c['제외'] + c['확인 필요']} |")
-
-    L += ["", "### 규칙 작성 방법", "",
-          "| 단계 | 내용 |", "|---|---|",
-          "| 항목 | 계획서 초안 8항목 그대로 |",
-          "| 키워드 | 항목별 일반 어휘 + **골든 102섹션 텍스트를 읽고 본 표현** 추가 — 가린 이름+님(`한기*님`) · `실사용`·`찐사용` · `N명이 인정` · OCR 오타 `금정 답변` · `페이백`·`기프트카드` · `올리브영`·`아마존` · `특수관리` 등 |",
-          "| 오탐 예외 | `피부과(?!학)`(한국피부과학연구원) · `\\d원(?![가-힣])`(원료·원하는) · `\\d위(?![가-힣])` · 영문자 사이 `vs` 제외 |",
-          "| 결정 기준 | 키워드 2개 이상 제외 · 1개 확인 필요 — **임의값, 데이터로 조정 안 함** |", "",
-          "### 한계", "",
-          "| # | 한계 |", "|---|---|",
-          "| 1 | **평가 표본과 규칙 작성 표본이 같음** — 골든 102섹션을 보고 키워드를 골라 이 표본 성적은 낙관적. 처음 보는 페이지에서 더 낮을 것 |",
-          "| 2 | 골든 표기 방식에 맞춘 패턴 포함 — 가린 이름 `*님` 등. 다른 브랜드·쇼핑몰 표기에는 안 맞을 수 있음 |",
-          "| 3 | 결정 기준(키워드 2개)이 임의값 |",
-          "| 4 | 키워드 유무로는 **맥락을 못 가름** — 리뷰 3건 섹션(`250199_009_003`)이 키워드 1개로 확인 필요에 그침. `리뷰 작성은 필요 없어요`(이벤트) · `실사용자 만족도`(설문)가 리뷰로 걸림 |",
-          "| 5 | OCR 깨진 글자(`1위)` · `top14위`) · 논문 초록 속 `vs`가 그대로 걸림 |",
-          "| 6 | 글자 없는 섹션은 판단 못 함 — 유지로 둠 |",
-          "| 7 | 사이트 정책(`all` · `review_ban`)은 가정 — 실제 정책 확정 시 항목·키워드 변경 가능 |", "",
-          "**보완 방향** — 키워드를 현 상태로 고정하고 판정표 작성 후 수정 안 함 · 골든 밖 상세페이지를 따로 두어 재측정.", "",
-          "## 섹션별 적중 · 판정표", "",
-          "`결정`은 `all` 기준. 항목 약칭 뒤 괄호는 적중 키워드 수. vis: `results/rule_kw/vis/sections/{섹션}.jpg`.", "",
-          "**채울 칸** — `정답 항목`(해당 항목 키를 쉼표로, 없으면 `-`) · `전체/일부`(해당 내용이 섹션 전체인가) · `비고`.", "",
-          "| 섹션 | 높이 | 결정(all) | 결정(review_ban) | 적중 항목 · 키워드 | 정답 항목 | 전체/일부 | 비고 |",
-          "|---|---|---|---|---|---|---|---|"]
-    for s in secs:
-        sid = s["section"]
-        h = hits[sid]
-        cell = "<br>".join(f"`{k}`({len(v['keywords'])}) {', '.join(v['keywords'])}"
-                           for k, v in h.items()) or ("_글자 없음_" if not any(
-                               b["text"].strip() for b in s["blocks"]) else "—")
-        L.append(f"| `{sid}` | {s['height']} | {decs['all'][sid]} | {decs['review_ban'][sid]} | {cell} |  |  |  |")
-    L += ["", "항목 키 — " + " · ".join(f"`{k}` {n}" for k, n, _ in ITEMS), ""]
-    (HERE / "summary.md").write_text("\n".join(L), encoding="utf-8")
 
 
 # ---------------------------------------------------------------- main
@@ -365,7 +314,8 @@ def run_rule_kw() -> None:
             "keywords": KEYWORDS, "policy_items": POLICIES,
             "run_at": time.strftime("%Y-%m-%d %H:%M:%S")}
     (out / "meta.json").write_text(json.dumps(meta, ensure_ascii=False, indent=1), encoding="utf-8")
-    write_summary(secs, hits, decs, meta)
+    import compare
+    compare.build()
 
     print(f"[rule_kw] 섹션 {len(secs)} · 판정 {sec_time}s")
     for p in POLICIES:
